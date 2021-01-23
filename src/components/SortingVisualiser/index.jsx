@@ -6,6 +6,7 @@ import './style.css'
 function SortingVisualiser(props){
     const [array, setArray] = useState([])
     const [animationSpeed, setAnimationSpeed] = useState(100)
+    const [animationActive, setAnimationActive] = useState(false)
 
     useEffect(effect => {
         resetArray()
@@ -60,12 +61,18 @@ function SortingVisualiser(props){
 
     }
 
+
+
+
     function animator(animations,speed){
+        setAnimationActive(prevState => true)
         let idx = 0
 
-        let intervalID = setInterval( () => {
+        const intervalID = setInterval( () => {
+            console.log(animationActive)
             if (idx > animations.length - 1) {
                 clearInterval(intervalID)
+                setAnimationActive(false)
                 return 
             }
             animate(animations[idx])
@@ -91,8 +98,8 @@ function SortingVisualiser(props){
     }
 
     //console.log(array)
-    let barsDivs = array.map(item  => {
-        return (<div className='bar' style={{height: `${item.value * 10}px`, backgroundColor: `${item.color}`}}>{item.value}</div>)
+    let barsDivs = array.map((item,idx)  => {
+        return (<div key={idx} className='bar' style={{height: `${item.value * 10}px`, backgroundColor: `${item.color}`}}>{item.value}</div>)
     })
 
     
@@ -103,12 +110,12 @@ function SortingVisualiser(props){
                 {barsDivs}
             </div>
             <nav>
-            <button onClick={resetArray}>Reset</button>
-                <button onClick={handleBubbleClick}>Bubble</button>
-                <button onClick={handleSelectionClick}>Selection</button>
+            <button disabled={animationActive} onClick={resetArray}>Reset</button>
+                <button disabled={animationActive} onClick={handleBubbleClick}>Bubble</button>
+                <button disabled={animationActive} onClick={handleSelectionClick}>Selection</button>
                 <label>
                     Animation Time (ms) 
-                    <input value={animationSpeed} onChange={(e) => {
+                    <input disabled={animationActive} value={animationSpeed} onChange={(e) => {
                         let val = parseInt(e.target.value)
                         if (!val) {
                             setAnimationSpeed(0)

@@ -1,12 +1,11 @@
 import React from 'react';
 import './App.css';
-import SortingVisualiser from './pages/SortingVisualiser';
+import SortingVisualiserPage from './pages/SortingVisualiserPage';
 
 function App() {
   return (
     <div className="App">
-        <p>Test</p>
-        <SortingVisualiser />
+        <SortingVisualiserPage />
     </div>
   );
 }

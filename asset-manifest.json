@@ -1,0 +1,20 @@
+{
+  "files": {
+    "main.css": "/jackgpalfrey/algori/static/css/main.8ca9b3e2.chunk.css",
+    "main.js": "/jackgpalfrey/algori/static/js/main.ffdedf42.chunk.js",
+    "main.js.map": "/jackgpalfrey/algori/static/js/main.ffdedf42.chunk.js.map",
+    "runtime-main.js": "/jackgpalfrey/algori/static/js/runtime-main.b1605d92.js",
+    "runtime-main.js.map": "/jackgpalfrey/algori/static/js/runtime-main.b1605d92.js.map",
+    "static/js/2.adaaae4c.chunk.js": "/jackgpalfrey/algori/static/js/2.adaaae4c.chunk.js",
+    "static/js/2.adaaae4c.chunk.js.map": "/jackgpalfrey/algori/static/js/2.adaaae4c.chunk.js.map",
+    "index.html": "/jackgpalfrey/algori/index.html",
+    "static/css/main.8ca9b3e2.chunk.css.map": "/jackgpalfrey/algori/static/css/main.8ca9b3e2.chunk.css.map",
+    "static/js/2.adaaae4c.chunk.js.LICENSE.txt": "/jackgpalfrey/algori/static/js/2.adaaae4c.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.b1605d92.js",
+    "static/js/2.adaaae4c.chunk.js",
+    "static/css/main.8ca9b3e2.chunk.css",
+    "static/js/main.ffdedf42.chunk.js"
+  ]
+}

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import bubbleSort from '../../algoithms/sorting/bubbleSort'
 import './style.css'
 
 function SortingVisualiser(props){
@@ -71,14 +72,25 @@ function SortingVisualiser(props){
         }, speed)
     }
 
-    function handleColorClick(){
-        console.log('click')
-        let animations = []
-        for (let i = 0; i < props.bars; i++){
-            animations.push({command: 'setColor',id: [i,i+1],color: '#fc0388'})
-            animations.push({command: 'swap',id1: i, id2: i+1})
-            animations.push({command: 'setColor',id: [i,i+1],color: '#035efc'})
+    function getNumbersFromArrayState(){
+        let numbers = []
+        for (let i = 0; i < array.length; i++){
+            numbers.push(array[i].value)
         }
+
+        return numbers
+    }
+    function handleColorClick(){
+        // console.log('click')
+        // let animations = []
+        // for (let i = 0; i < props.bars; i++){
+        //     animations.push({command: 'setColor',id: [i,i+1],color: '#fc0388'})
+        //     animations.push({command: 'swap',id1: i, id2: i+1})
+        //     animations.push({command: 'setColor',id: [i,i+1],color: '#035efc'})
+        // }
+
+        let animations = bubbleSort(getNumbersFromArrayState())
+
         animator(animations,animationSpeed)
     
     }
@@ -96,6 +108,7 @@ function SortingVisualiser(props){
                 {barsDivs}
             </div>
             <nav>
+            <button onClick={resetArray}>Reset</button>
                 <button onClick={handleColorClick}>Animate</button>
                 <label>
                     Animation Time (ms) 

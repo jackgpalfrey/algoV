@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import bubbleSort from '../../algoithms/sorting/bubbleSort'
+import insertionSort from '../../algoithms/sorting/insertionSort'
 import selectionSort from '../../algoithms/sorting/selectionSort'
 import './style.css'
 
@@ -96,6 +97,10 @@ function SortingVisualiser(props){
         let animations = selectionSort(getNumbersFromArrayState())
         animator(animations,animationSpeed)
     }
+    function handleInsertionClick(){
+        let animations = insertionSort(getNumbersFromArrayState())
+        animator(animations,animationSpeed)
+    }
 
     //console.log(array)
     let barsDivs = array.map((item,idx)  => {
@@ -113,6 +118,7 @@ function SortingVisualiser(props){
             <button disabled={animationActive} onClick={resetArray}>Reset</button>
                 <button disabled={animationActive} onClick={handleBubbleClick}>Bubble</button>
                 <button disabled={animationActive} onClick={handleSelectionClick}>Selection</button>
+                <button disabled={animationActive} onClick={handleInsertionClick}>Insertion</button>
                 <label>
                     Animation Time (ms) 
                     <input disabled={animationActive} value={animationSpeed} onChange={(e) => {

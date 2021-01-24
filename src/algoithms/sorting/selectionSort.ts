@@ -1,3 +1,5 @@
+import { start } from "repl"
+
 const COLORS = {
     BASE: '#035efc',
     BEING_CHECKED: '#fc0388',
@@ -6,7 +8,8 @@ const COLORS = {
 }
 
 
-function sort(array: number[]): [number[],object[]]{
+function sort(array: number[]): [number[],object[],number]{
+    const startTime = performance.now()
     let sortedArray: number[] = array
     let animations: object[] = []
     for (let i = 0; i < sortedArray.length - 1; i++){
@@ -31,13 +34,15 @@ function sort(array: number[]): [number[],object[]]{
     }
 
     animations.push({command: 'setColor',id: [sortedArray.length -1],color: COLORS.DONE})
-    return [sortedArray, animations]
+    const endTime = performance.now()
+    const runTime = endTime - startTime
+    return [sortedArray, animations, runTime]
 }
 
-function selectionSort(array: number[]): object[]{
-    let [sortedArray, animations] = sort(array)
+function selectionSort(array: number[]): [object[],number]{
+    let [sortedArray, animations, runTime] = sort(array)
     console.log(sortedArray)
-    return animations
+    return [animations, runTime]
 }
 
 

@@ -1,0 +1,31 @@
+.backgroundLayer {
+	position: absolute;
+	top: 0;
+	width: 100vw;
+	height: 100vh;
+	background-color: rgba(0, 0, 0, 0.9);
+}
+
+.card {
+	box-sizing: border-box;
+	position: absolute;
+	right: 0;
+	top: 0;
+	height: 100vh;
+	width: 25vw;
+	background-color: white;
+	padding: 2em;
+}
+
+.credit {
+	position: absolute;
+	bottom: 0;
+	margin: 2em;
+	font-size: 0.5em;
+	color: inherit;
+	text-decoration: none;
+}
+
+.title {
+	text-align: center;
+}

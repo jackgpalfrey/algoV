@@ -6,7 +6,8 @@ const COLORS = {
 
 
 
-function sort(array: number[]): [number[],object[]]{
+function sort(array: number[]): [number[],object[],number]{
+    const startTime = performance.now()
     let sortedArray: number[] = array
     let animations: object[] = []
 
@@ -27,14 +28,16 @@ function sort(array: number[]): [number[],object[]]{
 
     animations.push({command: 'setColor',id: [0],color: COLORS.DONE})
 
+    const endTime = performance.now()
+    const runTime = endTime - startTime
+    return [sortedArray, animations, runTime]
 
-    return [sortedArray, animations]
 }
 
-function bubbleSort(array: number[]): object[]{
-    let [sortedArray, animations] = sort(array)
+function bubbleSort(array: number[]): [object[],number]{
+    let [sortedArray, animations, runTime] = sort(array)
     console.log(sortedArray)
-    return animations
+    return [animations, runTime]
 }
 
 

@@ -6,7 +6,8 @@ const COLORS = {
 
 
 
-function sort(array: number[]): [number[],object[]]{
+function sort(array: number[]): [number[],object[],number]{
+    let startTime = performance.now()
     let sortedArray: number[] = array
     let animations: object[] = []
 
@@ -30,13 +31,15 @@ function sort(array: number[]): [number[],object[]]{
         animations.push({command: 'setColor',id: [i],color: COLORS.DONE})
     }
     
-    return [sortedArray, animations]
+    const endTime = performance.now()
+    const runTime = endTime - startTime
+    return [sortedArray, animations, runTime]
 }
 
-function insertionSort(array: number[]): object[]{
-    let [sortedArray, animations] = sort(array)
+function insertionSort(array: number[]): [object[],number]{
+    let [sortedArray, animations, runTime] = sort(array)
     console.log(sortedArray)
-    return animations
+    return [animations,runTime]
 }
 
 

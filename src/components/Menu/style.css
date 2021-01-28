@@ -1,0 +1,77 @@
+.background-layer {
+	position: absolute;
+	top: 0;
+	width: 100vw;
+	height: 100vh;
+	background-color: rgba(0, 0, 0, 0.4);
+}
+.menuCard {
+	box-sizing: content-box;
+	position: absolute;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	left: 0;
+	top: 0;
+	height: 100vh;
+	width: 4vw;
+	background-color: #262626;
+	color: white;
+	padding: 0 10px;
+	text-align: center;
+}
+
+.openMenuButton {
+	color: white;
+	cursor: pointer;
+	margin: -25px;
+	background-color: transparent;
+	border: none;
+}
+
+.menuCard * {
+	margin-bottom: 1em;
+}
+
+.closed {
+	background-color: transparent;
+}
+
+.card::-webkit-scrollbar {
+	display: none;
+}
+
+.dark-theme {
+	justify-self: flex-end;
+}
+
+.link {
+	color: rgba(255, 255, 255, 0.397);
+	text-decoration: none;
+	margin-top: 3em;
+	filter: brightness(100%);
+}
+
+.link:hover {
+	filter: brightness(70%);
+}
+
+.current {
+	color: #03a1fc;
+}
+
+.unavailable {
+	text-decoration: line-through;
+}
+
+.item {
+	transform: scale(2);
+}
+
+.hoverToOpen {
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 100vh;
+	width: 5vw;
+}

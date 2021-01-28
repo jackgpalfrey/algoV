@@ -1,0 +1,12 @@
+[
+    {
+        "version": "0.01",
+        "title": "Added Basic Changelog on homescreen",
+        "info": "Added basic changelog implementation on homescreen in order to track progress"
+    },
+    {
+        "version": "0.02",
+        "title": "Added heap sort",
+        "info": "Added heap sort algorithm. Animations are lackluster at best, needs improvement"
+    }
+]

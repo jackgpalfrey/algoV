@@ -1,0 +1,38 @@
+* {
+	margin: 0;
+}
+
+.changelogContainer {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-content: center;
+	padding: 1em;
+}
+
+.fullItemContainer {
+	width: 100%;
+	justify-self: center;
+	align-self: center;
+	margin: 0.2em;
+	color: rgb(170, 170, 170);
+	user-select: none;
+}
+
+.TitleContainer {
+	box-sizing: border-box;
+	width: 100%;
+	background-color: #262626;
+	display: flex;
+	justify-content: space-between;
+	padding: 0.6em 2em;
+	cursor: pointer;
+}
+
+.itemInfoContainer {
+	width: 100%;
+	background-color: #303030;
+	box-sizing: border-box;
+	padding: 0.6em 2em;
+}

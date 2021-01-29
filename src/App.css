@@ -1,13 +1,24 @@
-* {
-	margin: 0px;
-}
-
 body {
 	height: 100%;
 }
 
 .changeLog {
 	margin: 0 auto;
-	height: 100vh;
 	width: 60vw;
+}
+
+.openAllChangesButton {
+	width: 20%;
+	margin: 0 auto;
+	text-align: center;
+	background-color: #262626;
+	padding: 0.5em;
+	margin-top: 1em;
+	color: rgba(255, 255, 255, 0.829);
+	cursor: pointer;
+	user-select: none;
+}
+
+.openAllChangesButton:hover {
+	color: white;
 }

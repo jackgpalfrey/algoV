@@ -1,12 +1,140 @@
 [
     {
+        "Possible Finished Modifcation Keys": ["ADDED", "CHANGED", "DEPRECATED", "REMOVED", "FIXED"],
+        "Possible To Change Modifcation Keys": ["ADD", "CHANGE", "DEPRECATE", "REMOVE", "FIX"],
+        "dontDisplay": true
+    },
+    {
+        "version": "TEST",
+        "title": "Color test",
+        "info": "Test for different types of change",
+        "modifications":   [["ADDED","TEST"],
+                            ["CHANGED","TEST"], 
+                            ["DEPRECATED","TEST"], 
+                            ["REMOVED","TEST"], 
+                            ["FIXED","TEST"]
+                            ],
+        "date": "01/01/01",
+        "dontDisplay": true
+    },
+    {
         "version": "0.01",
-        "title": "Added Basic Changelog on homescreen",
-        "info": "Added basic changelog implementation on homescreen in order to track progress"
+        "title": "(History) Added foundations of sort visualiser",
+        "info": "Added bars and creating random array",
+        "modifications":   [["ADDED","Sort Visualiser Component"], 
+                            ["ADDED","Sort Visualiser Component - Create New Array"]],
+        "date": "23/01/21"
     },
     {
         "version": "0.02",
-        "title": "Added heap sort",
-        "info": "Added heap sort algorithm. Animations are lackluster at best, needs improvement"
+        "title": "(History) Added Animation System For Sort Visualiser",
+        "info": "Added system that takes array of animation objects and performs related actions on bars in sort visualiser",
+        "modifications":   [["ADDED","Aninimation System"], 
+                            ["ADDED","setColor animation"],
+                            ["ADDED", "swap animation"]],
+        "date": "23/01/21"
+    },
+    {
+        "version": "0.03",
+        "title": "(History) Added Bubble Sort",
+        "info": "Added bubble sort visualisation.",
+        "modifications":   [["ADDED","Bubble Sort Algorithm"], 
+                            ["ADDED","Sort button"]],
+        "date": "23/01/21"
+    },
+    {
+        "version": "0.04",
+        "title": "(History) Added Selection Sort",
+        "info": "Added Selection sort and improved bubble sort code",
+        "modifications":   [["ADDED","Selection Sort Algorithm"], 
+                            ["ADDED","Selection Sort Button"],
+                            ["ADDED", "Bubble Sort Button"],
+                            ["REMOVED", "Sort Button"]],
+        "date": "23/01/21"
+    },
+    {
+        "version": "0.05",
+        "title": "(History) Added Insertion Sort",
+        "info": "Added Insertion Sort",
+        "modifications":   [["ADDED","Insertion Sort Algorithm"], 
+                            ["ADDED","Insertion Sort Button"]],
+        "date": "24/01/21"
+    },
+    {
+        "version": "0.06",
+        "title": "(History) Added Sort Menu Items",
+        "info": "Added Info card, algorithm selection dropdown",
+        "modifications":   [["ADDED", "Sort Menu Bar"], 
+                            ["ADDED", "Added Sort Algorithm Selection Dropdown"],
+                            ["ADDED", "Sort Button"],
+                            ["ADDED", "No. Bars Selector"],
+                            ["ADDED", "Animation Speed Selector"],
+                            ["ADDED", "Reset Button"],
+                            ["ADDED", "Info Card Component"],
+                            ["REMOVED", "Insertion Sort Button"],
+                            ["REMOVED", "Bubble Sort Button"],
+                            ["REMOVED", "Selection Sort Button"]
+                        ],
+        "date": "24/01/21"
+    },
+    {
+        "version": "0.07",
+        "title": "(History) Improved Menu",
+        "info": "Created more pleasant UI and added Nav Menu",
+        "modifications":   [["ADDED","Sort Algorithm Time Taken Tracking & UI element"], 
+                            ["ADDED", "Page Navigation Menu"],
+                            ["ADDED", "Home Page"],
+                            ["ADDED", "Pathfinding Page"],
+                            ["ADDED", "Compute Page"],
+                            ["CHANGED","Improved Sort Menu Bar"]
+                        ],
+        "date": "25/01/21"
+    },
+    {
+        "version": "0.08",
+        "title": "(History) Added Heap Sort",
+        "info": "Added Heap sort algorithm. Animations are awful needs massive improvement but want to move on to other things right now",
+        "modifications":   [["ADDED","Heap Sort Algorithm"], 
+                            ["ADDED", "setArray animation"],
+                            ["ADDED","Heap Sort Drop Down Option"],
+                            ["ADDED", "Merge Sort Drop Down Option"],
+                            ["ADDED", "Quick Sort Drop Down Option"]
+                        ],
+        "date": "26/01/21"
+    },
+    {
+        "version": "0.09",
+        "title": "Added changelog",
+        "info": "Added Changelog. Pretty ugly but good enough for now.",
+        "modifications":   [["ADDED","ChangeLog Components"]],
+        "date": "28/01/21"
+    },
+    {
+        "version": "0.10",
+        "title": "Advanced Sort Algorithms",
+        "info": "",
+        "modifications":   [["ADD", "Merge Sort"],
+                            ["ADD", "Quick Sort"],
+                            ["ADDED", "Open / Close All on changelog "],
+                            ["ADDED", "Next update Functionality"]],
+        "date": "30/01/21",
+        "isNext": true
+    },
+    {
+        "version": "0.11",
+        "title": "",
+        "info": "",
+        "modifications":   [],
+        "date": "",
+        "dontDisplay": true
+    },{
+        "version": "0.12",
+        "title": "",
+        "info": "",
+        "modifications":   [],
+        "date": "",
+        "dontDisplay": true
     }
+    
+    
 ]

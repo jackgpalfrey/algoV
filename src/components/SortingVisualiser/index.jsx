@@ -11,7 +11,7 @@ import './style.css'
 
 
 const COLORS = {
-    BASE: '#035efc',
+    BASE: '#035efc', 
     CHECKING: 'red',
     DONE: '#0f8707',
     TEXT: 'white'
@@ -43,184 +43,193 @@ function SortingVisualiser(props){
 
     function AnimateEngine(command){
         let commandCode = command[0]
-        switch(commandCode){
-            case 'setColor': // Sets color of bars. Syntax: ["setColor",[array of ids or $ALL, $LHALF, $RHALF], "valid css color OR valid inbuilt variable prefixed with $"]
-                setArray(prevState => {
-                    let newArray = prevState.slice()
-                    let idxes = command[1]
-                    let color = command[2]
-                    if (color.includes('$')) color = COLORS[color.replace('$','')]
-    
-                    idxes.forEach(idx => {
-                        if (idx === '$ALL'){
-                            for (let y = 0; y < newArray.length; y++){
-                                newArray[y].color = color
+        try {
+            switch(commandCode){
+                case 'setColor': // Sets color of bars. Syntax: ["setColor",[array of ids or $ALL, $LHALF, $RHALF], "valid css color OR valid inbuilt variable prefixed with $"]
+                    setArray(prevState => {
+                        let newArray = prevState.slice()
+                        let idxes = command[1]
+                        let color = command[2]
+                        if (color.includes('$')) color = COLORS[color.replace('$','')]
+        
+                        idxes.forEach(idx => {
+                            if (idx === '$ALL'){
+                                for (let y = 0; y < newArray.length; y++){
+                                    newArray[y].color = color
+                                }
+                            } else if (idx === '$LHALF'){
+                                for (let y = 0; y < Math.ceil(newArray.length / 2); y++){
+                                    newArray[y].color = color
+                                }
+                            } else if (idx === '$RHALF'){
+                                for (let y = Math.floor(newArray.length / 2); y < newArray.length; y++){
+                                    newArray[y].color = color
+                                }
+                            } else if (idx === '$END') {
+                                newArray[newArray.length - 1].color = color
+
+                            }else if (typeof idx == "number" && idx >= 0 && idx < newArray.length){
+                                newArray[idx].color = color
                             }
-                        } else if (idx === '$LHALF'){
-                            for (let y = 0; y < Math.ceil(newArray.length / 2); y++){
-                                newArray[y].color = color
-                            }
-                        } else if (idx === '$RHALF'){
-                            for (let y = Math.floor(newArray.length / 2); y < newArray.length; y++){
-                                newArray[y].color = color
-                            }
-                        } else if (idx === '$END') {
-                            newArray[newArray.length - 1].color = color
-
-                        }else if (typeof idx == "number" && idx >= 0 && idx < newArray.length){
-                            newArray[idx].color = color
-                        }
-                        
-                    });
-    
-    
-                    return newArray
-                })
-                break;
-            
-            case 'swap':
-                setArray(prevState => {
-                    
-    
-                    let newArray = prevState.slice()
-
-                    let id1 = command[1]
-                    let id2 = command[2]
-
-                    if (id1 === '$END') id1 = newArray.length - 1
-                    if (id2 === '$END') id2 = newArray.length - 1
-                    
-                    if (id1 >= 0 && id1 < newArray.length && id2 >= 0 && id2 < newArray.length){
-                        const tmp1 = {...newArray[id1]}
-                        const tmp2 = {...newArray[id2]}
-                        newArray[id1] = tmp2
-                        newArray[id2] = tmp1
-                    }
-                    
-    
-                    return newArray
-                })
-    
-                break;
-            
-            case 'setValue':
-                setArray(prevState => {
-                    let newArray = prevState.slice()
-                    let idxes = command[1]
-                    let value = command[2]
-    
-                    idxes.forEach(idx => {
-                        if (idx === '$ALL'){
-                            for (let y = 0; y < newArray.length; y++){
-                                newArray[y].value = value
-                            }
-                        } else if (idx === '$LHALF'){
-                            for (let y = 0; y < Math.ceil(newArray.length / 2); y++){
-                                newArray[y].value = value
-                            }
-                        } else if (idx === '$RHALF'){
-                            for (let y = Math.floor(newArray.length / 2); y < newArray.length; y++){
-                                newArray[y].value = value
-                            }
-                        } else if (idx === '$END') {
-                            newArray[newArray.length - 1].value = value
-
-                        }else if (typeof idx == "number" && idx >= 0 && idx < newArray.length){
-                            newArray[idx].value = value
-                        }
-                        
-                    });
-    
-    
-                    return newArray
-                })
-                break;
-            
-            case 'setArray':
-                setArray(prevState => {
-                    let newArray = []
-                    let values = command[1]
-                    let color = command[2]
-                    if (color.includes('$')) color = COLORS[color.replace('$','')]
-    
-                    values.forEach(value => {
-                       if (typeof value == "number"){
-                            newArray.push({value: value, color: color})
-                        }
-                        
-                    });
-                    setNumBars(newArray.length)
-                    return newArray
-                })
-                break;
-            
-            case 'resetArray':
-                
-                let numOfBars = command[1]
-                //if (typeof numOfBars != "number") return
-                let values = []
-                for (let i = 0; i < numOfBars; i++){
-                    values.push(Math.round(Math.random() * 60) + 8)
-                }
-                AnimateEngine(["setArray",values,"$BASE"])
-                break;
-            
-            case 'setRunTimeDisplay':
-                setRunTime(command[1])
-                break;
-
-            case 'setComparisonsDisplay':
-                setComparisons(command[1])
-                break;
-
-            case 'setSwapsDisplay':
-                setSwaps(command[1])
-                break;
-
-            case 'startAnimation':
-                setAnimationActive(true)
-                break;
-
-            case 'endAnimation':
-                setAnimationActive(false)
-                break;
-
-            case 'do':
-                let subCommands = command[1]
-                let interval = command[2]
-                let currentCommandIdx = 0
-
-                if (interval == '$userSet') interval = animationSpeed
-
-                let intervalID = setInterval(() => {
-                    if (currentCommandIdx >= subCommands.length){
-                        clearInterval(intervalID)
-                        return
-                    }
-
-                    AnimateEngine(subCommands[currentCommandIdx])
-                    currentCommandIdx++
-                }, interval)
-                break;
-            
-            case 'doSim':
-                let toRunCommands = command[1]
-                for (let i = 0; i < toRunCommands.length; i++){
-                    AnimateEngine(toRunCommands[i])
-                }
-
-
-                break;
-
-            case 'doIn':
-                console.log('doIn')
-                setTimeout(() => {
-                    command[1].forEach((value) => {
-                        console.log(value)
-                        AnimateEngine(value)
+                            
+                        });
+        
+        
+                        return newArray
                     })
-                }, command[2] )
-                break;
+                    break;
+                
+                case 'swap':
+                    setArray(prevState => {
+                        
+        
+                        let newArray = prevState.slice()
+
+                        let id1 = command[1]
+                        let id2 = command[2]
+
+                        if (id1 === '$END') id1 = newArray.length - 1
+                        if (id2 === '$END') id2 = newArray.length - 1
+                        
+                        if (id1 >= 0 && id1 < newArray.length && id2 >= 0 && id2 < newArray.length){
+                            const tmp1 = {...newArray[id1]}
+                            const tmp2 = {...newArray[id2]}
+                            newArray[id1] = tmp2
+                            newArray[id2] = tmp1
+                        }
+                        
+        
+                        return newArray
+                    })
+        
+                    break;
+                
+                case 'setValue':
+                    setArray(prevState => {
+                        let newArray = prevState.slice()
+                        let idxes = command[1]
+                        let value = command[2]
+        
+                        idxes.forEach(idx => {
+                            if (idx === '$ALL'){
+                                for (let y = 0; y < newArray.length; y++){
+                                    newArray[y].value = value
+                                }
+                            } else if (idx === '$LHALF'){
+                                for (let y = 0; y < Math.ceil(newArray.length / 2); y++){
+                                    newArray[y].value = value
+                                }
+                            } else if (idx === '$RHALF'){
+                                for (let y = Math.floor(newArray.length / 2); y < newArray.length; y++){
+                                    newArray[y].value = value
+                                }
+                            } else if (idx === '$END') {
+                                newArray[newArray.length - 1].value = value
+
+                            }else if (typeof idx == "number" && idx >= 0 && idx < newArray.length){
+                                newArray[idx].value = value
+                            }
+                            
+                        });
+        
+        
+                        return newArray
+                    })
+                    break;
+                
+                case 'setArray':
+                    setArray(prevState => {
+                        let newArray = []
+                        let values = command[1]
+                        let color = command[2]
+                        if (color.includes('$')) color = COLORS[color.replace('$','')]
+        
+                        values.forEach(value => {
+                        if (typeof value == "number"){
+                                newArray.push({value: value, color: color})
+                            }
+                            
+                        });
+                        setNumBars(newArray.length)
+                        return newArray
+                    })
+                    break;
+                
+                case 'resetArray':
+                    
+                    let numOfBars = command[1]
+                    //if (typeof numOfBars != "number") return
+                    let values = []
+                    for (let i = 0; i < numOfBars; i++){
+                        values.push(Math.round(Math.random() * 60) + 8)
+                    }
+                    AnimateEngine(["setArray",values,"$BASE"])
+                    break;
+                
+                case 'setRunTimeDisplay':
+                    setRunTime(command[1])
+                    break;
+
+                case 'setComparisonsDisplay':
+                    setComparisons(command[1])
+                    break;
+
+                case 'setSwapsDisplay':
+                    setSwaps(command[1])
+                    break;
+
+                case 'startAnimation':
+                    setAnimationActive(true)
+                    break;
+
+                case 'endAnimation':
+                    setAnimationActive(false)
+                    break;
+
+                case 'do':
+                    let subCommands = command[1]
+                    let interval = command[2]
+                    
+                    if (interval == '$userSet') interval = animationSpeed
+
+                    if (interval == 0) {
+                        for (let i = 0; i < subCommands.length; i++){
+                            AnimateEngine(subCommands[i])
+                        }
+                        break; 
+                    }
+
+                    let currentCommandIdx = 0
+
+                    let intervalID = setInterval(() => {
+                        if (currentCommandIdx >= subCommands.length){
+                            clearInterval(intervalID)
+                            return
+                        }
+
+                        AnimateEngine(subCommands[currentCommandIdx])
+                        currentCommandIdx++
+                    }, interval)
+                    break;
+                
+                case 'doSim':
+                    let toRunCommands = command[1]
+                    AnimateEngine(["do", toRunCommands, 0])
+                    break;
+
+                case 'doIn':
+                    console.log('doIn')
+                    setTimeout(() => {
+                        command[1].forEach((value) => {
+                            console.log(value)
+                            AnimateEngine(value)
+                        })
+                    }, command[2] )
+                    break;
+            }
+
+        } catch {
+            return
         }
     
     }

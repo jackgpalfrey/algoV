@@ -122,12 +122,13 @@
         "version": "0.10",
         "title": "Sort Refactoring",
         "info": "",
-        "modifications":   [["CHANGE", "Refactored sort code base"],
+        "modifications":   [["CHANGED", "Refactored sort code base"],
                             ["CHANGED", "Moved Bubble Sort To Use New AnimateEngine"],
                             ["ADDED", "New And Improved AnimateEngine"],
                             ["ADDED", "Animation Console"],
                             ["ADD", "Extra Runtime Info - Total Comparisons and Swaps"],
-                            ["DEPRECATED", "Old Animation System"]],
+                            ["DEPRECATED", "Old Animation System"],
+                            ["DEPRECATED", "AnimateEngine: doSim replaced with using 0 as interval in do"]],
         "date": "31/01/21",
         "isNext": true
     },{
@@ -136,7 +137,7 @@
         "info": "",
         "modifications":   [["ADD", "Merge Sort"],
                             ["ADD", "Quick Sort"]],
-        "date": "",
+        "date": "03/02/21",
         "dontDisplay": true
     }
     

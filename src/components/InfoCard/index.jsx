@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import './style.css'
 import data from '../../data/algorithmInfo.json'
-import { setOriginalNode } from 'typescript'
 
 
 function InfoCard({algorithmType, algorithmID}){

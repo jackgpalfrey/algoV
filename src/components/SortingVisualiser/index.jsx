@@ -12,8 +12,7 @@ import './style.css'
 
 const COLORS = {
     BASE: '#035efc',
-    BEING_CHECKED: '#fc0388',
-    CHECKING: '#fc0388',
+    CHECKING: 'red',
     DONE: '#0f8707',
     TEXT: 'white'
     
@@ -65,7 +64,10 @@ function SortingVisualiser(props){
                             for (let y = Math.floor(newArray.length / 2); y < newArray.length; y++){
                                 newArray[y].color = color
                             }
-                        } else if (typeof idx == "number" && idx >= 0 && idx < newArray.length){
+                        } else if (idx === '$END') {
+                            newArray[newArray.length - 1].color = color
+
+                        }else if (typeof idx == "number" && idx >= 0 && idx < newArray.length){
                             newArray[idx].color = color
                         }
                         
@@ -78,10 +80,16 @@ function SortingVisualiser(props){
             
             case 'swap':
                 setArray(prevState => {
-                    let id1 = command[1]
-                    let id2 = command[2]
+                    
     
                     let newArray = prevState.slice()
+
+                    let id1 = command[1]
+                    let id2 = command[2]
+
+                    if (id1 === '$END') id1 = newArray.length - 1
+                    if (id2 === '$END') id2 = newArray.length - 1
+                    
                     if (id1 >= 0 && id1 < newArray.length && id2 >= 0 && id2 < newArray.length){
                         const tmp1 = {...newArray[id1]}
                         const tmp2 = {...newArray[id2]}
@@ -102,7 +110,22 @@ function SortingVisualiser(props){
                     let value = command[2]
     
                     idxes.forEach(idx => {
-                        if (typeof idx == "number" && idx >= 0 && idx < newArray.length){
+                        if (idx === '$ALL'){
+                            for (let y = 0; y < newArray.length; y++){
+                                newArray[y].value = value
+                            }
+                        } else if (idx === '$LHALF'){
+                            for (let y = 0; y < Math.ceil(newArray.length / 2); y++){
+                                newArray[y].value = value
+                            }
+                        } else if (idx === '$RHALF'){
+                            for (let y = Math.floor(newArray.length / 2); y < newArray.length; y++){
+                                newArray[y].value = value
+                            }
+                        } else if (idx === '$END') {
+                            newArray[newArray.length - 1].value = value
+
+                        }else if (typeof idx == "number" && idx >= 0 && idx < newArray.length){
                             newArray[idx].value = value
                         }
                         
@@ -209,7 +232,7 @@ function SortingVisualiser(props){
     async function animate(command){ // LEGACY - DEPRECATED IN 0.10
         switch(command.command) {
             case 'setColor':
-                AnimateEngine(["setColor",command.id,command.color])
+                AnimateEngine(["setColor",command.id,command.color.replace('$BEING_CHECKED', '$CHECKING')])
                 break;
             case 'swap':
                 AnimateEngine(["swap",command.id1,command.id2])

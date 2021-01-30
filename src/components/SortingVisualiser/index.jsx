@@ -144,7 +144,7 @@ function SortingVisualiser(props){
                 data = insertionSort(getNumbersFromArrayState())
                 break;
             case 'quick':
-                return alert('Currently Unavailable')
+                //return alert('Currently Unavailable')
                 data = quickSort(getNumbersFromArrayState())
                 break;
             case 'heap':

@@ -1,0 +1,52 @@
+[
+    {
+        "Bug Types": ["BUG","FEATURE","IMPROVEMENT"],
+        "STATES": [ "POSTED - Posted to bug tacker but not acknowledged",
+                    "WONT FIX - Won't be fixed",
+                    "COMPLETED - Updated", 
+                    "IN PROGRESS - Item is being added in next update",
+                    "PLANNED - Planned in a future update", 
+                    "WILL FIX - Will be fixed but not yet set for any specific update"],
+        "dontDisplay": true
+    },
+    {"title": "Example Bug",
+        "type": "BUG",
+        "description": "Example Bug to show all possible keys",
+        "labels": ["Example"],
+        "postDate": "29/01/21",
+        "state": "PLANNED",
+        "plannedForDate": "29/01/22",
+        "isClosed": false,
+        "conclusion": "",
+        "closeDate": "29/01/24",
+        "dontDisplay": true
+        
+    },
+    {"title": "Menu does not fill scrollable page",
+        "type": "BUG",
+        "description": "Menu does not fill the side so if you scrolldown you won't see the sidebar",
+        "labels": ["General"],
+        "postDate": "29/01/21",
+        "state": "WILL FIX",
+        "addedUpdate": "",
+        "plannedForDate": "",
+        "isClosed": true,
+        "conclusion": "",
+        "closeDate": "23/01/21"
+        
+    },
+    {"title": "Additional Meta Tags",
+        "type": "FEATURE",
+        "description": "Add more Meta tags eg. Best, worst case time complexity",
+        "labels": ["Sort Visualiser"],
+        "postDate": "28/01/21",
+        "state": "IN PROGRESS",
+        "addedUpdate": "0.09",
+        "plannedForDate": "31/01/21",
+        "isClosed": true,
+        "conclusion": "Completed in 0.09",
+        "closeDate": "28/01/21"
+        
+    }
+    
+]

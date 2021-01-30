@@ -43,11 +43,11 @@ Simple Algorithm Visualiser
     - $DONE
 
 
-- createNewArray:
-  - Array Syntax ["createNewArray", num of bars, "valid css color OR valid inbuilt variable prefixed with $"]
-  - String Syntax createNewArray: (num of bars); (valid css color OR valid inbuilt variable prefixed with $)
+- resetArray:
+  - Array Syntax ["resetArray", num of bars, "valid css color OR valid inbuilt variable prefixed with $"]
+  - String Syntax resetArray: (num of bars); (valid css color OR valid inbuilt variable prefixed with $)
 
-  - Description - Sets array to given array
+  - Description - Reset array
 
   - Inbuilt color variables:
     - $BASE
@@ -69,19 +69,9 @@ Simple Algorithm Visualiser
   - (Probably should be deprecated and replaced with just puting 0 as interval in do command)
 
 - doIn:
-  - Array Syntax ["doSim", time until execute, [array of animate command arrays]]
+  - Array Syntax ["doSim", [array of animate command arrays], time until execute]
 
   - Description - Runs commands in array after set time
-
-
-
-
-- setAnimationSpeed:
-  - Array Syntax ["setAnimationSpeed", speed in ms]
-  - String Syntax setAnimationSpeed: (speed in ms)
-
-  - Description - Sets animation speed will not change speed of currently executing animation
-
 
 
 - setRunTimeDisplay:

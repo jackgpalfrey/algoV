@@ -13,6 +13,7 @@ import './style.css'
 const COLORS = {
     BASE: '#035efc',
     BEING_CHECKED: '#fc0388',
+    CHECKING: '#fc0388',
     DONE: '#0f8707',
     TEXT: 'white'
     
@@ -24,9 +25,10 @@ function SortingVisualiser(props){
     const [animationSpeed, setAnimationSpeed] = useState(cookieData[0] || 100)
     const [numBars, setNumBars] = useState(Math.round((window.innerWidth / 12) / 2))
     const [runTime, setRunTime] = useState(0)
+    const [swaps, setSwaps] = useState(0)
+    const [comparisons, setComparisons] = useState(0)
     const [animationActive, setAnimationActive] = useState(false)
     const [activeAlgorithm, setActiveAlgorithm] = useState(cookieData[1] || 'bubble')
-    const [isSorted, setIsSorted] = useState(true)
 
     
     useEffect(effect => {
@@ -35,85 +37,196 @@ function SortingVisualiser(props){
     
 
     useEffect(effect => {
-        resetArray(numBars)
-
+        AnimateEngine(["resetArray",numBars])
     }, [])
 
-    function resetArray(numOfBars){
-        let newArray = []
-        for (let i = 0; i < numOfBars; i++){
-            let randomVal = Math.round(Math.random() * 60) + 8
-            let item = {
-                value: randomVal,
-                color: COLORS.BASE
-            }
-            newArray.push(item)
-        }
-        setIsSorted(false)
-        setArray(newArray)
-    }
 
-    async function animate(command){
-        setArray(prevState => {
-            try {
-                let newArray = prevState.slice()
-                switch(command.command){
-                    case 'setColor':
-                        if (typeof command.id === 'number' && command.id > newArray.length -1 ) return newArray[command.id].color = command.color
-                        let col;
-                        command.id.forEach(value => {
-                            if (value > newArray.length - 1) return; //throw 'Out of bounds'
-                            if (command.color[0] === '?') {
-                                command.color = command.color.slice(1)
-                                if (array[value].color == COLORS.DONE) return
+    function AnimateEngine(command){
+        let commandCode = command[0]
+        switch(commandCode){
+            case 'setColor': // Sets color of bars. Syntax: ["setColor",[array of ids or $ALL, $LHALF, $RHALF], "valid css color OR valid inbuilt variable prefixed with $"]
+                setArray(prevState => {
+                    let newArray = prevState.slice()
+                    let idxes = command[1]
+                    let color = command[2]
+                    if (color.includes('$')) color = COLORS[color.replace('$','')]
+    
+                    idxes.forEach(idx => {
+                        if (idx === '$ALL'){
+                            for (let y = 0; y < newArray.length; y++){
+                                newArray[y].color = color
                             }
-                            command.color[0] === '$' ? col = COLORS[command.color.slice(1)] : col = command.color 
-                            newArray[value].color = col
-                        })
+                        } else if (idx === '$LHALF'){
+                            for (let y = 0; y < Math.ceil(newArray.length / 2); y++){
+                                newArray[y].color = color
+                            }
+                        } else if (idx === '$RHALF'){
+                            for (let y = Math.floor(newArray.length / 2); y < newArray.length; y++){
+                                newArray[y].color = color
+                            }
+                        } else if (typeof idx == "number" && idx >= 0 && idx < newArray.length){
+                            newArray[idx].color = color
+                        }
                         
-                        break;
-                    case 'swap':
-                        if (command.id1 > newArray.length -1) throw 'Out of bounds'
-                        if (command.id2 > newArray.length -1) throw 'Out of bounds'
-                        const tmp1 = {...newArray[command.id1]}
-                        const tmp2 = {...newArray[command.id2]}
-                        newArray[command.id1] = tmp2
-                        newArray[command.id2] = tmp1
-                        break;
-                    case 'setArray':
-                        newArray = []
-                        command.array.forEach(val => {
-                            let item = {
-                                value: val,
-                                color: COLORS.BASE
-                            }
-                            newArray.push(item)
-                        })
-                        break;
-                }
-                
-                return newArray
+                    });
+    
+    
+                    return newArray
+                })
+                break;
             
-            } catch (err) {
-                throw err
-                return prevState
-            }  
-        });
-        
+            case 'swap':
+                setArray(prevState => {
+                    let id1 = command[1]
+                    let id2 = command[2]
+    
+                    let newArray = prevState.slice()
+                    if (id1 >= 0 && id1 < newArray.length && id2 >= 0 && id2 < newArray.length){
+                        const tmp1 = {...newArray[id1]}
+                        const tmp2 = {...newArray[id2]}
+                        newArray[id1] = tmp2
+                        newArray[id2] = tmp1
+                    }
+                    
+    
+                    return newArray
+                })
+    
+                break;
+            
+            case 'setValue':
+                setArray(prevState => {
+                    let newArray = prevState.slice()
+                    let idxes = command[1]
+                    let value = command[2]
+    
+                    idxes.forEach(idx => {
+                        if (typeof idx == "number" && idx >= 0 && idx < newArray.length){
+                            newArray[idx].value = value
+                        }
+                        
+                    });
+    
+    
+                    return newArray
+                })
+                break;
+            
+            case 'setArray':
+                setArray(prevState => {
+                    let newArray = []
+                    let values = command[1]
+                    let color = command[2]
+                    if (color.includes('$')) color = COLORS[color.replace('$','')]
+    
+                    values.forEach(value => {
+                       if (typeof value == "number"){
+                            newArray.push({value: value, color: color})
+                        }
+                        
+                    });
+    
+                    return newArray
+                })
+                break;
+            
+            case 'resetArray':
+                
+                let numOfBars = command[1]
+                if (typeof numOfBars != "number") return
+                let values = []
+                for (let i = 0; i < numOfBars; i++){
+                    values.push(Math.round(Math.random() * 60) + 8)
+                }
+                AnimateEngine(["setArray",values,"$BASE"])
+                break;
+            
+            case 'setRunTimeDisplay':
+                setRunTime(command[1])
+                break;
 
+            case 'setComparisonsDisplay':
+                setComparisons(command[1])
+                break;
+
+            case 'setSwapsDisplay':
+                setSwaps(command[1])
+                break;
+
+            case 'startAnimation':
+                setAnimationActive(true)
+                break;
+
+            case 'endAnimation':
+                setAnimationActive(false)
+                break;
+
+            case 'do':
+                let subCommands = command[1]
+                let interval = command[2]
+                let currentCommandIdx = 0
+
+                if (interval == '$userSet') interval = animationSpeed
+
+                let intervalID = setInterval(() => {
+                    if (currentCommandIdx >= subCommands.length){
+                        clearInterval(intervalID)
+                        return
+                    }
+
+                    AnimateEngine(subCommands[currentCommandIdx])
+                    currentCommandIdx++
+                }, interval)
+                break;
+            
+            case 'doSim':
+                let toRunCommands = command[1]
+                for (let i = 0; i < toRunCommands.length; i++){
+                    AnimateEngine(toRunCommands[i])
+                }
+
+
+                break;
+
+            case 'doIn':
+                setTimeout(() => {
+                    command[1].forEach((value) => {
+                        AnimateEngine(value)
+                    })
+                }, command[2] )
+                break;
+        }
+    
     }
 
 
+    function resetArray(numOfBars){ // LEGACY
+        AnimateEngine(["resetArray", numOfBars])
+    }
 
+    async function animate(command){ // LEGACY
+        switch(command.command) {
+            case 'setColor':
+                AnimateEngine(["setColor",command.id,command.color])
+                break;
+            case 'swap':
+                AnimateEngine(["swap",command.id1,command.id2])
+                break;
+            case 'setArray':
+                AnimateEngine(["setArray",command.array,'$BASE'])
+                break;
+                
+        }
+    }
 
-    function animator(animations,speed){
-        setAnimationActive(prevState => true)
+    function animator(animations,speed){ // LEGACY
+        AnimateEngine(["startAnimation"])
         let idx = 0
 
         const intervalID = setInterval( () => {
             if (idx > animations.length - 1) {
                 clearInterval(intervalID)
-                setAnimationActive(false)
+                AnimateEngine(["endAnimation"])
                 return 
             }
             animate(animations[idx])
@@ -132,60 +245,77 @@ function SortingVisualiser(props){
 
     function handleSortClick(){
         let data = []
+        let isLegacy = false
         if(animationActive) return false
         switch(activeAlgorithm){
             case 'bubble':
                 data = bubbleSort(getNumbersFromArrayState())
+                //isLegacy = true
                 break;
             case 'selection':
                 data = selectionSort(getNumbersFromArrayState())
+                isLegacy = true
                 break;
             case 'insertion':
                 data = insertionSort(getNumbersFromArrayState())
+                isLegacy = true
                 break;
             case 'quick':
-                //return alert('Currently Unavailable')
+                return alert('Currently Unavailable')
                 data = quickSort(getNumbersFromArrayState())
+                isLegacy = true
                 break;
             case 'heap':
                 data = heapSort(getNumbersFromArrayState())
+                isLegacy = true
                 break;
             case 'merge':
                 return alert('Currently Unavailable')
                 data = mergeSort(getNumbersFromArrayState())
+                isLegacy = true
                 break;
             case 'reverseArray':
                 data = reverseArray(getNumbersFromArrayState())
+                isLegacy = true
                 break;
         }
 
-        let [animations,runTime] = data
-        setRunTime(Math.round(runTime * 1000) / 1000)
-        animator(animations,animationSpeed)
-        setIsSorted(true)
+
+        // Legacy
+        if (isLegacy){
+            let [animations,runTime] = data
+            AnimateEngine(["setRunTimeDisplay", Math.round(runTime * 1000) / 1000])
+            animator(animations,animationSpeed)
+        } else {
+            // NEW Animation System
+            AnimateEngine(["doSim", [data]])
+        }
+        
     }
 
-    let barWidth = ((window.innerWidth / 100) * 90) / numBars
+    function createBars(){
+        let barWidth = ((window.innerWidth / 100) * 90) / numBars
 
-    let barsDivs = array.map((item,idx)  => {
-        let barStyle = {
-            height: `${item.value}%`, 
-            backgroundColor: `${item.color}`,
-            width: barWidth,
-            fontSize: barWidth > 20 ? barWidth / 3 : 0,
-            color: COLORS.TEXT
-            
-        }
-        return (<div key={idx} className='bar' style={barStyle}>{item.value}</div>)
-    })
+        let barsDivs = array.map((item, idx) => {
+            let style = {
+                height: `${item.value}%`, 
+                backgroundColor: `${item.color}`,
+                width: barWidth,
+                fontSize: barWidth > 20 ? barWidth / 3 : 0,
+                color: COLORS.TEXT  
+            }
 
-    
+            return (<div key={idx} className='bar' style={style}>{item.value}</div>)
+        })
+
+        return barsDivs
+    }
 
     return (
         <div className='container'>
             <div className='bar-container'>
                 <div className='inner-bar-container'>
-                    {barsDivs}
+                    {createBars()}
                 </div>
                 
             </div>
@@ -193,7 +323,7 @@ function SortingVisualiser(props){
             <div className='sliderBox'>
                 <p className={animationActive ? 'disabled' : ''}>Animation Time ({animationSpeed}ms) </p>
                 <input disabled={animationActive} type="range" min="1" max="1000" value={animationSpeed} onChange={e => {
-                    setAnimationSpeed(e.target.value)
+                    setAnimationSpeed(e.target.value); 
                 }}></input>
             </div>
                 <button disabled={animationActive} onClick={() => {if(!animationActive) {resetArray(numBars)}}} className={!animationActive ? 'button reset' : 'button-disabled reset'}>Reset</button>
@@ -212,7 +342,7 @@ function SortingVisualiser(props){
                         <p className={animationActive ? 'disabled' : ''}>Number of Bars ({numBars})</p>
                         <input disabled={animationActive} type="range" min="5" max={`${Math.round(window.innerWidth / 12) - 10}`} value={numBars} onChange={e => {
                             setNumBars(e.target.value)
-                            resetArray(e.target.value)
+                            AnimateEngine(["resetArray",e.target.value])
                         }}></input>
                     </div>
                     

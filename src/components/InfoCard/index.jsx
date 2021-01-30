@@ -8,7 +8,6 @@ function InfoCard({algorithmType, algorithmID}){
     const [isOpen, setIsOpen] = useState(false)
     const [isOpenHover, setIsOpenHover] = useState(false)
     
-    console.log('INFO')
 
     let title = 'No Information Available'
     let avgTimeComplexity = ''

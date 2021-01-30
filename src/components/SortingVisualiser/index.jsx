@@ -29,6 +29,7 @@ function SortingVisualiser(props){
     const [comparisons, setComparisons] = useState(0)
     const [animationActive, setAnimationActive] = useState(false)
     const [activeAlgorithm, setActiveAlgorithm] = useState(cookieData[1] || 'bubble')
+    const [isTerminalOpen, setIsTerminalOpen] = useState(false)
 
     
     useEffect(effect => {
@@ -125,7 +126,7 @@ function SortingVisualiser(props){
                         }
                         
                     });
-    
+                    setNumBars(newArray.length)
                     return newArray
                 })
                 break;
@@ -133,7 +134,7 @@ function SortingVisualiser(props){
             case 'resetArray':
                 
                 let numOfBars = command[1]
-                if (typeof numOfBars != "number") return
+                //if (typeof numOfBars != "number") return
                 let values = []
                 for (let i = 0; i < numOfBars; i++){
                     values.push(Math.round(Math.random() * 60) + 8)
@@ -189,8 +190,10 @@ function SortingVisualiser(props){
                 break;
 
             case 'doIn':
+                console.log('doIn')
                 setTimeout(() => {
                     command[1].forEach((value) => {
+                        console.log(value)
                         AnimateEngine(value)
                     })
                 }, command[2] )
@@ -199,12 +202,11 @@ function SortingVisualiser(props){
     
     }
 
-
-    function resetArray(numOfBars){ // LEGACY
+    function resetArray(numOfBars){ // LEGACY - DEPRECATED IN 0.10
         AnimateEngine(["resetArray", numOfBars])
     }
-
-    async function animate(command){ // LEGACY
+    
+    async function animate(command){ // LEGACY - DEPRECATED IN 0.10
         switch(command.command) {
             case 'setColor':
                 AnimateEngine(["setColor",command.id,command.color])
@@ -219,7 +221,7 @@ function SortingVisualiser(props){
         }
     }
 
-    function animator(animations,speed){ // LEGACY
+    function animator(animations,speed){ // LEGACY - DEPRECATED IN 0.10
         AnimateEngine(["startAnimation"])
         let idx = 0
 
@@ -250,7 +252,6 @@ function SortingVisualiser(props){
         switch(activeAlgorithm){
             case 'bubble':
                 data = bubbleSort(getNumbersFromArrayState())
-                //isLegacy = true
                 break;
             case 'selection':
                 data = selectionSort(getNumbersFromArrayState())
@@ -293,6 +294,19 @@ function SortingVisualiser(props){
         
     }
 
+    function handleConsole(e){
+        if (e.key != 'Enter') return
+        let command = e.target.value.replaceAll("'",'"')
+        console.log(`Command: ${command}`)
+        try {
+            let jsonCommand = JSON.parse(command)
+            AnimateEngine(jsonCommand)
+        } catch {
+            e.target.style = {color: 'red'}
+            console.log("Invalid")
+        }
+    }
+
     function createBars(){
         let barWidth = ((window.innerWidth / 100) * 90) / numBars
 
@@ -320,6 +334,7 @@ function SortingVisualiser(props){
                 
             </div>
             <nav>
+            <i className='material-icons consoleButton' onClick={() => setIsTerminalOpen(!isTerminalOpen)}>code</i>
             <div className='sliderBox'>
                 <p className={animationActive ? 'disabled' : ''}>Animation Time ({animationSpeed}ms) </p>
                 <input disabled={animationActive} type="range" min="1" max="1000" value={animationSpeed} onChange={e => {
@@ -341,7 +356,6 @@ function SortingVisualiser(props){
                     <div className='sliderBox'>
                         <p className={animationActive ? 'disabled' : ''}>Number of Bars ({numBars})</p>
                         <input disabled={animationActive} type="range" min="5" max={`${Math.round(window.innerWidth / 12) - 10}`} value={numBars} onChange={e => {
-                            setNumBars(e.target.value)
                             AnimateEngine(["resetArray",e.target.value])
                         }}></input>
                     </div>
@@ -352,6 +366,8 @@ function SortingVisualiser(props){
                 
             </nav>
             <InfoCard algorithmType='sorting' algorithmID={activeAlgorithm}/>
+
+            {isTerminalOpen ? <input placeholder='Console' className='console' onKeyDown={handleConsole}></input> : null}
  
         </div>
         

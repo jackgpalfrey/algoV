@@ -123,9 +123,11 @@
         "title": "Sort Refactoring",
         "info": "",
         "modifications":   [["CHANGE", "Refactored sort code base"],
-                            ["CHANGE", "New And Improved Animation System"],
-                            ["ADD", "Animation Console"],
-                            ["ADD", "Extra Runtime Info - Total Comparisons and Swaps"]],
+                            ["CHANGED", "Moved Bubble Sort To Use New AnimateEngine"],
+                            ["ADDED", "New And Improved AnimateEngine"],
+                            ["ADDED", "Animation Console"],
+                            ["ADD", "Extra Runtime Info - Total Comparisons and Swaps"],
+                            ["DEPRECATED", "Old Animation System"]],
         "date": "31/01/21",
         "isNext": true
     },{

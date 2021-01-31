@@ -1,0 +1,62 @@
+import React, { useEffect, useState } from 'react'
+import './style.css'
+
+function Console(props){
+    const [isOpen, setIsOpen] = useState(props.display)
+    const [textColor, setTextColor] = useState('white')
+    const [commandText, setCommandText] = useState('')
+    const [responseText, setResponseText] = useState('')
+
+    useEffect(() => {
+        setIsOpen(props.display)
+    }, [props.display])
+
+    function responseHandler(response) {
+        response[0] === 'ERROR' ? setTextColor('red') : setTextColor('green')
+        setResponseText(`${response[1]}`)
+        setTimeout(() => {
+            setResponseText('')
+        }, 1000)
+        console.log(response[1])
+    }
+
+    function handleConsole(e){
+        if (e.key != 'Enter') return
+        let command = commandText.replaceAll("'",'"')
+        console.log(`Command: ${command}`)
+        try {
+            let jsonCommand = JSON.parse(command)
+            let response = props.AnimateEngine(jsonCommand)
+            responseHandler(response)
+        } catch (error) {
+            responseHandler(["ERROR", "Invalid Syntax"])
+        }
+    }
+
+    function consoleChangeHandler(e){
+        if (e.target.value.includes('cls')) {
+            setCommandText('')
+        } else {
+            setCommandText(e.target.value)
+        }
+        
+        setTextColor('white')
+    }
+
+    let terminal = (
+        <div className='consoleBox'>
+            <input placeholder='Console' value={commandText} onChange={consoleChangeHandler} style={{color: textColor}}className='console' onKeyDown={handleConsole}></input>
+            <p style={{color: textColor}}>{responseText}</p>
+        </div>
+    )
+
+    return (
+        <div>
+            {isOpen ? terminal : null}
+        </div>
+        
+    )
+        
+}
+
+export default Console

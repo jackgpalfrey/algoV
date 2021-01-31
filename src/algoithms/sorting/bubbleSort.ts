@@ -33,6 +33,8 @@ function sort(array: number[]): [number[],object[],number]{
     endAni.push(["setRunTimeDisplay", Math.round(runTime * 1000) / 1000])
     endAni.push(["startAnimation"])
 
+    console.log("EXEC")
+
     animations.unshift(["doSim", endAni])
     return [sortedArray, animations, runTime]
 
@@ -41,7 +43,7 @@ function sort(array: number[]): [number[],object[],number]{
 function bubbleSort(array: number[]): any{
     let [sortedArray, animations, runTime] = sort(array)
 
-    let command = ["do", animations, 10]
+    let command = ["do", animations, "$userSet"]
     return (command)
 }
 

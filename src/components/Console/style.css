@@ -1,0 +1,22 @@
+.consoleBox {
+	position: absolute;
+	width: 50vw;
+	top: 3em;
+	left: 50%;
+	transform: translateX(-50%);
+}
+
+.consoleBox p {
+	font-size: 0.5em;
+	text-align: center;
+	margin: 1em;
+}
+.console {
+	width: 100%;
+	padding: 1em;
+	background-color: #262626;
+	border: none;
+	box-shadow: none;
+	color: white;
+	-ms-user-select: none;
+}

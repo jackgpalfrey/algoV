@@ -131,7 +131,8 @@
                             ["DEPRECATED", "AnimateEngine: doSim replaced with using 0 as interval in do"]],
         "date": "31/01/21",
         "isNext": true
-    },{
+    },
+    {
         "version": "0.11",
         "title": "Advanced Sort Algorithms",
         "info": "",
@@ -140,6 +141,6 @@
         "date": "03/02/21",
         "dontDisplay": true
     }
-    
+
     
 ]

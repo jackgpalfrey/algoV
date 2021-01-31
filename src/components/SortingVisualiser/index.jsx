@@ -30,7 +30,7 @@ function SortingVisualiser(props){
     const [swaps, setSwaps] = useState(0)
     const [comparisons, setComparisons] = useState(0)
     const [animationActive, setAnimationActive] = useState(false)
-    const [activeAlgorithm, setActiveAlgorithm] = useState(cookieData[1] || 'bubble')
+    const [activeAlgorithm, setActiveAlgorithm] = useState(cookieData[1] || 'bubbleSort')
     const [isTerminalOpen, setIsTerminalOpen] = useState(false)
     const [activeTimeouts, setActiveTimeouts] = useState([])
     const [activeIntervals, setActiveIntervals] = useState([])
@@ -77,12 +77,12 @@ function SortingVisualiser(props){
                             let newArray = prevState.slice()
                             
                             indexArray.forEach(idx => {
-                                if (typeof idx == "number" && idx < 0 && Math.abs(idx) <= newArray.length){
-                                    newArray[newArray.length - Math.abs(idx)][type] = data
-                                
-                                } else if (typeof idx == "number" && idx >= 0 && idx < newArray.length){
+                                if (typeof idx == "number" && idx >= 0 && idx < newArray.length){
                                     newArray[idx][type] = data
 
+                                } if (typeof idx == "number" && idx < 0 && Math.abs(idx) <= newArray.length){
+                                    newArray[newArray.length - Math.abs(idx)][type] = data
+                                
                                 } else if (idx === '$ALL'){
                                     for (let y = 0; y < newArray.length; y++){
                                         newArray[y][type] = data
@@ -209,6 +209,7 @@ function SortingVisualiser(props){
                     let intervalID = setInterval(() => {
                         if (currentCommandIdx >= subCommands.length){
                             clearInterval(intervalID)
+                            //AnimateEngine(["clearLoop", `${intervalID}`])
                             return
                         }
 
@@ -323,15 +324,28 @@ function SortingVisualiser(props){
                     setAnimationActive(false)
                     break;
 
-                case 'clearLoops':
+                case 'clearLoop': //FIXME: Dosen't work
+                    let specificLoop = command[1]
                     let activeLoops = activeIntervals.slice()
-                    let ALLen = activeLoops.length
-                    for (let i = 0; i < ALLen; i++){
-                        clearInterval(activeLoops.pop())
+                    if (!specificLoop && specificLoop !== 0){
+                        let ALLen = activeLoops.length
+                        for (let i = 0; i < ALLen; i++){
+                            clearInterval(activeLoops.pop())
+                        }
+                    } else if (typeof specificLoop === 'number') {
+                        let loop = activeLoops.splice(specificLoop, 1)[0]
+                        console.log(loop)
+                    } else if (typeof specificLoop === 'string'){
+                        let loop = activeLoops.indexOf(parseInt(specificLoop))
+                        console.log(loop)
                     }
+
+                    setActiveIntervals(activeLoops)
+                    
+                    
                     break;
 
-                case 'clearWaits': 
+                case 'clearWaits': //FIXME: Dosen't work
                     let activeWaits = activeTimeouts.slice()
                     let AWLen = activeWaits.length
                     for (let i = 0; i < AWLen; i++){
@@ -340,7 +354,7 @@ function SortingVisualiser(props){
                     break;
                 
                 case 'ct':
-                case 'clearTimers':
+                case 'clearTimers': //FIXME: Dosen't work
                     AnimateEngine(["clearLoops"])
                     AnimateEngine(["clearWaits"])
                     break;
@@ -350,6 +364,58 @@ function SortingVisualiser(props){
                     window.location.reload()
                     break;
                     
+                case 'executeInternalAnimation':
+                    let animationKey = command[1]
+                    console.log(animationKey)
+                    if (!animationKey || typeof animationKey !== 'string' ) return ["ERROR", "Invalid Animation Key"]
+                    let resultData = []
+                    let isLegacy = false
+                    switch(animationKey){
+                        case 'bubbleSort':
+                            resultData = bubbleSort(getNumbersFromArrayState())
+                            break;
+                        case 'selectionSort':
+                            resultData = selectionSort(getNumbersFromArrayState())
+                            isLegacy = true
+                            break;
+                        case 'insertionSort':
+                            resultData = insertionSort(getNumbersFromArrayState())
+                            isLegacy = true
+                            break;
+                        case 'quickSort':
+                            return alert('Currently Unavailable')
+                            resultData = quickSort(getNumbersFromArrayState())
+                            isLegacy = true
+                            break;
+                        case 'heapSort':
+                            resultData = heapSort(getNumbersFromArrayState())
+                            isLegacy = true
+                            break;
+                        case 'mergeSort':
+                            return alert('Currently Unavailable')
+                            resultData = mergeSort(getNumbersFromArrayState())
+                            isLegacy = true
+                            break;
+                        case 'reverseArray':
+                            resultData = reverseArray(getNumbersFromArrayState())
+                            isLegacy = true
+                            break;
+                        default:
+                            return ["ERROR", "Invalid Animation Key"]
+                            break;
+                    }
+
+                    // Legacy
+                    if (isLegacy){
+                        let [animations,runTime] = resultData
+                        AnimateEngine(["setRunTimeDisplay", Math.round(runTime * 1000) / 1000])
+                        animator(animations,animationSpeed)
+                    } else {
+                        // NEW Animation System
+                        AnimateEngine(["doSim", [resultData]])
+                    }
+
+                    break;
                 default:
                     return ["ERROR", "Unknown Command"]
                     break;
@@ -408,52 +474,8 @@ function SortingVisualiser(props){
     }
 
     function handleSortClick(){
-        let data = []
-        let isLegacy = false
-        if(animationActive) return false
-        switch(activeAlgorithm){
-            case 'bubble':
-                data = bubbleSort(getNumbersFromArrayState())
-                break;
-            case 'selection':
-                data = selectionSort(getNumbersFromArrayState())
-                isLegacy = true
-                break;
-            case 'insertion':
-                data = insertionSort(getNumbersFromArrayState())
-                isLegacy = true
-                break;
-            case 'quick':
-                return alert('Currently Unavailable')
-                data = quickSort(getNumbersFromArrayState())
-                isLegacy = true
-                break;
-            case 'heap':
-                data = heapSort(getNumbersFromArrayState())
-                isLegacy = true
-                break;
-            case 'merge':
-                return alert('Currently Unavailable')
-                data = mergeSort(getNumbersFromArrayState())
-                isLegacy = true
-                break;
-            case 'reverseArray':
-                data = reverseArray(getNumbersFromArrayState())
-                isLegacy = true
-                break;
-        }
-
-
-        // Legacy
-        if (isLegacy){
-            let [animations,runTime] = data
-            AnimateEngine(["setRunTimeDisplay", Math.round(runTime * 1000) / 1000])
-            animator(animations,animationSpeed)
-        } else {
-            // NEW Animation System
-            AnimateEngine(["doSim", [data]])
-        }
-        
+        if (animationActive) return false
+        console.log(AnimateEngine(["executeInternalAnimation", activeAlgorithm]))
     }
 
     function handleConsole(e){
@@ -510,12 +532,12 @@ function SortingVisualiser(props){
                 <button disabled={animationActive} onClick={() => {if(!animationActive) {resetArray(numBars)}}} className={!animationActive ? 'button reset' : 'button-disabled reset'}>Reset</button>
                 <button disabled={animationActive} onClick={handleSortClick} className={!animationActive ? 'button sort' : 'button-disabled sort'}>Sort</button>
                 <select disabled={animationActive} value={activeAlgorithm} onChange={e => {setActiveAlgorithm(e.target.value)}}>
-                    <option value='bubble'>Bubble Sort</option>
-                    <option value='selection'>Selection Sort</option>
-                    <option value='insertion'>Insertion Sort</option>
-                    <option value='quick'>Quick Sort</option>
-                    <option value='heap'>Heap Sort</option>
-                    <option value='merge'>Merge Sort</option>
+                    <option value='bubbleSort'>Bubble Sort</option>
+                    <option value='selectionSort'>Selection Sort</option>
+                    <option value='insertionSort'>Insertion Sort</option>
+                    <option value='quickSort'>Quick Sort</option>
+                    <option value='heapSort'>Heap Sort</option>
+                    <option value='mergeSort'>Merge Sort</option>
                     <option value='reverseArray'>(Other)Reverse Array</option>
                 </select>
                 

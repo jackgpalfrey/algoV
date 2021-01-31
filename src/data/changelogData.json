@@ -147,8 +147,8 @@
         "title": "FUTURE FEATURES",
         "info": "",
         "modifications":   [["ADD", "General setState AnimateEngine Command instead of setColor and setValue. They will become Abstracted Commands"],
-                            ["CHANGE", "Move AnimateEngine if elses so that must common idexes etc are first. Eg. numberic indexes should be checked before variables"]
-                            ],
+                            ["CHANGE", "Move AnimateEngine if elses so that must common idexes etc are first. Eg. numberic indexes should be checked before variables"],
+                            ["FIX", "clearLoop, clearWaits, clearTimers and ensure correct cleanup of intervals "]],
         "date": "03/02/21",
         "dontDisplay": true
     }

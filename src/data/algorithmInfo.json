@@ -1,6 +1,6 @@
 {
     "sorting": {
-        "bubble": {
+        "bubbleSort": {
             "title": "Bubble Sort",
             "bestTimeComplexity": "O(n)",
             "avgTimeComplexity": "O(n²)",
@@ -11,7 +11,7 @@
             "creditText": "Description and Meta from",
             "credit": "https://en.wikipedia.org/wiki/Sorting_algorithm"
         },
-        "selection": {
+        "selectionSort": {
             "title": "Selection Sort",
             "bestTimeComplexity": "O(n²)",
             "avgTimeComplexity": "O(n²)",
@@ -22,7 +22,7 @@
             "creditText": "Description and Meta from",
             "credit": "https://en.wikipedia.org/wiki/Sorting_algorithm"
         },
-        "insertion": {
+        "insertionSort": {
             "title": "Insertion Sort",
             "bestTimeComplexity": "O(n)",
             "avgTimeComplexity": "O(n²)",
@@ -33,7 +33,7 @@
             "creditText": "Description and Meta from",
             "credit": "https://en.wikipedia.org/wiki/Sorting_algorithm"
         },
-        "quick": {
+        "quickSort": {
             "title": "Quick Sort",
             "bestTimeComplexity": "O(n log n)",
             "avgTimeComplexity": "O(n log n)",
@@ -44,7 +44,7 @@
             "creditText": "Description and Meta from",
             "credit": "https://en.wikipedia.org/wiki/Sorting_algorithm"
         },
-        "heap": {
+        "heapSort": {
             "title": "Heap Sort",
             "bestTimeComplexity": "O(n log n)",
             "avgTimeComplexity": "O(n log n)",
@@ -55,7 +55,7 @@
             "creditText": "Description and Meta from",
             "credit": "https://en.wikipedia.org/wiki/Sorting_algorithm"
         },
-        "merge": {
+        "mergeSort": {
             "title": "Merge Sort",
             "bestTimeComplexity": "O(n log n)",
             "avgTimeComplexity": "O(n log n)",

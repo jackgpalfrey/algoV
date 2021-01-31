@@ -8,14 +8,13 @@
 	flex-direction: column;
 	justify-content: center;
 	align-content: center;
-	padding: 1em;
 }
 
 .fullItemContainer {
 	width: 100%;
 	justify-self: center;
 	align-self: center;
-	margin: 0.2em;
+	margin: 0.2em 0;
 	color: rgb(170, 170, 170);
 	user-select: none;
 }

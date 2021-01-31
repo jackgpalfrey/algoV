@@ -4,13 +4,17 @@ import Container from '../components/ChangeLog/Container'
 import Item from '../components/ChangeLog/Item'
 
 
-import changeLogItems from '../data/changelogData.json'
+import changeLogData from '../data/changelogData.json'
 
 
 function HomePage(){
     const [isAllOpen, setIsAllOpen] = useState(false)
+    const [isNewestFirst, setIsNewestFirst] = useState(true)
     console.log(isAllOpen)
-    
+
+    let changeLogItems = changeLogData.slice()
+    if (isNewestFirst) changeLogItems = changeLogItems.reverse()
+
     let changeItems = changeLogItems.map((value, idx) => {
         let dontDisplay = false
         dontDisplay = value.dontDisplay
@@ -22,7 +26,10 @@ function HomePage(){
 
     return (
         <div className='changeLog'>
-            <div className='openAllChangesButton' onClick={() => setIsAllOpen(!isAllOpen)}>{isAllOpen ? 'Close All' : 'Open All'}</div>
+            <div className='changeLogMenuItems'>
+                <div className='openAllChangesButton' onClick={() => setIsAllOpen(!isAllOpen)}>{isAllOpen ? 'Close All' : 'Open All'}</div>
+                <div className='openAllChangesButton' onClick={() => setIsNewestFirst(!isNewestFirst)}>{isNewestFirst ? 'Order Oldest to Newest' : 'Order Newest to Oldest'}</div>
+            </div>
             <Container titleBgColor='' titleTxtColor='' infoBgColor='' infoTxtColor=''>
                 {changeItems}
             </Container>

@@ -3,6 +3,13 @@ body {
 	overflow-x: hidden;
 }
 
+.changeLogMenuItems {
+	display: flex;
+	justify-content: space-between;
+	align-content: space-between;
+	margin-bottom: 0.7em;
+}
+
 .changeLog {
 	margin: 0 auto;
 	width: 60vw;
@@ -17,7 +24,6 @@ body {
 
 .openAllChangesButton {
 	width: 20%;
-	margin: 0 auto;
 	text-align: center;
 	background-color: #262626;
 	padding: 0.5em;

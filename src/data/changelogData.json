@@ -1,11 +1,10 @@
 [
-    {
+    {"version": "DATA",
         "Possible Finished Modifcation Keys": ["ADDED", "CHANGED", "DEPRECATED", "REMOVED", "FIXED"],
         "Possible To Change Modifcation Keys": ["ADD", "CHANGE", "DEPRECATE", "REMOVE", "FIX"],
         "dontDisplay": true
     },
-    {
-        "version": "TEST",
+    {"version": "TEST",
         "title": "Color test",
         "info": "Test for different types of change",
         "modifications":   [["ADDED","TEST"],
@@ -17,16 +16,14 @@
         "date": "01/01/01",
         "dontDisplay": true
     },
-    {
-        "version": "0.00",
+    {"version": "0.00",
         "title": "(History) Sort Visualiser Foundations",
         "info": "Added bars and creating random array",
         "modifications":   [["ADDED","Sort Visualiser Component"], 
                             ["ADDED","Sort Visualiser Component - Create New Array"]],
         "date": "23/01/21"
     },
-    {
-        "version": "0.01",
+    {"version": "0.01",
         "title": "(History) Sort Visualiser Animation System",
         "info": "Added system that takes array of animation objects and performs related actions on bars in sort visualiser",
         "modifications":   [["ADDED","Aninimation System"], 
@@ -34,16 +31,14 @@
                             ["ADDED", "swap animation"]],
         "date": "23/01/21"
     },
-    {
-        "version": "0.02",
+    {"version": "0.02",
         "title": "(History) Bubble Sort",
         "info": "Added bubble sort visualisation.",
         "modifications":   [["ADDED","Bubble Sort Algorithm"], 
                             ["ADDED","Sort button"]],
         "date": "23/01/21"
     },
-    {
-        "version": "0.03",
+    {"version": "0.03",
         "title": "(History) Selection Sort",
         "info": "Added Selection sort and improved bubble sort code",
         "modifications":   [["ADDED","Selection Sort Algorithm"], 
@@ -52,16 +47,14 @@
                             ["REMOVED", "Sort Button"]],
         "date": "23/01/21"
     },
-    {
-        "version": "0.04",
+    {"version": "0.04",
         "title": "(History) Insertion Sort",
         "info": "Added Insertion Sort",
         "modifications":   [["ADDED","Insertion Sort Algorithm"], 
                             ["ADDED","Insertion Sort Button"]],
         "date": "24/01/21"
     },
-    {
-        "version": "0.05",
+    {"version": "0.05",
         "title": "(History) Sort Menu Beginnings",
         "info": "Added Info card, algorithm selection dropdown",
         "modifications":   [["ADDED", "Sort Menu Bar"], 
@@ -77,8 +70,7 @@
                         ],
         "date": "24/01/21"
     },
-    {
-        "version": "0.06",
+    {"version": "0.06",
         "title": "(History) Improved Sort Visualiser Menu",
         "info": "Created more pleasant UI and added Nav Menu",
         "modifications":   [["ADDED","Sort Algorithm Time Taken Tracking & UI element"], 
@@ -90,8 +82,7 @@
                         ],
         "date": "25/01/21"
     },
-    {
-        "version": "0.07",
+    {"version": "0.07",
         "title": "(History) Heap Sort",
         "info": "Added Heap sort algorithm. Animations are awful needs massive improvement but want to move on to other things right now",
         "modifications":   [["ADDED","Heap Sort Algorithm"], 
@@ -102,15 +93,13 @@
                         ],
         "date": "26/01/21"
     },
-    {
-        "version": "0.08",
+    {"version": "0.08",
         "title": "Changelog",
         "info": "Added Changelog. Pretty ugly but good enough for now.",
         "modifications":   [["ADDED","ChangeLog Components"]],
         "date": "28/01/21"
     },
-    {
-        "version": "0.9",
+    {"version": "0.9",
         "title": "Changelog And Meta",
         "info": "Added additional changelog functionality and meta tags for algorithms",
         "modifications":   [["ADDED", "Open / Close All on changelog "],
@@ -118,26 +107,48 @@
                             ["ADDED", "Aditional Meta Tags On Info Card (Worst, best, avg, memory complexity and stable"]],
         "date": "29/01/21" 
     },
-    {
-        "version": "0.10",
-        "title": "Sort Refactoring",
-        "info": "",
+    {"version": "0.10",
+        "title": "Animate Engine",
+        "info": "Added new complex Animation System (AnimateEngine) probably slightly bloated, may need future refinement but for now provides a indepth system that allows for a variety of complex animations. Also generally refactored SortVisualiser code base. Deprecated old animation system and converted functions to translate from old commands to new AnimateEngine commands. Not yet removed as only bubbleSort has been moved to new Engine. Also added a console to execute AnimateEngine commands and added extra Runtime info when hovering over Runtime display. Should probably make documentation for AnimateEngine in the future as looking at the code everytime is quite annoying. doSim command performs actions simulteneously however using do with an interval of 0 is proabably a better approach so consider it deprecated.",
         "modifications":   [["CHANGED", "Refactored sort code base"],
                             ["CHANGED", "Moved Bubble Sort To Use New AnimateEngine"],
                             ["ADDED", "New And Improved AnimateEngine"],
                             ["ADDED", "Animation Console"],
-                            ["ADD", "Extra Runtime Info - Total Comparisons and Swaps"],
+                            ["ADDED", "Extra Runtime Info - Total Comparisons and Swaps"],
                             ["DEPRECATED", "Old Animation System"],
                             ["DEPRECATED", "AnimateEngine: doSim replaced with using 0 as interval in do"]],
-        "date": "31/01/21",
+        "date": "31/01/21"
+        
+    },
+    {"version": "0.11",
+        "title": "Pathfinding Update",
+        "info": "",
+        "modifications":   [["ADDED", "Changelog Order Toggle"]],
+        "date": "03/02/21",
         "isNext": true
     },
-    {
-        "version": "0.11",
+    {"version": "0.12",
         "title": "Advanced Sort Algorithms",
         "info": "",
         "modifications":   [["ADD", "Merge Sort"],
                             ["ADD", "Quick Sort"]],
+        "date": "03/02/21",
+        "dontDisplay": true
+    },
+    {"version": "0.13",
+        "title": "Advanced Sort Algorithms",
+        "info": "",
+        "modifications":   [["ADD", "Merge Sort"],
+                            ["ADD", "Quick Sort"]],
+        "date": "03/02/21",
+        "dontDisplay": true
+    },
+    {"version": "FUTURE VERSIONS",
+        "title": "FUTURE FEATURES",
+        "info": "",
+        "modifications":   [["ADD", "General setState AnimateEngine Command instead of setColor and setValue. They will become Abstracted Commands"],
+                            ["CHANGE", "Move AnimateEngine if elses so that must common idexes etc are first. Eg. numberic indexes should be checked before variables"]
+                            ],
         "date": "03/02/21",
         "dontDisplay": true
     }

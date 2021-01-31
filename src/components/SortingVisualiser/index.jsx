@@ -53,54 +53,81 @@ function SortingVisualiser(props){
             
             let response = ["PENDING", "In progress"]
             switch(commandCode){
+                case 'setState':
+                        let indexArray = command[1]
+                        let type = command[2]
+                        let data = command[3]
+
+                        if (!indexArray || !Array.isArray(indexArray)) return ["ERROR", "Invalid Indexs"]
+                        if (!type || typeof type !== 'string') return ["ERROR", "Invalid Type"]
+                        
+                        type = type.toLowerCase()
+
+                        if (type === 'color'){
+                            if(typeof data !== 'string') return ["ERROR", "Invalid Data"]
+                            if (data.includes('$')) data = COLORS[data.replace('$','')]
+                        } else if (type === 'value'){
+                            if(typeof data !== 'number') return ["ERROR", "Invalid Data"]
+                        } else {
+                            return ["ERROR", "Invalid Type"]
+                        }
+
+
+                        setArray(prevState => {
+                            let newArray = prevState.slice()
+                            
+                            indexArray.forEach(idx => {
+                                if (typeof idx == "number" && idx < 0 && Math.abs(idx) <= newArray.length){
+                                    newArray[newArray.length - Math.abs(idx)][type] = data
+                                
+                                } else if (typeof idx == "number" && idx >= 0 && idx < newArray.length){
+                                    newArray[idx][type] = data
+
+                                } else if (idx === '$ALL'){
+                                    for (let y = 0; y < newArray.length; y++){
+                                        newArray[y][type] = data
+                                    }
+                                } else if (idx === '$LHALF'){
+                                    for (let y = 0; y < Math.ceil(newArray.length / 2); y++){
+                                        newArray[y][type] = data
+                                    }
+                                } else if (idx === '$RHALF'){
+                                    for (let y = Math.floor(newArray.length / 2); y < newArray.length; y++){
+                                        newArray[y][type] = data
+                                    }
+    
+                                } else if (idx === '$ODD'){
+                                    for (let y = 0; y < newArray.length; y++){
+                                        if (y % 2 === 0) newArray[y][type] = data
+                                        
+                                    }
+    
+                                } else if (idx === '$EVEN'){
+                                    for (let y = 0; y < newArray.length; y++){
+                                        if (y % 2 === 1) newArray[y][type] = data
+                                    }
+    
+                                } else if (idx === '$MID'){
+                                    newArray[Math.floor((newArray.length - 1) / 2)][type] = data
+                                    newArray[Math.ceil((newArray.length - 1) / 2)][type] = data
+    
+                                }
+                                
+                                
+                            });
+                            
+                            return newArray
+                        });
+                            
+
+                    break;
+                
                 case 'sc':
                 case 'setColor': // Sets color of bars. Syntax: ["setColor",[array of ids or $ALL, $LHALF, $RHALF], "valid css color OR valid inbuilt variable prefixed with $"]
                     let idxes = command[1]
                     let color = command[2]
-                    if (!color || typeof color !== 'string') return ["ERROR", "Invalid Color"]
-                    if (!idxes || !Array.isArray(idxes)) return ["ERROR", "Invalid Indexs"]
-                    setArray(prevState => {
-                        color = command[2]
-                        let newArray = prevState.slice()
-                        if (color.includes('$')) color = COLORS[color.replace('$','')]
-        
-                        idxes.forEach(idx => {
-                            if (idx === '$ALL'){
-                                for (let y = 0; y < newArray.length; y++){
-                                    newArray[y].color = color
-                                }
-                            } else if (idx === '$LHALF'){
-                                for (let y = 0; y < Math.ceil(newArray.length / 2); y++){
-                                    newArray[y].color = color
-                                }
-                            } else if (idx === '$RHALF'){
-                                for (let y = Math.floor(newArray.length / 2); y < newArray.length; y++){
-                                    newArray[y].color = color
-                                }
-
-                            } else if (idx === '$ODD'){
-                                for (let y = 0; y < newArray.length; y++){
-                                    if (y % 2 === 0) newArray[y].color = color
-                                    
-                                }
-
-                            } else if (idx === '$EVEN'){
-                                for (let y = 0; y < newArray.length; y++){
-                                    if (y % 2 === 1) newArray[y].color = color
-                                }
-
-                            } else if (typeof idx == "number" && idx < 0 && Math.abs(idx) <= newArray.length){
-                                newArray[newArray.length - Math.abs(idx)].color = color
-                            
-                            } else if (typeof idx == "number" && idx >= 0 && idx < newArray.length){
-                                newArray[idx].color = color
-                            }
-                            
-                        });
-        
-        
-                        return newArray
-                    })
+                    
+                    AnimateEngine(["setState", idxes, 'color', color])
                     break;
                 
                 case 'swap':
@@ -132,48 +159,8 @@ function SortingVisualiser(props){
                 case 'setValue':
                     let idxs = command[1]
                     let value = command[2]
-                    if (!value || typeof value !== 'number') return ["ERROR", "Invalid Value"]
-                    if (!idxs || !Array.isArray(idxs)) return ["ERROR", "Invalid Indexs"]
-                    setArray(prevState => {
-                        let newArray = prevState.slice()
-                        
-        
-                        idxs.forEach(idx => {
-                            if (idx === '$ALL'){
-                                for (let y = 0; y < newArray.length; y++){
-                                    newArray[y].value = value
-                                }
-                            } else if (idx === '$LHALF'){
-                                for (let y = 0; y < Math.ceil(newArray.length / 2); y++){
-                                    newArray[y].value = value
-                                }
-                            } else if (idx === '$RHALF'){
-                                for (let y = Math.floor(newArray.length / 2); y < newArray.length; y++){
-                                    newArray[y].value = value
-                                }
-                            } else if (idx === '$ODD'){
-                                for (let y = 0; y < newArray.length; y++){
-                                    if (y % 2 === 0) newArray[y].value = value
-                                    
-                                }
 
-                            } else if (idx === '$EVEN'){
-                                for (let y = 0; y < newArray.length; y++){
-                                    if (y % 2 === 1) newArray[y].value = value
-                                }
-
-                            } else if (typeof idx == "number" && idx < 0 && Math.abs(idx) <= newArray.length){
-                                newArray[newArray.length - Math.abs(idx)].value = value
-                            
-                            } else if (typeof idx == "number" && idx >= 0 && idx < newArray.length){
-                                newArray[idx].value = value
-                            }
-                            
-                        });
-        
-        
-                        return newArray
-                    })
+                    AnimateEngine(["setState", idxs, 'value', value])
                     break;
                 
                 case 'setArray':
@@ -197,45 +184,7 @@ function SortingVisualiser(props){
                         return newArray
                     })
                     break;
-                
-                case 'r':
-                case 'resetArray':
-                    
-                    let numOfBars = command[1]
-                    if (!numOfBars || typeof numOfBars !== 'number') return ["ERORR", "Invalid Number of bars"]
-                    let Randvalues = []
-                    for (let i = 0; i < numOfBars; i++){
-                        Randvalues.push(Math.round(Math.random() * 60) + 8)
-                    }
-                    AnimateEngine(["setArray",Randvalues,"$BASE"])
-                    break;
-                
-                case 'setRunTimeDisplay':
-                    let newRuntime = command[1]
-                    if (!newRuntime) return ["ERROR", "Invalid Runtime"]
-                    setRunTime(newRuntime)
-                    break;
-
-                case 'setComparisonsDisplay':
-                    let newComparisons = command[1]
-                    if (!newComparisons) return ["ERROR", "Invalid Comparisons"]
-                    setComparisons(newComparisons)
-                    break;
-
-                case 'setSwapsDisplay':
-                    let newSwaps = command[1]
-                    if (!newSwaps) return ["ERROR", "Invalid Swaps"]
-                    setSwaps(newSwaps)
-                    break;
-
-                case 'startAnimation':
-                    setAnimationActive(true)
-                    break;
-
-                case 'endAnimation':
-                    setAnimationActive(false)
-                    break;
-
+                        
                 case 'do':
                     let subCommands = command[1]
                     let interval = command[2]
@@ -334,7 +283,46 @@ function SortingVisualiser(props){
                     })
 
                     break;
-            
+                
+                case 'ra':
+                case 'resetArray':
+                    
+                    let numOfBars = command[1]
+                    if (!numOfBars) numOfBars = numBars
+                    if (typeof numOfBars !== 'number') return ["ERROR", "Invalid Number of bars"]
+                    let Randvalues = []
+                    for (let i = 0; i < numOfBars; i++){
+                        Randvalues.push(Math.round(Math.random() * 60) + 8)
+                    }
+                    AnimateEngine(["setArray",Randvalues,"$BASE"])
+                    break;
+                
+                case 'setRunTimeDisplay':
+                    let newRuntime = command[1]
+                    if (!newRuntime) return ["ERROR", "Invalid Runtime"]
+                    setRunTime(newRuntime)
+                    break;
+
+                case 'setComparisonsDisplay':
+                    let newComparisons = command[1]
+                    if (!newComparisons) return ["ERROR", "Invalid Comparisons"]
+                    setComparisons(newComparisons)
+                    break;
+
+                case 'setSwapsDisplay':
+                    let newSwaps = command[1]
+                    if (!newSwaps) return ["ERROR", "Invalid Swaps"]
+                    setSwaps(newSwaps)
+                    break;
+
+                case 'startAnimation':
+                    setAnimationActive(true)
+                    break;
+
+                case 'endAnimation':
+                    setAnimationActive(false)
+                    break;
+
                 case 'clearLoops':
                     let activeLoops = activeIntervals.slice()
                     let ALLen = activeLoops.length
@@ -357,7 +345,7 @@ function SortingVisualiser(props){
                     AnimateEngine(["clearWaits"])
                     break;
                 
-                case 'rd':
+                case 'r':
                 case 'reload':
                     window.location.reload()
                     break;
@@ -369,8 +357,9 @@ function SortingVisualiser(props){
 
             return ["SUCCESS", "Exectuted Successfully"]
 
-        } catch {
-            return ["ERROR", "Error"]
+        } catch (error){
+            console.error(error)
+            return ["ERROR", "Try Failed"]
         }
     
     }
@@ -489,7 +478,7 @@ function SortingVisualiser(props){
                 height: `${item.value}%`, 
                 backgroundColor: `${item.color}`,
                 width: barWidth,
-                margin: barWidth / 4 > 10 ? 10 : barWidth / 4,
+                margin: barWidth / 4 > 20 ? 20 : barWidth / 4,
                 fontSize: barWidth > 20 ? barWidth / 3 : 0,
                 color: COLORS.TEXT  
             }
@@ -539,7 +528,7 @@ function SortingVisualiser(props){
                     
                     
 
-                <p className={animationActive ? 'timeTaken disabled' : 'timeTaken'}>{runTime !== 0 ? `Time: ${runTime}ms`: `Time: N/A`}</p>
+                <p title={`Swaps: ${swaps} \nComparisons: ${comparisons}`} className={animationActive ? 'timeTaken disabled' : 'timeTaken'}>{runTime !== 0 ? `Time: ${runTime}ms`: `Time: N/A`}</p>
                 
             </nav>
             <InfoCard algorithmType='sorting' algorithmID={activeAlgorithm}/>

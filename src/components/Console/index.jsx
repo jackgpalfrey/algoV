@@ -29,6 +29,7 @@ function Console(props){
             let response = props.AnimateEngine(jsonCommand)
             responseHandler(response)
         } catch (error) {
+            console.log(error)
             responseHandler(["ERROR", "Invalid Syntax"])
         }
     }

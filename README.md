@@ -1,4 +1,4 @@
-# Algori.com
+# algoV.app
 
 Simple Algorithm Visualiser 
 

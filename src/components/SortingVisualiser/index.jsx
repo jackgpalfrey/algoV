@@ -526,7 +526,7 @@ function SortingVisualiser(props){
             </div>
                 <button disabled={animationActive} onClick={() => {if(!animationActive) {resetArray(numBars)}}} className={!animationActive ? 'button reset' : 'button-disabled reset'}>Reset</button>
                 <button disabled={animationActive} onClick={handleSortClick} className={!animationActive ? 'button sort' : 'button-disabled sort'}>Sort</button>
-                <select disabled={animationActive} value={activeAlgorithm} onChange={e => {setActiveAlgorithm(e.target.value)}}>
+                <select disabled={animationActive} value={activeAlgorithm} name={activeAlgorithm} onChange={e => {setActiveAlgorithm(e.target.value)}}>
                     <option value='bubbleSort'>Bubble Sort</option>
                     <option value='selectionSort'>Selection Sort</option>
                     <option value='insertionSort'>Insertion Sort</option>

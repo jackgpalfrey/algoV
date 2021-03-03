@@ -124,7 +124,8 @@
         "title": "Pathfinding Update",
         "info": "",
         "modifications":   [["ADDED", "Changelog Order Toggle"],
-                            ["FIXED", "Bug in AnimateEngine Resulting in 1st bar not swapping"]],
+                            ["FIXED", "Bug in AnimateEngine Resulting in 1st bar not swapping"],
+                            ["ADDED", "Ability to reference specific sort algorithm in url with ?"]],
         "date": "03/02/21",
         "isNext": true
     },

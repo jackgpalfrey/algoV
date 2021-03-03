@@ -9,6 +9,7 @@ const CHANGES_COLORS = {
     "DEPRECATED": "#a6602b",
     "REMOVED": "#a62b2b",
     "FIXED": "#218f7c",
+    "GENERAL": "#e0b53d",
     // Planned Changes
     "ADD": "#1b9429",
     "CHANGE": "#2b6bba",

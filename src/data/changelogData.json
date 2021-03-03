@@ -99,7 +99,7 @@
         "modifications":   [["ADDED","ChangeLog Components"]],
         "date": "28/01/21"
     },
-    {"version": "0.9",
+    {"version": "0.09",
         "title": "Changelog And Meta",
         "info": "Added additional changelog functionality and meta tags for algorithms",
         "modifications":   [["ADDED", "Open / Close All on changelog "],
@@ -120,14 +120,32 @@
         "date": "31/01/21"
         
     },
-    {"version": "0.11",
+    {"version": "1.00",
+        "title": "Publish Update",
+        "info": "",
+        "modifications":   [["GENERAL", "Published to Github Pages"],
+                            ["ADDED", "General Key for Change Log"],
+                            ["ADD", "Under development page"],
+                            ["ADDED", "General setState AnimateEngine Command to change item data like color and value"],
+                            ["ADDED", "Changelog Order Toggle"],
+                            ["ADDED", "Ability to reference specific sort algorithms in url with ?"],
+                            ["CHANGED", "setColor and setValue to Abstracted Commands using setState "],
+                            ["CHANGE", "All Algorithms over to AnimateEngine"],
+                            ["CHANGED", "Optimised AnimateEngine to check for most common commands first"],
+                            ["REMOVE", "Hover to open Menus"],
+                            ["REMOVE", "Legacy to AnimateEngine conversion functions"],
+                            ["FIX", "Slider styling"],
+                            ["FIX", "Text overflowing for small numbers in the Sort Visualiser when the number of bars is low"],
+                            ["FIXED", "Bug in AnimateEngine resulting in first bar not swapping with some algorithms"]],
+        "date": "04/03/21",
+        "isNext": true
+    },
+    {"version": "1.10",
         "title": "Pathfinding Update",
         "info": "",
-        "modifications":   [["ADDED", "Changelog Order Toggle"],
-                            ["FIXED", "Bug in AnimateEngine Resulting in 1st bar not swapping"],
-                            ["ADDED", "Ability to reference specific sort algorithm in url with ?"]],
+        "modifications":   [],
         "date": "03/02/21",
-        "isNext": true
+        "dontDisplay": true
     },
     {"version": "0.12",
         "title": "Advanced Sort Algorithms",
@@ -148,9 +166,7 @@
     {"version": "FUTURE VERSIONS",
         "title": "FUTURE FEATURES",
         "info": "",
-        "modifications":   [["ADD", "General setState AnimateEngine Command instead of setColor and setValue. They will become Abstracted Commands"],
-                            ["CHANGE", "Move AnimateEngine if elses so that must common idexes etc are first. Eg. numberic indexes should be checked before variables"],
-                            ["FIX", "clearLoop, clearWaits, clearTimers and ensure correct cleanup of intervals "]],
+        "modifications":   [["FIX", "clearLoop, clearWaits, clearTimers and ensure correct cleanup of intervals "]],
         "date": "03/02/21",
         "dontDisplay": true    
     }

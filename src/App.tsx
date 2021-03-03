@@ -4,7 +4,7 @@ import Menu from './components/Menu';
 import SortingVisualiserPage from './pages/SortingVisualiserPage';
 
 
-import {BrowserRouter as Router, Redirect, Route, Switch} from 'react-router-dom'
+import {HashRouter as Router, Redirect, Route, Switch} from 'react-router-dom'
 import PathfindingVisualiserPage from './pages/PathfindingVisualiserPage';
 import AlgoriComputePage from './pages/AlgoriComputePage';
 import HomePage from './pages/HomePage';

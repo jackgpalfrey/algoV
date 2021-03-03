@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react'
+import { useLocation } from 'react-router-dom'
+
 import bubbleSort from '../../algoithms/sorting/bubbleSort'
 import heapSort from '../../algoithms/sorting/heapSort'
 import insertionSort from '../../algoithms/sorting/insertionSort'
@@ -8,6 +10,7 @@ import reverseArray from '../../algoithms/sorting/reverseArray'
 import selectionSort from '../../algoithms/sorting/selectionSort'
 import Console from '../Console'
 import InfoCard from '../InfoCard'
+import algoData from '../../data/algorithmInfo.json'
 import './style.css'
 
 
@@ -23,6 +26,10 @@ function SortingVisualiser(props){
 
     //#region State Creation 
     const cookieData = document.cookie.replace(';','').replace(' ','').split(',')
+    let animationtype = cookieData[0]
+    let urlAnimation = useLocation().search.replace('?','')
+    if (urlAnimation && Object.keys(algoData['sorting']).includes(urlAnimation)) animationtype = urlAnimation
+    if(!Object.keys(algoData['sorting']).includes(urlAnimation)) animationtype = 'bubbleSort'
     const [array, setArray] = useState([])
     const [animationSpeed, setAnimationSpeed] = useState(cookieData[0] || 100)
     const [numBars, setNumBars] = useState(Math.round((window.innerWidth / 12) / 2))
@@ -30,7 +37,7 @@ function SortingVisualiser(props){
     const [swaps, setSwaps] = useState(0)
     const [comparisons, setComparisons] = useState(0)
     const [animationActive, setAnimationActive] = useState(false)
-    const [activeAlgorithm, setActiveAlgorithm] = useState(cookieData[1] || 'bubbleSort')
+    const [activeAlgorithm, setActiveAlgorithm] = useState(animationtype || 'bubbleSort')
     const [isTerminalOpen, setIsTerminalOpen] = useState(false)
     const [activeTimeouts, setActiveTimeouts] = useState([])
     const [activeIntervals, setActiveIntervals] = useState([])
@@ -133,8 +140,8 @@ function SortingVisualiser(props){
                 case 'swap':
                     let id1 = command[1]
                     let id2 = command[2]
-                    if (!id1 && id1 !== 0 || typeof id1 !== 'number') return ["ERROR", "Invalid id1"]
-                    if (!id2 && id1 !== 0 || typeof id2 !== 'number') return ["ERROR", "Invalid id2"]
+                    if (id1 == undefined || typeof id1 !== 'number') return ["ERROR", "Invalid id1"]
+                    if (id2 == undefined || typeof id2 !== 'number') return ["ERROR", "Invalid id2"]
                     setArray(prevState => {
                         id1 = command[1]
                         id2 = command[2]
@@ -327,7 +334,7 @@ function SortingVisualiser(props){
                 case 'clearLoop': //FIXME: Dosen't work
                     let specificLoop = command[1]
                     let activeLoops = activeIntervals.slice()
-                    if (!specificLoop && specificLoop !== 0){
+                    if (specificLoop == undefined){
                         let ALLen = activeLoops.length
                         for (let i = 0; i < ALLen; i++){
                             clearInterval(activeLoops.pop())
@@ -335,9 +342,11 @@ function SortingVisualiser(props){
                     } else if (typeof specificLoop === 'number') {
                         let loop = activeLoops.splice(specificLoop, 1)[0]
                         console.log(loop)
+                        clearInterval(loop)
                     } else if (typeof specificLoop === 'string'){
-                        let loop = activeLoops.indexOf(parseInt(specificLoop))
+                        let loop = activeLoops.indexOf(parseInt(specificLoop))[0]
                         console.log(loop)
+                        clearInterval(loop)
                     }
 
                     setActiveIntervals(activeLoops)
@@ -416,6 +425,7 @@ function SortingVisualiser(props){
                     }
 
                     break;
+                
                 default:
                     return ["ERROR", "Unknown Command"]
                     break;

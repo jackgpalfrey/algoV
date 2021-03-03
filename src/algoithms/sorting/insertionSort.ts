@@ -7,7 +7,7 @@ function sort(array: number[]): [number[],object[],number]{
     let sortedArray: number[] = array
     let animations: object[] = []
 
-    for (let i = 1; i < sortedArray.length; i++){
+    for (let i = 0; i < sortedArray.length; i++){
         for (let j = i; j > 0; j--){
             animations.push({command: 'setColor',id: [j,j-1],color: '$BEING_CHECKED'})
             if (sortedArray[j] < sortedArray[j-1]) {
@@ -32,6 +32,7 @@ function sort(array: number[]): [number[],object[],number]{
     
     const endTime = performance.now()
     const runTime = endTime - startTime
+    console.log(sortedArray)
     return [sortedArray, animations, runTime]
 }
 

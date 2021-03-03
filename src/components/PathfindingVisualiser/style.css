@@ -5,7 +5,6 @@ body {
 .container {
 	width: 100vw;
 	height: 100vh;
-	overflow: hidden;
 	justify-content: center;
 	align-items: center;
 	align-content: center;
@@ -16,10 +15,17 @@ body {
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	margin: 0 0 0 auto;
-	width: 100vw;
+	margin: auto;
 	height: 90vh;
-	overflow: hidden;
+	/* overflow: hidden; */
+}
+
+.grid-container-inner {
+	height: 95%;
+	justify-content: center;
+	align-items: center;
+	align-content: center;
+	/* overflow: hidden; */
 }
 
 .row {

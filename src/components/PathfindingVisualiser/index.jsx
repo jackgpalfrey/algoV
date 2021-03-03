@@ -79,13 +79,18 @@ function PathfindingVisualiser(props){
                         setGrid(prevState => {
                             let newArray = prevState.slice()
                             
-                            indexArray.forEach(idx => {
+                            indexArray.forEach((idx) => {
                                 if (!Array.isArray(idx)) {
                                     return newArray
 
                                 } else if (idx.length === 2 && (typeof idx[0] === 'number' || idx[0] === '$MID')&& (typeof idx[1] === 'number' || idx[1] === '$MID') && idx[0] < newArray.length && idx[1] < newArray.length){
                                     idx.forEach((indexVal, indexIdx) => {
-                                        if (idx[indexIdx] < 0 && Math.abs(idx[indexIdx]) < newArray.length) idx[indexIdx] = newArray.length - idx[indexIdx]
+                                        if (idx[indexIdx] < 0 && Math.abs(idx[indexIdx]) < newArray.length){
+                                            console.log("SUB0")
+                                            if (indexIdx === 0) idx[indexIdx] = newArray.length - idx[indexIdx]
+                                            else if (indexIdx === 1) idx[indexIdx] = newArray[0].length - idx[indexIdx]
+                                            else console.log("TEST")
+                                        } 
                                         else if (idx[indexIdx] === '$MID') idx[indexIdx] = Math.floor(newArray.length / 2)
                                     })
 
@@ -441,8 +446,9 @@ function PathfindingVisualiser(props){
 
 
     function resetGrid(){
-        let xNum = 37
-        let yNum = 16
+        let boxSize = 20
+        let xNum = ((window.innerWidth - 30) / boxSize)
+        let yNum = ((window.innerHeight - 100) / boxSize)
         let defaultItem = {color: 'black', value: '2'}
 
         let newGrid = []
@@ -463,10 +469,18 @@ function PathfindingVisualiser(props){
 
     function createDivGrid(){
         let divGrid = []
+        let width = 40
+        let height = 40
+        try {
+            width = ((window.innerWidth - 30) / grid[0].length) - 1
+            height = ((window.innerHeight - 100) / grid.length) - 1
+        } catch {
+            console.log("No Grid Created")
+        }
         grid.forEach((itemx,idxx) => {
             let col = grid[idxx]
             let divCol = col.map((item, idxy) => {
-                return (<div onMouseDown={boxClickHandler} className='node' key={`${idxx}-${idxy}`} id={`${idxx}-${idxy}`} style={{backgroundColor: item.color, width: '40px', height: '40px'}}></div>)
+                return (<div onMouseDown={boxClickHandler} className='node' key={`${idxx}-${idxy}`} id={`${idxx}-${idxy}`} style={{backgroundColor: item.color, width: width, height: height}}></div>)
             })
 
             divGrid.push(<div className='row'>{divCol}</div>)
@@ -485,7 +499,8 @@ function PathfindingVisualiser(props){
             let posX = parseInt(pos[0])
             let posY = parseInt(pos[1])
             console.log(pos)
-            newGrid[posX][posY].color = 'red'
+            if (newGrid[posX][posY].color === 'red') newGrid[posX][posY].color = 'red'
+            else newGrid[posX][posY].color = 'red'
             console.log(newGrid)
             return newGrid
         })
@@ -502,7 +517,9 @@ function PathfindingVisualiser(props){
         <div className='container'>
         
             <div className='grid-container'>
-                {createDivGrid()}
+                <div className="grid-container-inner">
+                    {createDivGrid()}
+                </div>
             </div>
             <nav>
             <i className='material-icons consoleButton' onClick={() => setIsTerminalOpen(!isTerminalOpen)}>code</i>

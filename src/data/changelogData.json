@@ -123,7 +123,8 @@
     {"version": "0.11",
         "title": "Pathfinding Update",
         "info": "",
-        "modifications":   [["ADDED", "Changelog Order Toggle"]],
+        "modifications":   [["ADDED", "Changelog Order Toggle"],
+                            ["FIXED", "Bug in AnimateEngine Resulting in 1st bar not swapping"]],
         "date": "03/02/21",
         "isNext": true
     },
@@ -150,7 +151,7 @@
                             ["CHANGE", "Move AnimateEngine if elses so that must common idexes etc are first. Eg. numberic indexes should be checked before variables"],
                             ["FIX", "clearLoop, clearWaits, clearTimers and ensure correct cleanup of intervals "]],
         "date": "03/02/21",
-        "dontDisplay": true
+        "dontDisplay": true    
     }
 
     

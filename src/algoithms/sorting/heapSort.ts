@@ -15,7 +15,7 @@ function heapify(array: number[], length: number, idx: number, animations: objec
     let left:number = idx * 2 + 1
     let right:number = left + 1
 
-    animations.push({command: 'setColor',id: [left,right],color: '?$BEING_CHECKED'})
+    animations.push({command: 'setColor',id: [left,right],color: '$BEING_CHECKED'})
 
     if(left < length && array[left] > array[largest]) {
         largest = left
@@ -25,7 +25,7 @@ function heapify(array: number[], length: number, idx: number, animations: objec
         largest = right
     }
 
-    animations.push({command: 'setColor',id: [left,right],color: '?$BASE'})
+    animations.push({command: 'setColor',id: [left,right],color: '$BASE'})
 
     if(largest != idx){
         swap(array, idx, largest, animations)

@@ -8,9 +8,9 @@ function Menu(){
     
     return (
         <div>
-        <div className='hoverToOpen' onMouseEnter={() => {console.log(true)}}></div>
+        {/* {<div className='hoverToOpen' onMouseEnter={() => {console.log(true)}}></div> */}
         {isOpen ? <div className='background-layer' onClick = {() => {setIsOpen(false)}}></div> : null}
-        <div className={isOpen ? 'menuCard': 'menuCard closed'} onMouseEnter={() => {setIsOpen(true)}} onMouseLeave={() => {setIsOpen(false)}}>
+        <div className={isOpen ? 'menuCard': 'menuCard closed'} /*onMouseEnter={() => {setIsOpen(true)}} onMouseLeave={() => {setIsOpen(false)}}*/>
             
             <br />
             <br />

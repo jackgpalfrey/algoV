@@ -31,7 +31,7 @@ function InfoCard({algorithmType, algorithmID}){
     }
     
 
-    let card = (<div className='card' onMouseOver={() => setIsOpenHover(true)} onMouseLeave={() => setIsOpenHover(false)}>
+    let card = (<div className='card' /*onMouseOver={() => setIsOpenHover(true)} onMouseLeave={() => setIsOpenHover(false)}*/>
                     <p className='title'>{title}</p>
                     <hr></hr>
                     <p className='meta'>{`Worst Case Time Complexity: ${worstTimeComplexity}`}</p>
@@ -44,7 +44,7 @@ function InfoCard({algorithmType, algorithmID}){
                     {credit ? <a className='credit' href={credit} >{`${creditText}: ${credit}`}</a> : null}     
                 </div>)
     return (
-            <div className='card-container' onMouseOver={() => setIsOpenHover(true)} onMouseLeave={() => setIsOpenHover(false)} >
+            <div className='card-container' /*onMouseOver={() => setIsOpenHover(true)} onMouseLeave={() => setIsOpenHover(false)}*/ >
                 {isOpen || isOpenHover ? card : null}
                 <button onClick={() => setIsOpen(!isOpen)} className='openCardButton' >
                 {isOpen ? <i className="material-icons ">close</i> : <i className="material-icons ">info</i> }

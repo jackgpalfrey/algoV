@@ -2,44 +2,53 @@
 
 
 
-function sort(array: number[]): [number[],object[],number]{
+function sort(array: number[]){
     let startTime = performance.now()
     let sortedArray: number[] = array
-    let animations: object[] = []
+    let animations = []
+    let swaps = 0
+    let comparisons = 0
 
     for (let i = 0; i < sortedArray.length; i++){
         for (let j = i; j > 0; j--){
-            animations.push({command: 'setColor',id: [j,j-1],color: '$BEING_CHECKED'})
+            animations.push(["setColor", [j,j-1], "$CHECKING"])
+            comparisons++
             if (sortedArray[j] < sortedArray[j-1]) {
                 const tmp = sortedArray[j]
                 sortedArray[j] = sortedArray[j-1]
                 sortedArray[j-1] = tmp
-                animations.push({command: 'swap',id1: j, id2: j-1})
+                swaps++
+                animations.push(["swap", j, j-1])
             } else {
-                animations.push({command: 'setColor',id: [j,j-1],color: '$BASE'})
+                animations.push(["setColor", [j,j-1], "$BASE"])
                 break;
             }
-            animations.push({command: 'setColor',id: [j,j-1],color: '$BASE'})
+            animations.push(["setColor", [j,j-1], "$BASE"])
         }
     }
 
-    let posIdxs = []
-    for (let i = 0; i < sortedArray.length; i++){
-        posIdxs.push(i)
-        //animations.push({command: 'setColor',id: [i],color: '$DONE'})
-    }
-    animations.push({command: 'setColor',id: posIdxs,color: '$DONE'})
-    
     const endTime = performance.now()
     const runTime = endTime - startTime
-    console.log(sortedArray)
+
+    animations.push(["setColor", ["$ALL"], "$DONE"])
+    animations.push(["endAnimation"])
+
+    let endAni = []
+    endAni.push(["setRunTimeDisplay", Math.round(runTime * 1000) / 1000])
+    endAni.push(["setComparisonsDisplay", comparisons])
+    endAni.push(["setSwapsDisplay", swaps])
+    endAni.push(["startAnimation"])
+
+
+    animations.unshift(["doSim", endAni])
     return [sortedArray, animations, runTime]
 }
 
-function insertionSort(array: number[]): [object[],number]{
+function insertionSort(array: number[]){
     let [sortedArray, animations, runTime] = sort(array)
-    console.log(sortedArray)
-    return [animations,runTime]
+
+    let command = ["do", animations, "$userSet"]
+    return command
 }
 
 

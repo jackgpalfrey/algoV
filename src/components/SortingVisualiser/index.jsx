@@ -59,6 +59,7 @@ function SortingVisualiser(props){
             let commandCode = command[0]
             
             let response = ["PENDING", "In progress"]
+            console.log(`Command: ${commandCode}`)
             switch(commandCode){
                 case 'setState':
                         let indexArray = command[1]
@@ -385,29 +386,23 @@ function SortingVisualiser(props){
                             break;
                         case 'selectionSort':
                             resultData = selectionSort(getNumbersFromArrayState())
-                            isLegacy = true
                             break;
                         case 'insertionSort':
                             resultData = insertionSort(getNumbersFromArrayState())
-                            isLegacy = true
                             break;
                         case 'quickSort':
                             return alert('Currently Unavailable')
                             resultData = quickSort(getNumbersFromArrayState())
-                            isLegacy = true
                             break;
                         case 'heapSort':
                             resultData = heapSort(getNumbersFromArrayState())
-                            isLegacy = true
                             break;
                         case 'mergeSort':
                             return alert('Currently Unavailable')
                             resultData = mergeSort(getNumbersFromArrayState())
-                            isLegacy = true
                             break;
                         case 'reverseArray':
                             resultData = reverseArray(getNumbersFromArrayState())
-                            isLegacy = true
                             break;
                         default:
                             return ["ERROR", "Invalid Animation Key"]

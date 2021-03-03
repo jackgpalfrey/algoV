@@ -132,7 +132,7 @@
                             ["ADDED", "Changelog Order Toggle"],
                             ["ADDED", "Ability to reference specific sort algorithms in url with ?"],
                             ["CHANGED", "setColor and setValue to Abstracted Commands using setState "],
-                            ["CHANGE", "All Algorithms over to AnimateEngine"],
+                            ["CHANGED", "All Algorithms over to AnimateEngine"],
                             ["CHANGED", "Optimised AnimateEngine to check for most common commands first"],
                             ["REMOVED", "Hover to open Menus"],
                             ["REMOVE", "Legacy to AnimateEngine conversion functions"],

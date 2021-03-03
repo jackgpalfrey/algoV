@@ -35,7 +35,6 @@ function sort(array: number[]): [number[],object[],number]{
     endAni.push(["setSwapsDisplay", swaps])
     endAni.push(["startAnimation"])
 
-    console.log("EXEC")
 
     animations.unshift(["doSim", endAni])
     return [sortedArray, animations, runTime]

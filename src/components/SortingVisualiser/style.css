@@ -48,6 +48,15 @@ select {
 	border-radius: 20px;
 }
 
+option {
+	background-color: #262626;
+}
+
+.algorithmsTitle {
+	background-color: #181818;
+	font-size: 1.1em;
+}
+
 .button,
 .button-disabled,
 select {

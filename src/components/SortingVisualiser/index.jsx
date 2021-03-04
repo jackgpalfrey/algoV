@@ -376,10 +376,8 @@ function SortingVisualiser(props){
                     
                 case 'executeInternalAnimation':
                     let animationKey = command[1]
-                    console.log(animationKey)
                     if (!animationKey || typeof animationKey !== 'string' ) return ["ERROR", "Invalid Animation Key"]
                     let resultData = []
-                    let isLegacy = false
                     switch(animationKey){
                         case 'bubbleSort':
                             resultData = bubbleSort(getNumbersFromArrayState())
@@ -409,16 +407,7 @@ function SortingVisualiser(props){
                             break;
                     }
 
-                    // Legacy
-                    if (isLegacy){
-                        let [animations,runTime] = resultData
-                        AnimateEngine(["setRunTimeDisplay", Math.round(runTime * 1000) / 1000])
-                        animator(animations,animationSpeed)
-                    } else {
-                        // NEW Animation System
-                        AnimateEngine(["doSim", [resultData]])
-                    }
-
+                    AnimateEngine(["doSim", [resultData]])
                     break;
                 
                 default:
@@ -433,40 +422,6 @@ function SortingVisualiser(props){
             return ["ERROR", "Try Failed"]
         }
     
-    }
-
-    function resetArray(numOfBars){ // LEGACY - DEPRECATED IN 0.10
-        AnimateEngine(["resetArray", numOfBars])
-    }
-    
-    async function animate(command){ // LEGACY - DEPRECATED IN 0.10
-        switch(command.command) {
-            case 'setColor':
-                AnimateEngine(["setColor",command.id,command.color.replace('$BEING_CHECKED', '$CHECKING')])
-                break;
-            case 'swap':
-                AnimateEngine(["swap",parseInt(command.id1),parseInt(command.id2)])
-                break;
-            case 'setArray':
-                AnimateEngine(["setArray",command.array,'$BASE'])
-                break;
-                
-        }
-    }
-
-    function animator(animations,speed){ // LEGACY - DEPRECATED IN 0.10
-        AnimateEngine(["startAnimation"])
-        let idx = 0
-
-        const intervalID = setInterval( () => {
-            if (idx > animations.length - 1) {
-                clearInterval(intervalID)
-                AnimateEngine(["endAnimation"])
-                return 
-            }
-            animate(animations[idx])
-            idx++
-        }, speed)
     }
 
     function getNumbersFromArrayState(){
@@ -496,7 +451,7 @@ function SortingVisualiser(props){
                 color: COLORS.TEXT  
             }
 
-            return (<div key={idx} className='bar' style={style}>{item.value}</div>)
+            return (<div key={idx} title={item.value}className='bar' style={style}>{item.value}</div>)
         })
 
         return barsDivs
@@ -512,23 +467,25 @@ function SortingVisualiser(props){
                 
             </div>
             <nav>
-            <i className='material-icons consoleButton' onClick={() => setIsTerminalOpen(!isTerminalOpen)}>code</i>
+            <i className='material-icons consoleButton' title={isTerminalOpen ? 'Close Terminal': 'Open Terminal'} onClick={() => setIsTerminalOpen(!isTerminalOpen)}>{isTerminalOpen ? 'code_off': 'code'}</i>
             <div className='sliderBox'>
                 <p className={animationActive ? 'disabled' : ''}>Animation Time ({animationSpeed}ms) </p>
                 <input disabled={animationActive} type="range" min="1" max="1000" value={animationSpeed} onChange={e => {
                     setAnimationSpeed(parseInt(e.target.value)); 
                 }}></input>
             </div>
-                <button disabled={animationActive} onClick={() => {if(!animationActive) {resetArray(numBars)}}} className={!animationActive ? 'button reset' : 'button-disabled reset'}>Reset</button>
+                <button disabled={animationActive} onClick={() => {if(!animationActive) {AnimateEngine(["resetArray", numBars])}}} className={!animationActive ? 'button reset' : 'button-disabled reset'}>Reset</button>
                 <button disabled={animationActive} onClick={handleSortClick} className={!animationActive ? 'button sort' : 'button-disabled sort'}>Sort</button>
                 <select disabled={animationActive} value={activeAlgorithm} name={activeAlgorithm} onChange={e => {setActiveAlgorithm(e.target.value)}}>
+                <option disabled className='algorithmsTitle' value='otherTitle'>Sorting Algorithms</option>
                     <option value='bubbleSort'>Bubble Sort</option>
                     <option value='selectionSort'>Selection Sort</option>
                     <option value='insertionSort'>Insertion Sort</option>
                     <option value='quickSort'>Quick Sort</option>
                     <option value='heapSort'>Heap Sort</option>
                     <option value='mergeSort'>Merge Sort</option>
-                    <option value='reverseArray'>(Other)Reverse Array</option>
+                    <option disabled className='algorithmsTitle' value='otherTitle'>Other Algorithms</option>
+                    <option value='reverseArray'>Reverse Array</option>
                 </select>
                 
                     <div className='sliderBox'>

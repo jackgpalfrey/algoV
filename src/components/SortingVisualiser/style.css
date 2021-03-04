@@ -1,5 +1,6 @@
 body {
 	background-color: #121212;
+	overflow: hidden;
 }
 
 .bar-container {
@@ -31,6 +32,7 @@ nav * {
 	height: 30px;
 	margin: 0 1.5em;
 	color: white;
+	user-select: none;
 }
 
 button,
@@ -46,6 +48,11 @@ select {
 	justify-content: center;
 	align-items: center;
 	border-radius: 20px;
+	user-select: none;
+}
+
+.bar:hover {
+	filter: brightness(150%);
 }
 
 option {
@@ -102,10 +109,6 @@ select:hover,
 select:focus {
 	filter: brightness(130%);
 	cursor: pointer;
-}
-
-.bar:hover {
-	filter: brightness(110%);
 }
 
 option {

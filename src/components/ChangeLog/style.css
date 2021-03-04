@@ -8,6 +8,11 @@
 	flex-direction: column;
 	justify-content: center;
 	align-content: center;
+	overflow-y: scroll;
+	-ms-overflow-style: none;
+}
+.changelogContainer::-webkit-scrollbar {
+	display: none;
 }
 
 .fullItemContainer {

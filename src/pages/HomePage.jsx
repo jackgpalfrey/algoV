@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Redirect } from 'react-router-dom'
 import Container from '../components/ChangeLog/Container'
 import Item from '../components/ChangeLog/Item'
+import './HomePageStyle.css'
 
 
 import changeLogData from '../data/changelogData.json'
@@ -16,13 +17,18 @@ function HomePage(){
     if (isNewestFirst) changeLogItems = changeLogItems.reverse()
 
     let changeItems = changeLogItems.map((value, idx) => {
-        let dontDisplay = false
-        dontDisplay = value.dontDisplay
-        if (!dontDisplay) return <Item key={idx}  isOpen={isAllOpen} changes={value.modifications} date={value.isNext ? `Planned for ${value.date}` : value.date} version={value.isNext ? 'Next update' : value.version} title={value.title}> <p>{value.info}</p> </Item>
-    
+        let dontDisplay = value.dontDisplay
+        let displayAfter = value.displayAfter
+        if (displayAfter) {
+            const [day, month, year] = displayAfter.split('/')
+            displayAfter = `${year}-${month}-${day}`
+            
+        }
+        let date = new Date().getTime()
+        let afterDate = Date.parse(displayAfter)
+        let timeUntil = afterDate - date
+        if ((!dontDisplay && !displayAfter) || (timeUntil <= 0)) return <Item key={idx}  isOpen={isAllOpen} changes={value.modifications} date={value.isNext ? `Planned for ${value.date}` : value.date} version={value.isNext ? 'Next update' : value.version} title={value.title}> <p>{value.info}</p> </Item>
     })
-
-
 
     return (
         <div className='changeLog'>

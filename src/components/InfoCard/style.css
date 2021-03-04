@@ -70,6 +70,10 @@
 	margin-right: 0;
 }
 
+.meta {
+	margin-left: 0.6em;
+}
+
 .description {
 	line-height: 1.5em;
 	margin: 1em 0;

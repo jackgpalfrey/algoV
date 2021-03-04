@@ -64,6 +64,10 @@ option {
 	font-size: 1.1em;
 }
 
+.algorithmsUnavailable {
+	color: red;
+}
+
 .button,
 .button-disabled,
 select {

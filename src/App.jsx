@@ -20,7 +20,11 @@ function App() {
   const [showNewVersion, setShowNewVersion] = useState(false)
   useEffect(() => {
     let version = document.cookie.split('; ').find(row => row.startsWith('version='))
-    version = version.split('=')[1]
+    if (!version || version == ''){
+      version = 0
+    } else {
+      version = version.split('=')[1]
+    }
     console.log(version)
     let curVer = currentVersion.replace('.','')
     if (parseInt(curVer) > parseInt(version)){

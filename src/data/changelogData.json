@@ -132,6 +132,7 @@
                             ["ADDED", "Changelog Order Toggle"],
                             ["ADDED", "Ability to reference specific sort algorithms in url with ?"],
                             ["ADDED", "Ability to hover over bars to see value"],
+                            ["ADDED", "Latest Update Card"],
                             ["CHANGED", "setColor and setValue to Abstracted Commands using setState "],
                             ["CHANGED", "All Algorithms over to AnimateEngine"],
                             ["CHANGED", "Optimised AnimateEngine to check for most common commands first"],
@@ -145,10 +146,10 @@
     {"version": "1.10",
         "title": "Pathfinding Update",
         "info": "Add new Pathfinding visualiser",
-        "modifications":   ["FIXED", "Maintenance spelling mistake"],
+        "modifications":   [],
         "date": "10/03/21",
         "isNext": true,
-        "XdisplayAfter": "6/3/2021" 
+        "displayAfter": "6/3/2021" 
     },
     {"version": "0.12",
         "title": "Advanced Sort Algorithms",

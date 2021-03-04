@@ -25,7 +25,13 @@ const COLORS = {
 function SortingVisualiser(props){
 
     //#region State Creation 
-    const cookieData = document.cookie.replace(';','').replace(' ','').split(',')
+    let sortingCookie = document.cookie.split('; ').find(row => row.startsWith('sort='))
+    if (!sortingCookie || sortingCookie == ''){
+        sortingCookie = "100,bubbleSort"
+    } else {
+        sortingCookie = sortingCookie.split('=')[1]
+    }
+    const cookieData = sortingCookie.replace(' ','').split(',')
     let animationtype = cookieData[0]
     let urlAnimation = useLocation().search.replace('?','')
     if (urlAnimation && Object.keys(algoData['sorting']).includes(urlAnimation)) animationtype = urlAnimation
@@ -45,7 +51,7 @@ function SortingVisualiser(props){
     //#endregion
     
     useEffect(effect => {
-        document.cookie = `${animationSpeed},${activeAlgorithm};`;
+        document.cookie = `sort=${animationSpeed},${activeAlgorithm};`;
     },[animationSpeed, activeAlgorithm])
     
 

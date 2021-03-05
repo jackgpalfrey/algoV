@@ -422,6 +422,13 @@ function SortingVisualiser(props){
                     let version = document.cookie.split('; ').find(row => row.startsWith('version=')).split('=')[1]
                     alert(`Version: ${version}`)
                     break;
+
+
+                case 'defaultColor':
+                    let codeForColor = command[1]
+                    let colorForCode = command[2]
+                    COLORS[codeForColor] = colorForCode
+                    break;
                 
                 default:
                     return ["ERROR", "Unknown Command"]

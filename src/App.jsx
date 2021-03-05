@@ -12,9 +12,10 @@ import HomePage from './pages/HomePage';
 import UnavailablePage from './pages/UnavailablePage';
 import changelogData from './data/changelogData.json'
 import LatestChangesCard from './components/LatestChangesCard';
-const allowInDevPages = false
-const currentVersion = "1.10.1"
-const versionID = 13
+import vars from './data/vars.json'
+const allowInDevPages = vars.devMode
+const currentVersion = vars.versionNumber
+const versionID = vars.lastestChangeID
 
 function App() {
   const [showNewVersion, setShowNewVersion] = useState(false)

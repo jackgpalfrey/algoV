@@ -12,8 +12,8 @@ import HomePage from './pages/HomePage';
 import UnavailablePage from './pages/UnavailablePage';
 import changelogData from './data/changelogData.json'
 import LatestChangesCard from './components/LatestChangesCard';
-const allowInDevPages = true
-const currentVersion = "1.10"
+const allowInDevPages = false
+const currentVersion = "1.10.1"
 const versionID = 13
 
 function App() {
@@ -23,14 +23,20 @@ function App() {
     if (!version || version == ''){
       version = 0
     } else {
-      version = version.split('=')[1]
+      version = version.split('=')[1].split('.')
+      if (version.length > 2) version.pop()
+      version = version.join('')
+      console.log(version)
     }
     console.log(version)
-    let curVer = currentVersion.replace('.','')
+    let curVer = currentVersion.split('.')
+    if (curVer.length > 2) curVer.pop()
+    curVer = curVer.join('')
+    console.log(curVer)
     if (parseInt(curVer) > parseInt(version)){
         setShowNewVersion(true)
-        document.cookie = `version=${curVer}`
     }
+    document.cookie = `version=${currentVersion}`
   },[])
   return (
     <Router>

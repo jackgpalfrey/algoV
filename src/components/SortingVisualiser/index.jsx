@@ -417,6 +417,11 @@ function SortingVisualiser(props){
 
                     AnimateEngine(["doSim", [resultData]])
                     break;
+
+                case 'version':
+                    let version = document.cookie.split('; ').find(row => row.startsWith('version=')).split('=')[1]
+                    alert(`Version: ${version}`)
+                    break;
                 
                 default:
                     return ["ERROR", "Unknown Command"]

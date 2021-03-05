@@ -27,7 +27,7 @@
 
 .no-icon {
 	margin-bottom: 3rem;
-	color: red;
+	color: #b00020;
 	transform: scale(5);
 }
 
@@ -43,5 +43,5 @@
 }
 
 .inDevGoHomeLink:hover {
-	color: rgb(122, 122, 122);
+	color: #b00020;
 }

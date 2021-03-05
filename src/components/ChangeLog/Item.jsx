@@ -31,13 +31,14 @@ function Item(props){
 
     if (props.changes){
         changes = props.changes.map((value, idx) => {
-            return (<li style={{color: `${CHANGES_COLORS[value[0]]}`}}>{value[0]} - {value[1]}</li>)
+            return (<li className='changeEntry' ><span style={{backgroundColor: `${CHANGES_COLORS[value[0]]}`}} className='changelog-label'>{value[0]}</span> - {value[1]}</li>)
         })
     }
 
     let ItemInfo = (
         <div className='itemInfoContainer'>
             {props.children}
+            <br />
             {changes ? <ul className='changesList'>{changes}</ul> : null}
             <p className='date'>{props.date || 'Unknown'}</p>
         </div>

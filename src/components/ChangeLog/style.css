@@ -66,3 +66,20 @@
 	margin-top: 1em;
 	margin-left: auto;
 }
+
+.changelog-label {
+	filter: brightness(70%);
+	color: white;
+	padding: 0.05em 0.7em;
+	border-radius: 1em;
+	font-weight: 500;
+}
+
+.changeEntry {
+	margin-bottom: 0.5em;
+}
+
+.changelog-changeTitle {
+	font-size: 1.2rem;
+	margin-top: 1em;
+}

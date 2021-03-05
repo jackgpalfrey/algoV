@@ -146,10 +146,13 @@
     {"version": "1.10",
         "title": "Documentation Update",
         "info": "Adds documentation page",
-        "modifications":   [],
+        "modifications":   [["CHANGED", "Changelog and Latest Item Card Changes List to use labels to show change type"],
+                            ["ADDED", "defaultColor AnimateEngine Command (Added in 1.00.2"],
+                            ["ADDED", "version AnimateEngine Command (Added in 1.00.1)"],
+                            ["CHANGED", "Improved Unavailable Page (Changed in 1.00.1"]],
         "date": "8/03/21",
         "isNext": true,
-        "displayAfter": "6/3/2021" 
+        "XdisplayAfter": "6/3/2021" 
         
     },
     {"version": "1.20",

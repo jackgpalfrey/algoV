@@ -21,7 +21,7 @@ function Console(props){
     }
 
     function handleConsole(e){
-        if (e.key != 'Enter') return
+        if (e.key !== 'Enter') return
         let command = commandText.replaceAll("'",'"')
         console.log(`Command: ${command}`)
         try {

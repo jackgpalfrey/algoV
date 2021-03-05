@@ -1,16 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
-
-import bubbleSort from '../../algoithms/sorting/bubbleSort'
-import heapSort from '../../algoithms/sorting/heapSort'
-import insertionSort from '../../algoithms/sorting/insertionSort'
-import mergeSort from '../../algoithms/sorting/mergeSort'
-import quickSort from '../../algoithms/sorting/quickSort'
-import reverseArray from '../../algoithms/sorting/reverseArray'
-import selectionSort from '../../algoithms/sorting/selectionSort'
 import Console from '../Console'
 import InfoCard from '../InfoCard'
-import algoData from '../../data/algorithmInfo.json'
 import './style.css'
 
 
@@ -22,44 +12,30 @@ const COLORS = {
     
 }
 
-
-
-function SortingVisualiser(props){
+function PathfindingVisualiser(props){
 
     //#region State Creation 
-    let sortingCookie = document.cookie.split('; ').find(row => row.startsWith('sort='))
-    if (!sortingCookie || sortingCookie == ''){
-        sortingCookie = "100,bubbleSort"
-    } else {
-        sortingCookie = sortingCookie.split('=')[1]
-    }
-    const cookieData = sortingCookie.replace(' ','').split(',')
-    let animationtype = cookieData[0]
-    let urlAnimation = useLocation().search.replace('?','')
-    if (urlAnimation && Object.keys(algoData['sorting']).includes(urlAnimation)) animationtype = urlAnimation
-    if(!Object.keys(algoData['sorting']).includes(urlAnimation)) animationtype = 'bubbleSort'
-    const [array, setArray] = useState([])
+    const cookieData = document.cookie.replace(';','').replace(' ','').split(',')
+    const [grid, setGrid] = useState([])
     const [animationSpeed, setAnimationSpeed] = useState(cookieData[0] || 100)
-    const [numBars, setNumBars] = useState(Math.round((window.innerWidth / 12) / 2))
     const [runTime, setRunTime] = useState(0)
     const [swaps, setSwaps] = useState(0)
     const [comparisons, setComparisons] = useState(0)
     const [animationActive, setAnimationActive] = useState(false)
-    const [activeAlgorithm, setActiveAlgorithm] = useState(animationtype || 'bubbleSort')
+    const [activeAlgorithm, setActiveAlgorithm] = useState(cookieData[1] || 'bubbleSort')
     const [isTerminalOpen, setIsTerminalOpen] = useState(false)
     const [activeTimeouts, setActiveTimeouts] = useState([])
     const [activeIntervals, setActiveIntervals] = useState([])
 
     //#endregion
     
-    useEffect(effect => {
-        document.cookie = `sort=${animationSpeed},${activeAlgorithm};`;
-    },[animationSpeed, activeAlgorithm])
-    
 
     useEffect(effect => {
-        AnimateEngine(["resetArray",numBars])
+        //AnimateEngine(["resetArray",numBars])
+        resetGrid()
     }, [])
+
+
 
 
     function AnimateEngine(command){
@@ -67,7 +43,6 @@ function SortingVisualiser(props){
             let commandCode = command[0]
             
             let response = ["PENDING", "In progress"]
-            console.log(`Command: ${commandCode}`)
             switch(commandCode){
                 case 'setState':
                         let indexArray = command[1]
@@ -89,46 +64,57 @@ function SortingVisualiser(props){
                         }
 
 
-                        setArray(prevState => {
+                        setGrid(prevState => {
                             let newArray = prevState.slice()
                             
-                            indexArray.forEach(idx => {
-                                if (typeof idx == "number" && idx >= 0 && idx < newArray.length){
-                                    newArray[idx][type] = data
+                            indexArray.forEach((idx) => {
+                                if (!Array.isArray(idx)) {
+                                    return newArray
 
-                                } if (typeof idx == "number" && idx < 0 && Math.abs(idx) <= newArray.length){
-                                    newArray[newArray.length - Math.abs(idx)][type] = data
-                                
+                                } else if (idx.length === 2 && (typeof idx[0] === 'number' || idx[0] === '$MID')&& (typeof idx[1] === 'number' || idx[1] === '$MID') && idx[0] < newArray.length && idx[1] < newArray.length){
+                                    idx.forEach((indexVal, indexIdx) => {
+                                        if (idx[indexIdx] < 0 && Math.abs(idx[indexIdx]) < newArray.length){
+                                            console.log("SUB0")
+                                            if (indexIdx === 0) idx[indexIdx] = newArray.length - idx[indexIdx]
+                                            else if (indexIdx === 1) idx[indexIdx] = newArray[0].length - idx[indexIdx]
+                                            else console.log("TEST")
+                                        } 
+                                        else if (idx[indexIdx] === '$MID') idx[indexIdx] = Math.floor(newArray.length / 2)
+                                    })
+
+                                    newArray[idx[0]][idx[1]][type] = data
                                 } else if (idx === '$ALL'){
-                                    for (let y = 0; y < newArray.length; y++){
-                                        newArray[y][type] = data
+                                    newArray.forEach((xVal, xPos) => {
+                                        newArray[xPos].forEach((yVal, yPos) => {
+                                            newArray[xPos][yPos][type] = data
+                                        })
+                                    })
+                                } else if (idx === '$QUAD1'){
+                                    for (let x = 0; x < Math.floor(newArray.length / 2); x++){
+                                        for (let y = 0; y < Math.floor(newArray.length / 2); y++){
+                                            newArray[x][y][type] = data
+                                        }
                                     }
-                                } else if (idx === '$LHALF'){
-                                    for (let y = 0; y < Math.ceil(newArray.length / 2); y++){
-                                        newArray[y][type] = data
+                                } else if (idx === '$QUAD2'){
+                                    for (let x = Math.floor(newArray.length / 2); x < newArray.length; x++){
+                                        for (let y = 0; y < Math.floor(newArray.length / 2); y++){
+                                            newArray[x][y][type] = data
+                                        }
                                     }
-                                } else if (idx === '$RHALF'){
-                                    for (let y = Math.floor(newArray.length / 2); y < newArray.length; y++){
-                                        newArray[y][type] = data
+                                } else if (idx === '$QUAD3'){
+                                    for (let x = 0; x < Math.floor(newArray.length / 2); x++){
+                                        for (let y = Math.floor(newArray.length / 2); y < newArray.length; y++){
+                                            newArray[x][y][type] = data
+                                        }
                                     }
-    
-                                } else if (idx === '$ODD'){
-                                    for (let y = 0; y < newArray.length; y++){
-                                        if (y % 2 === 0) newArray[y][type] = data
-                                        
+                                } else if (idx === '$QUAD4'){
+                                    for (let x = Math.floor(newArray.length / 2); x < newArray.length; x++){
+                                        for (let y = Math.floor(newArray.length / 2); y < newArray.length; y++){
+                                            newArray[x][y][type] = data
+                                        }
                                     }
-    
-                                } else if (idx === '$EVEN'){
-                                    for (let y = 0; y < newArray.length; y++){
-                                        if (y % 2 === 1) newArray[y][type] = data
-                                    }
-    
-                                } else if (idx === '$MID'){
-                                    newArray[Math.floor((newArray.length - 1) / 2)][type] = data
-                                    newArray[Math.ceil((newArray.length - 1) / 2)][type] = data
-    
                                 }
-                                
+                                //
                                 
                             });
                             
@@ -149,9 +135,9 @@ function SortingVisualiser(props){
                 case 'swap':
                     let id1 = command[1]
                     let id2 = command[2]
-                    if (id1 == undefined || typeof id1 !== 'number') return ["ERROR", "Invalid id1"]
-                    if (id2 == undefined || typeof id2 !== 'number') return ["ERROR", "Invalid id2"]
-                    setArray(prevState => {
+                    if (!id1 && id1 !== 0 || typeof id1 !== 'number') return ["ERROR", "Invalid id1"]
+                    if (!id2 && id1 !== 0 || typeof id2 !== 'number') return ["ERROR", "Invalid id2"]
+                    setGrid(prevState => {
                         id1 = command[1]
                         id2 = command[2]
                         let newArray = prevState.slice()
@@ -185,7 +171,7 @@ function SortingVisualiser(props){
 
                     if (!values || !Array.isArray(values)) return ["ERROR", "Invalid Values"]
                     if (!colorCode || typeof colorCode !== 'string') return ["ERROR", "Invalid Color"]
-                    setArray(prevState => {
+                    setGrid(prevState => {
                         let newArray = []
                         let color = command[2]
                         if (color.includes('$')) color = COLORS[color.replace('$','')]
@@ -196,7 +182,6 @@ function SortingVisualiser(props){
                             }
                             
                         });
-                        setNumBars(newArray.length)
                         return newArray
                     })
                     break;
@@ -305,11 +290,11 @@ function SortingVisualiser(props){
                 case 'resetArray':
                     
                     let numOfBars = command[1]
-                    if (!numOfBars) numOfBars = numBars
+                    //if (!numOfBars) numOfBars = numBars
                     if (typeof numOfBars !== 'number') return ["ERROR", "Invalid Number of bars"]
                     let Randvalues = []
                     for (let i = 0; i < numOfBars; i++){
-                        Randvalues.push(Math.round(Math.random() * 60) + 13)
+                        Randvalues.push(Math.round(Math.random() * 60) + 8)
                     }
                     AnimateEngine(["setArray",Randvalues,"$BASE"])
                     break;
@@ -343,7 +328,7 @@ function SortingVisualiser(props){
                 case 'clearLoop': //FIXME: Dosen't work
                     let specificLoop = command[1]
                     let activeLoops = activeIntervals.slice()
-                    if (specificLoop == undefined){
+                    if (!specificLoop && specificLoop !== 0){
                         let ALLen = activeLoops.length
                         for (let i = 0; i < ALLen; i++){
                             clearInterval(activeLoops.pop())
@@ -351,11 +336,9 @@ function SortingVisualiser(props){
                     } else if (typeof specificLoop === 'number') {
                         let loop = activeLoops.splice(specificLoop, 1)[0]
                         console.log(loop)
-                        clearInterval(loop)
                     } else if (typeof specificLoop === 'string'){
-                        let loop = activeLoops.indexOf(parseInt(specificLoop))[0]
+                        let loop = activeLoops.indexOf(parseInt(specificLoop))
                         console.log(loop)
-                        clearInterval(loop)
                     }
 
                     setActiveIntervals(activeLoops)
@@ -383,42 +366,59 @@ function SortingVisualiser(props){
                     break;
                     
                 case 'executeInternalAnimation':
-                    let animationKey = command[1]
-                    if (!animationKey || typeof animationKey !== 'string' ) return ["ERROR", "Invalid Animation Key"]
-                    let resultData = []
-                    switch(animationKey){
-                        case 'bubbleSort':
-                            resultData = bubbleSort(getNumbersFromArrayState())
-                            break;
-                        case 'selectionSort':
-                            resultData = selectionSort(getNumbersFromArrayState())
-                            break;
-                        case 'insertionSort':
-                            resultData = insertionSort(getNumbersFromArrayState())
-                            break;
-                        case 'quickSort':
-                            return alert('Currently Unavailable')
-                            resultData = quickSort(getNumbersFromArrayState())
-                            break;
-                        case 'heapSort':
-                            resultData = heapSort(getNumbersFromArrayState())
-                            break;
-                        case 'mergeSort':
-                            return alert('Currently Unavailable')
-                            resultData = mergeSort(getNumbersFromArrayState())
-                            break;
-                        case 'reverseArray':
-                            resultData = reverseArray(getNumbersFromArrayState())
-                            break;
-                        default:
-                            return ["ERROR", "Invalid Animation Key"]
-                            break;
-                    }
+                        break;
+                //     let animationKey = command[1]
+                //     console.log(animationKey)
+                //     if (!animationKey || typeof animationKey !== 'string' ) return ["ERROR", "Invalid Animation Key"]
+                //     let resultData = []
+                //     let isLegacy = false
+                //     switch(animationKey){
+                //         case 'bubbleSort':
+                //             resultData = bubbleSort(getNumbersFromArrayState())
+                //             break;
+                //         case 'selectionSort':
+                //             resultData = selectionSort(getNumbersFromArrayState())
+                //             isLegacy = true
+                //             break;
+                //         case 'insertionSort':
+                //             resultData = insertionSort(getNumbersFromArrayState())
+                //             isLegacy = true
+                //             break;
+                //         case 'quickSort':
+                //             return alert('Currently Unavailable')
+                //             resultData = quickSort(getNumbersFromArrayState())
+                //             isLegacy = true
+                //             break;
+                //         case 'heapSort':
+                //             resultData = heapSort(getNumbersFromArrayState())
+                //             isLegacy = true
+                //             break;
+                //         case 'mergeSort':
+                //             return alert('Currently Unavailable')
+                //             resultData = mergeSort(getNumbersFromArrayState())
+                //             isLegacy = true
+                //             break;
+                //         case 'reverseArray':
+                //             resultData = reverseArray(getNumbersFromArrayState())
+                //             isLegacy = true
+                //             break;
+                //         default:
+                //             return ["ERROR", "Invalid Animation Key"]
+                //             break;
+                //     }
 
-                    AnimateEngine(["doSim", [resultData]])
-                    break;
-                
-                default:
+                //     // Legacy
+                //     if (isLegacy){
+                //         let [animations,runTime] = resultData
+                //         AnimateEngine(["setRunTimeDisplay", Math.round(runTime * 1000) / 1000])
+                //         animator(animations,animationSpeed)
+                //     } else {
+                //         // NEW Animation System
+                //         AnimateEngine(["doSim", [resultData]])
+                //     }
+
+                //     break;
+                // default:
                     return ["ERROR", "Unknown Command"]
                     break;
             }
@@ -432,90 +432,114 @@ function SortingVisualiser(props){
     
     }
 
-    function getNumbersFromArrayState(){
-        let numbers = []
-        for (let i = 0; i < array.length; i++){
-            numbers.push(array[i].value)
+
+    function resetGrid(){
+        let boxSize = 20
+        let xNum = ((window.innerWidth - 30) / boxSize)
+        let yNum = ((window.innerHeight - 100) / boxSize)
+        let defaultItem = {color: 'black', value: '2'}
+
+        let newGrid = []
+        for (let y = 0; y < yNum; y++){
+            let newCol = []
+            for (let x = 0; x < xNum; x++){
+                let item = {
+                    color: 'white',
+                    type: 'OPEN'
+                }
+                newCol.push({...defaultItem})
+            }
+            newGrid.push(newCol)
         }
 
-        return numbers
+        return setGrid(newGrid)
     }
+
+    function createDivGrid(){
+        let divGrid = []
+        let width = 40
+        let height = 40
+        try {
+            width = ((window.innerWidth - 30) / grid[0].length) - 1
+            height = ((window.innerHeight - 100) / grid.length) - 1
+        } catch {
+            console.log("No Grid Created")
+        }
+        grid.forEach((itemx,idxx) => {
+            let col = grid[idxx]
+            let divCol = col.map((item, idxy) => {
+                return (<div onMouseDown={boxClickHandler} className='node' key={`${idxx}-${idxy}`} id={`${idxx}-${idxy}`} style={{backgroundColor: item.color, width: width, height: height}}></div>)
+            })
+
+            divGrid.push(<div className='row'>{divCol}</div>)
+        })
+        
+
+        return divGrid
+    }
+
+    function boxClickHandler(e){
+        console.log("FIRE")
+        setGrid(prevState => {
+            console.log(e)
+            let newGrid = prevState.slice()
+            let pos = e.target.id.split('-')
+            let posX = parseInt(pos[0])
+            let posY = parseInt(pos[1])
+            console.log(pos)
+            if (newGrid[posX][posY].color === 'red') newGrid[posX][posY].color = 'red'
+            else newGrid[posX][posY].color = 'red'
+            console.log(newGrid)
+            return newGrid
+        })
+        
+    }
+
 
     function handleSortClick(){
-        if (animationActive) return false
-        console.log(AnimateEngine(["executeInternalAnimation", activeAlgorithm]))
-    }
-
-    function createBars(){
-        let barWidth = ((window.innerWidth / 100) * 90) / numBars
-        
-        let barsDivs = array.map((item, idx) => {
-            let style = {
-                height: `${item.value}%`, 
-                backgroundColor: `${item.color}`,
-                width: barWidth,
-                margin: barWidth / 4 > 20 ? 20 : barWidth / 4,
-                fontSize: barWidth > 20 ? barWidth / 3 : 0,
-                color: COLORS.TEXT  
-            }
-
-            return (<div key={idx} title={item.value}className='bar' style={style}>{item.value}</div>)
-        })
-
-        return barsDivs
+        return ''
     }
 
 
     return (
         <div className='container'>
-            <div className='bar-container'>
-                <div className='inner-bar-container'>
-                    {createBars()}
+        
+            <div className='grid-container'>
+                <div className="grid-container-inner">
+                    {createDivGrid()}
                 </div>
-                
             </div>
             <nav>
-            <i className='material-icons consoleButton' title={isTerminalOpen ? 'Close Terminal': 'Open Terminal'} onClick={() => setIsTerminalOpen(!isTerminalOpen)}>{isTerminalOpen ? 'code_off': 'code'}</i>
+            <i className='material-icons consoleButton' onClick={() => setIsTerminalOpen(!isTerminalOpen)}>code</i>
             <div className='sliderBox'>
                 <p className={animationActive ? 'disabled' : ''}>Animation Time ({animationSpeed}ms) </p>
                 <input disabled={animationActive} type="range" min="1" max="1000" value={animationSpeed} onChange={e => {
                     setAnimationSpeed(parseInt(e.target.value)); 
                 }}></input>
             </div>
-                <button disabled={animationActive} onClick={() => {if(!animationActive) {AnimateEngine(["resetArray", numBars])}}} className={!animationActive ? 'button reset' : 'button-disabled reset'}>Reset</button>
+                <button disabled={animationActive} onClick={() => {if(!animationActive) {resetGrid()}}} className={!animationActive ? 'button reset' : 'button-disabled reset'}>Reset</button>
                 <button disabled={animationActive} onClick={handleSortClick} className={!animationActive ? 'button sort' : 'button-disabled sort'}>Sort</button>
-                <select disabled={animationActive} value={activeAlgorithm} name={activeAlgorithm} onChange={e => {setActiveAlgorithm(e.target.value)}}>
-                <option disabled className='algorithmsTitle' value='otherTitle'>Sorting Algorithms</option>
+                <select disabled={animationActive} value={activeAlgorithm} onChange={e => {setActiveAlgorithm(e.target.value)}}>
                     <option value='bubbleSort'>Bubble Sort</option>
                     <option value='selectionSort'>Selection Sort</option>
                     <option value='insertionSort'>Insertion Sort</option>
                     <option value='quickSort'>Quick Sort</option>
                     <option value='heapSort'>Heap Sort</option>
                     <option value='mergeSort'>Merge Sort</option>
-                    <option disabled className='algorithmsTitle' value='otherTitle'>Other Algorithms</option>
-                    <option value='reverseArray'>Reverse Array</option>
+                    <option value='reverseArray'>(Other)Reverse Array</option>
                 </select>
-                
-                    <div className='sliderBox'>
-                        <p className={animationActive ? 'disabled' : ''}>Number of Bars ({numBars})</p>
-                        <input disabled={animationActive} type="range" min="5" max={`${Math.round(window.innerWidth / 12) - 10}`} value={numBars} onChange={e => {
-                            AnimateEngine(["resetArray",parseInt(e.target.value)])
-                        }}></input>
-                    </div>
-                    
-                    
-
                 <p title={`Swaps: ${swaps} \nComparisons: ${comparisons}`} className={animationActive ? 'timeTaken disabled' : 'timeTaken'}>{runTime !== 0 ? `Time: ${runTime}ms`: `Time: N/A`}</p>
-                
+
             </nav>
             <InfoCard algorithmType='sorting' algorithmID={activeAlgorithm}/>
 
             <Console display={isTerminalOpen} AnimateEngine={AnimateEngine}/>
- 
         </div>
-        
     )
+
+
 }
 
 
-export default SortingVisualiser
+
+export default PathfindingVisualiser

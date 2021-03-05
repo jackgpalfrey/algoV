@@ -1,19 +1,3 @@
-import { create } from "domain"
-
-const COLORS = {
-    BASE: '#035efc',
-    BEING_CHECKED: '#fc0388',
-    DONE: '#15ba09'
-}
-
-function swap(array: any, idx1: number, idx2: number, animations: object[]){
-    let tmp = array[idx1]
-    array[idx1] = array[idx2]
-    array[idx2] = tmp
-    animations.push({command: 'swap',id1: array[idx1][0], id2: array[idx2][0]})
-}
-
-
 function mergeArrays(leftArray: any, rightArray: any, animations: any){
     let leftIndex = 0 , rightIndex = 0
 

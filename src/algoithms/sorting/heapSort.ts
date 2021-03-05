@@ -27,7 +27,7 @@ function heapify(array: number[], length: number, idx: number, animations: objec
 
     animations.push(["setColor", [left,right], "$BASE"])
 
-    if(largest != idx){
+    if(largest !== idx){
         data.swaps++
         swap(array, idx, largest, animations)
         heapify(array, length, largest, animations, data)

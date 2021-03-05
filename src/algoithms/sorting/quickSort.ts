@@ -1,11 +1,3 @@
-const COLORS = {
-    BASE: '#035efc',
-    BEING_CHECKED: '#fc0388',
-    DONE: '#15ba09'
-}
-
-
-
 function sort(array: any, animations: any): any {
  
 

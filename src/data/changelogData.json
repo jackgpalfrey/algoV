@@ -146,10 +146,11 @@
     {"version": "1.10",
         "title": "Pathfinding Update",
         "info": "Add new Pathfinding visualiser",
-        "modifications":   [],
+        "modifications":   [["CHANGED", "Under Development page to Unavailable page and improved styling - Now appears for all non valid urls"],
+                            ["", "Test"]],
         "date": "10/03/21",
         "isNext": true,
-        "displayAfter": "6/3/2021" 
+        "XdisplayAfter": "6/3/2021" 
     },
     {"version": "0.12",
         "title": "Advanced Sort Algorithms",

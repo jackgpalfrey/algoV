@@ -1,0 +1,47 @@
+.inDevPageh1 {
+	color: white;
+	margin-top: 1em;
+	margin-bottom: 2em;
+	font-weight: 500;
+}
+
+.inDevPagep {
+	color: rgb(223, 223, 223);
+	width: 40%;
+	text-align: center;
+}
+
+.inDevPage {
+	display: flex;
+	flex-direction: column;
+	height: 100vh;
+	justify-content: center;
+}
+
+.InDevDiv {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin-top: -10%;
+}
+
+.no-icon {
+	margin-bottom: 3rem;
+	color: red;
+	transform: scale(5);
+}
+
+.InDevDiv a {
+	text-decoration: none;
+	margin-top: 1em;
+	font-weight: 500;
+}
+
+.inDevGoHomeLink {
+	margin-top: none;
+	color: rgb(223, 223, 223);
+}
+
+.inDevGoHomeLink:hover {
+	color: rgb(122, 122, 122);
+}

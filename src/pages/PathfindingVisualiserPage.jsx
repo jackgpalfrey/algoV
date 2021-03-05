@@ -1,5 +1,5 @@
 import React from 'react'
-import PathfindingVisualiser from '../components/PathfindingVisualiser'
+import PathfindingVisualiser from '../components/PathfindingVisualiser/index'
 
 function PathfindingVisualiserPage(){
     return (<PathfindingVisualiser />)

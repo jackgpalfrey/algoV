@@ -9,11 +9,11 @@ import {HashRouter as Router, Redirect, Route, Switch, useHistory} from 'react-r
 import PathfindingVisualiserPage from './pages/PathfindingVisualiserPage';
 import AlgoriComputePage from './pages/AlgoriComputePage';
 import HomePage from './pages/HomePage';
-import InDevPage from './pages/InDevPage';
+import UnavailablePage from './pages/UnavailablePage';
 import changelogData from './data/changelogData.json'
 import LatestChangesCard from './components/LatestChangesCard';
-const allowInDevPages = false
-const currentVersion = "1.00"
+const allowInDevPages = true
+const currentVersion = "1.10"
 const versionID = 13
 
 function App() {
@@ -40,18 +40,18 @@ function App() {
             <SortingVisualiserPage />
           </Route>
           <Route path='/pathfind'>
-            {!allowInDevPages ? <Redirect to='/indev'/> : null}
+            {!allowInDevPages ? <UnavailablePage/> : null}
             <PathfindingVisualiserPage />
           </Route>
           <Route path='/compute'>
-            {!allowInDevPages ? <Redirect to='/indev'/> : null}
+            {!allowInDevPages ? <UnavailablePage/> : null}
             <AlgoriComputePage />
           </Route>
-          <Route path='/indev'>
-            <InDevPage/>
-          </Route>
-          <Route path='/'>
+          <Route exact path='/'>
             <HomePage />
+          </Route>
+          <Route>
+            <UnavailablePage/>
           </Route>
         </Switch>
         

@@ -107,10 +107,6 @@ select:focus {
 	cursor: pointer;
 }
 
-.bar:hover {
-	filter: brightness(110%);
-}
-
 option {
 	border: none;
 	box-shadow: none;

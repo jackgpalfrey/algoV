@@ -28,7 +28,7 @@ const data = {
 						<span className='docsPage-mainContent-exampleStyle-command'>
 							'setState'
 						</span>
-						,[<span style={{ color: 'pink' }}>Array of Indexes</span>],{' '}
+						,<span style={{ color: 'pink' }}>[Array of Indexes]</span>,{' '}
 						<span style={{ color: 'turquoise' }}>
 							Type of data (value/color)
 						</span>
@@ -41,7 +41,7 @@ const data = {
 						<span className='docsPage-mainContent-exampleStyle-command'>
 							'setState'
 						</span>
-						,[<span style={{ color: 'pink' }}>1,2,-1,'$MID'</span>],{' '}
+						,<span style={{ color: 'pink' }}>[1,2,-1,'$MID']</span>,{' '}
 						<span style={{ color: 'turquoise' }}>'color'</span>,{' '}
 						<span style={{ color: 'gold' }}>'red'</span>]{' '}
 					</span>
@@ -75,7 +75,7 @@ const data = {
 						<span className='docsPage-mainContent-exampleStyle-command'>
 							'setColor'
 						</span>
-						,[<span style={{ color: 'pink' }}>Array of Indexes</span>],{' '}
+						,<span style={{ color: 'pink' }}>[Array of Indexes]</span>,{' '}
 						<span style={{ color: 'turquoise' }}>Color</span>]
 					</span>
 				),
@@ -85,7 +85,7 @@ const data = {
 						<span className='docsPage-mainContent-exampleStyle-command'>
 							'setColor'
 						</span>
-						,[<span style={{ color: 'pink' }}>1,2,-1,'$MID'</span>],{' '}
+						,<span style={{ color: 'pink' }}>[1,2,-1,'$MID']</span>,{' '}
 						<span style={{ color: 'turquoise' }}>'red'</span>]
 					</span>
 				),
@@ -116,7 +116,7 @@ const data = {
 						<span className='docsPage-mainContent-exampleStyle-command'>
 							'setValue'
 						</span>
-						,[<span style={{ color: 'pink' }}>Array of Indexes</span>],{' '}
+						,<span style={{ color: 'pink' }}>[Array of Indexes]</span>,{' '}
 						<span style={{ color: 'turquoise' }}>Value</span>]
 					</span>
 				),
@@ -126,7 +126,7 @@ const data = {
 						<span className='docsPage-mainContent-exampleStyle-command'>
 							'setValue'
 						</span>
-						,[<span style={{ color: 'pink' }}>1,2,-1,'$MID'</span>],{' '}
+						,<span style={{ color: 'pink' }}>[1,2,-1,'$MID']</span>,{' '}
 						<span style={{ color: 'turquoise' }}>32</span>]
 					</span>
 				),
@@ -193,7 +193,7 @@ const data = {
 						<span className='docsPage-mainContent-exampleStyle-command'>
 							'setArray'
 						</span>
-						,[<span style={{ color: 'pink' }}>Array of Values</span>],{' '}
+						,<span style={{ color: 'pink' }}>[Array of Values]</span>,{' '}
 						<span style={{ color: 'turquoise' }}>Color</span>]
 					</span>
 				),
@@ -203,7 +203,7 @@ const data = {
 						<span className='docsPage-mainContent-exampleStyle-command'>
 							'setArray'
 						</span>
-						,[<span style={{ color: 'pink' }}>1,2,18,22,55,16'</span>],{' '}
+						,<span style={{ color: 'pink' }}>[1,2,18,22,55,16]</span>,{' '}
 						<span style={{ color: 'turquoise' }}>'red'</span>]
 					</span>
 				),
@@ -542,7 +542,7 @@ const data = {
 						<span className='docsPage-mainContent-exampleStyle-command'>
 							'defaultColor'
 						</span>
-						,[<span style={{ color: 'pink' }}>Variable Name</span>],{' '}
+						,<span style={{ color: 'pink' }}>Variable Name</span>,{' '}
 						<span style={{ color: 'turquoise' }}>Color</span>]
 					</span>
 				),
@@ -552,7 +552,7 @@ const data = {
 						<span className='docsPage-mainContent-exampleStyle-command'>
 							'defaultColor'
 						</span>
-						,[<span style={{ color: 'pink' }}>'BASE'</span>],{' '}
+						,<span style={{ color: 'pink' }}>'BASE'</span>,{' '}
 						<span style={{ color: 'turquoise' }}>'red'</span>]
 					</span>
 				),
@@ -686,7 +686,7 @@ const data = {
 						<span className='docsPage-mainContent-exampleStyle-command'>
 							'doSim'
 						</span>
-						,[<span style={{ color: 'pink' }}>Array of Commands</span>]]
+						,[<span style={{ color: 'pink' }}>Array of Commands</span>]]]
 					</span>
 				),
 				exampleHTML: (
@@ -695,7 +695,7 @@ const data = {
 						<span className='docsPage-mainContent-exampleStyle-command'>
 							'doSim'
 						</span>
-						,[<span style={{ color: 'pink' }}>["setColor",[0],"red"]</span>]
+						,[<span style={{ color: 'pink' }}>["setColor",[0],"red"]</span>]]
 					</span>
 				),
 				arguments: [

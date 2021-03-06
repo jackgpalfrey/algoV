@@ -46,6 +46,7 @@
 	margin: 0.3em 0;
 	padding: 0.25em 0;
 	cursor: pointer;
+	user-select: none;
 }
 
 .docsPage-sidebar-section {
@@ -70,6 +71,7 @@
 	margin-top: 0;
 	padding: 0.6em 0;
 	cursor: pointer;
+	user-select: none;
 }
 
 .docsPage-sideBarItem:hover {

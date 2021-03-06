@@ -1,24 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
 import Menu from './components/Menu';
-import SortingVisualiserPage from './pages/SortingVisualiserPage';
+import BarsPage from './pages/BarsPage';
 
 
 import {HashRouter as Router, Redirect, Route, Switch, useHistory} from 'react-router-dom'
 
-import PathfindingVisualiserPage from './pages/PathfindingVisualiserPage';
-import AlgoriComputePage from './pages/AlgoriComputePage';
+import GridPage from './pages/GridPage';
 import HomePage from './pages/HomePage';
 import UnavailablePage from './pages/UnavailablePage';
 import changelogData from './data/changelogData.json'
 import LatestChangesCard from './components/LatestChangesCard';
 import vars from './data/vars.json'
+import DocsPage from './pages/DocsPage';
 const allowInDevPages = vars.devMode
 const currentVersion = vars.versionNumber
 const versionID = vars.lastestChangeID
 
 function App() {
   const [showNewVersion, setShowNewVersion] = useState(false)
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+
   useEffect(() => {
     let version = document.cookie.split('; ').find(row => row.startsWith('version='))
     if (!version || version == ''){
@@ -39,30 +41,37 @@ function App() {
     }
     document.cookie = `version=${currentVersion}`
   },[])
+
   return (
     <Router>
       <div className="App">
         <Switch>
-          <Route path='/sort'>
-            <SortingVisualiserPage />
+          <Route path='/bars'>
+            <BarsPage />
           </Route>
-          <Route path='/pathfind'>
+          <Route path='/sort'><Redirect to='/bars' /> </Route>
+
+          <Route path='/grid'>
             {!allowInDevPages ? <UnavailablePage/> : null}
-            <PathfindingVisualiserPage />
+            <GridPage />
           </Route>
-          <Route path='/compute'>
-            {!allowInDevPages ? <UnavailablePage/> : null}
-            <AlgoriComputePage />
+          <Route path='/pathfind'><Redirect to='/grid' /> </Route>
+
+          <Route path='/docs'>
+            <DocsPage />
           </Route>
+
           <Route exact path='/'>
             <HomePage />
           </Route>
+
           <Route>
             <UnavailablePage/>
           </Route>
+
         </Switch>
         
-        <Menu/>
+        <Menu isLoggedIn={isLoggedIn}/>
         {showNewVersion ? <LatestChangesCard closeFunc={setShowNewVersion} isOpen={true} changes={changelogData[versionID].modifications} date={changelogData[versionID].date} version={changelogData[versionID].version} title={changelogData[versionID].title}> <p>{changelogData[versionID].info}</p> </LatestChangesCard>: null}
         
       </div>

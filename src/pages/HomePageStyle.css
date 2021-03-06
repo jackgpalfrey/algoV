@@ -6,3 +6,8 @@ body {
 body::-webkit-scrollbar {
 	display: none;
 }
+
+.homepage-img {
+	margin-top: 0.5em;
+	user-select: none;
+}

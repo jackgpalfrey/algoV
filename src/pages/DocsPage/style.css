@@ -57,6 +57,7 @@
 	width: 85%;
 	padding-bottom: 1em;
 	border-radius: 1em;
+	margin-bottom: 1em;
 }
 
 .docsPage-sidebar-section::-webkit-scrollbar {

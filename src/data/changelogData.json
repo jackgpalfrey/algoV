@@ -151,7 +151,10 @@
                             ["ADDED", "version AnimateEngine Command (Added in 1.00.1)"],
                             ["CHANGED", "Improved Unavailable Page (Changed in 1.00.1"],
                             ["ADDED", "New Icons for future pages in menu"],
-                            ["ADDED", "Favicon and icon on Homepage"]],
+                            ["ADDED", "Favicon and icon on Homepage"],
+                            ["CHANGED", "Menu to close on scroll"],
+                            ["ADDED", "/docs page"],
+                            ["ADDED", "AnimateEngine (Bars) Documentation"]],
         "date": "8/03/21",
         "isNext": true,
         "XdisplayAfter": "6/3/2021" 

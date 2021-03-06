@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useLocation } from 'react-router-dom'
 import './style.css'
 import icon from '../../images/icon.png'
 import docData from '../../data/docs'
@@ -7,8 +8,15 @@ import docData from '../../data/docs'
     
 
 function DocsPage(){
-    const [openItem, setOpenItem] = useState("General-Introduction")
-    const [openTabs, setOpenTabs] = useState(["General"])
+    let firstItem = "General-Introduction"
+    let firstOpenTabs = ["General"]
+    let urlItem = useLocation() .search.replace('?','')
+    if (urlItem){ 
+        firstItem = urlItem
+        firstOpenTabs.push(urlItem.split('-')[0])
+    }
+    const [openItem, setOpenItem] = useState(firstItem)
+    const [openTabs, setOpenTabs] = useState(firstOpenTabs)
 
     let itemKey = openItem.split('-')
     let data = docData[itemKey[0]].pages[itemKey[1]]

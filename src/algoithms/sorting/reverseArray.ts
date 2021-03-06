@@ -36,7 +36,7 @@ function reverseArray(array: number[]){
     animations.push(["endAnimation"])
 
     let endAni = []
-    endAni.push(["setRunTimeDisplay", Math.round(runTime * 1000) / 1000])
+    endAni.push(["setRuntimeDisplay", Math.round(runTime * 1000) / 1000])
     endAni.push(["setComparisonsDisplay", 0])
     endAni.push(["setSwapsDisplay", swaps])
     endAni.push(["startAnimation"])

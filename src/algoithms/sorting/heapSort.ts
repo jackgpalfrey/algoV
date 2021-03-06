@@ -79,7 +79,7 @@ function heapSort(array: number[]){
     animations.push(["endAnimation"])
 
     let endAni = []
-    endAni.push(["setRunTimeDisplay", Math.round(runTime * 1000) / 1000])
+    endAni.push(["setRuntimeDisplay", Math.round(runTime * 1000) / 1000])
     endAni.push(["setComparisonsDisplay", data.comparisons])
     endAni.push(["setSwapsDisplay", data.swaps])
     endAni.push(["startAnimation"])

@@ -30,7 +30,7 @@ function sort(array: number[]): [number[],object[],number]{
     animations.push(["endAnimation"])
 
     let endAni = []
-    endAni.push(["setRunTimeDisplay", Math.round(runTime * 1000) / 1000])
+    endAni.push(["setRuntimeDisplay", Math.round(runTime * 1000) / 1000])
     endAni.push(["setComparisonsDisplay", comparisons])
     endAni.push(["setSwapsDisplay", swaps])
     endAni.push(["startAnimation"])

@@ -7,7 +7,8 @@ import docData from '../../data/docs'
     
 
 function DocsPage(){
-    const [openItem, setOpenItem] = useState("AnimateEngineSort-setState")
+    const [openItem, setOpenItem] = useState("General-Introduction")
+    const [openTabs, setOpenTabs] = useState(["General"])
 
     let itemKey = openItem.split('-')
     let data = docData[itemKey[0]].pages[itemKey[1]]
@@ -44,8 +45,22 @@ function DocsPage(){
             })
             return (
                 <div className= 'docsPage-sidebar-section'>
-                    <div className="docsPage-sideBarTitle">{value.name}</div>
-                    {items}
+                    <div onClick={() => {
+                        if (openTabs.includes(value.id)){
+                            setOpenTabs((prevState) => {
+                                let curOpenTabs = prevState.slice()
+                                curOpenTabs.splice(curOpenTabs.indexOf(value.id))
+                                return curOpenTabs
+                            })
+                        } else {
+                            setOpenTabs((prevState) => {
+                                let curOpenTabs = prevState.slice()
+                                curOpenTabs.push(value.id)
+                                return curOpenTabs
+                            })
+                        }
+                    }}className="docsPage-sideBarTitle">{value.name}</div>
+                    {openTabs.includes(value.id) ? items : null}
                 </div>
             )
         })
@@ -53,6 +68,21 @@ function DocsPage(){
         return [sideBarHTML]
     }
 
+
+
+    function createTable(){
+        return (
+            <table className='arguments'>
+                <tr>
+                    <th>Argument</th>
+                    <th>Type</th>
+                    <th>Examples</th>
+                    <th>Notes</th>
+                </tr>
+                {createRows()}
+            </table>
+        )
+    }
     return (
         <div className='docsPage-container'>
             <div className='docsPage-titleBar'><img className='docspage-img' src={icon} alt='AlgoV' width='80' height='40'/> Documentation</div>
@@ -63,17 +93,9 @@ function DocsPage(){
                     <hr />
                     <p className='docsPage-mainContent-description'>{data.desc}</p>
                     <br />
-                    <p className='docsPage-mainContent-example-title docsPage-mainContent-example-container'>Syntax: <span className='docsPage-mainContent-example' >{data.syntaxHTML}</span></p>
-                    <p className='docsPage-mainContent-example-container'><span className='docsPage-mainContent-example-title'>Example: </span><span className='docsPage-mainContent-example'>{data.exampleHTML}</span></p>
-                    <table className='arguments'>
-                        <tr>
-                            <th>Argument</th>
-                            <th>Type</th>
-                            <th>Examples</th>
-                            <th>Notes</th>
-                        </tr>
-                        {createRows()}
-                    </table>
+                    {data.syntaxHTML ? <p className='docsPage-mainContent-example-title docsPage-mainContent-example-container'>Syntax: <span className='docsPage-mainContent-example' >{data.syntaxHTML}</span></p>: null}
+                    {data.exampleHTML ? <p className='docsPage-mainContent-example-container'><span className='docsPage-mainContent-example-title'>Example: </span><span className='docsPage-mainContent-example'>{data.exampleHTML}</span></p>: null}
+                    {data.arguments ? createTable(): null}
                 </div>
                 
             </div>

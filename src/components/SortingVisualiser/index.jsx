@@ -314,7 +314,7 @@ function SortingVisualiser(props){
                     AnimateEngine(["setArray",Randvalues,"$BASE"])
                     break;
                 
-                case 'setRunTimeDisplay':
+                case 'setRuntimeDisplay':
                     let newRuntime = command[1]
                     if (!newRuntime) return ["ERROR", "Invalid Runtime"]
                     setRunTime(newRuntime)
@@ -363,7 +363,7 @@ function SortingVisualiser(props){
                     
                     break;
 
-                case 'clearWaits': //FIXME: Dosen't work
+                case 'clearWait': //FIXME: Dosen't work
                     let activeWaits = activeTimeouts.slice()
                     let AWLen = activeWaits.length
                     for (let i = 0; i < AWLen; i++){

@@ -20,3 +20,19 @@
 	color: white;
 	-ms-user-select: none;
 }
+
+.docsButton {
+	color: rgb(167, 167, 167);
+	display: inline-block;
+	margin-left: 0.5em;
+	cursor: pointer;
+}
+
+.docsButton:hover {
+	filter: brightness(60%);
+}
+
+.consoleLine {
+	display: flex;
+	align-items: center;
+}

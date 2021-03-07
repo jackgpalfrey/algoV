@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import './style.css'
 
 function Console(props){
@@ -46,7 +47,10 @@ function Console(props){
 
     let terminal = (
         <div className='consoleBox'>
-            <input placeholder='Console' value={commandText} onChange={consoleChangeHandler} style={{color: textColor}}className='console' onKeyDown={handleConsole}></input>
+            <div className='consoleLine'>
+                <input placeholder='Console' value={commandText} onChange={consoleChangeHandler} style={{color: textColor}}className='console' onKeyDown={handleConsole}></input>
+                {isOpen ? <Link title='Open Documentation' to='/docs?AnimateEngineSort-clearLoop' > <i className="material-icons docsButton">description</i> </Link> : null}
+            </div>
             <p style={{color: textColor}}>{responseText}</p>
         </div>
     )
@@ -54,6 +58,7 @@ function Console(props){
     return (
         <div>
             {isOpen ? terminal : null}
+            
         </div>
         
     )

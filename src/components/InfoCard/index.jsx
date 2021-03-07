@@ -31,7 +31,7 @@ function InfoCard({algorithmType, algorithmID}){
     }
     
 
-    let card = (<div className='card' /*onMouseOver={() => setIsOpenHover(true)} onMouseLeave={() => setIsOpenHover(false)}*/>
+    let card = (<div className='card scrollable-bright' /*onMouseOver={() => setIsOpenHover(true)} onMouseLeave={() => setIsOpenHover(false)}*/>
                     <p className='title'>{title}</p>
                     <hr></hr>
                     <p className='meta'>{`Worst Case Time Complexity: ${worstTimeComplexity}`}</p>

@@ -49,10 +49,6 @@
 	background-color: transparent;
 }
 
-.card::-webkit-scrollbar {
-	display: none;
-}
-
 .dark-theme {
 	justify-self: flex-end;
 }

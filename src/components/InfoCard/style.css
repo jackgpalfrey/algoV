@@ -17,8 +17,6 @@
 	color: white;
 	padding: 2em;
 	overflow: scroll;
-	-ms-overflow-style: none;
-	scrollbar-width: none;
 	cursor: context-menu;
 }
 
@@ -42,10 +40,6 @@
 
 .openCardButton:focus {
 	outline: none;
-}
-
-.card::-webkit-scrollbar {
-	display: none;
 }
 
 .credit {
@@ -75,7 +69,7 @@
 }
 
 .description {
-	line-height: 1.5em;
+	line-height: 1.7em;
 	margin: 1em 0;
 	text-align: center;
 }

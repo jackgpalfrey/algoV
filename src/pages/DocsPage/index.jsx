@@ -93,7 +93,7 @@ function DocsPage(){
     }
     return (
         <div className='docsPage-container'>
-            <div className='docsPage-titleBar'><img className='docspage-img' src={icon} alt='AlgoV' width='80' height='40'/> Documentation</div>
+            <div className='docsPage-titleBar'><img className='docspage-img' src={icon} alt='AlgoV' width='80' height='40'/> Docs</div>
             <div className='docsPage-searchBox'>Test</div>
             <div className='docsPage-mainContent'>
                 <div className='docsPage-mainContent-container'>

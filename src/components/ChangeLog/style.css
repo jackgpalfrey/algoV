@@ -9,10 +9,6 @@
 	justify-content: center;
 	align-content: center;
 	overflow-y: scroll;
-	-ms-overflow-style: none;
-}
-.changelogContainer::-webkit-scrollbar {
-	display: none;
 }
 
 .fullItemContainer {
@@ -55,6 +51,7 @@
 
 .version {
 	margin-right: 2em;
+	font-weight: bold;
 }
 
 .changesList {
@@ -82,4 +79,8 @@
 .changelog-changeTitle {
 	font-size: 1.2rem;
 	margin-top: 1em;
+}
+
+.changeLog-title {
+	font-size: 1.05em;
 }

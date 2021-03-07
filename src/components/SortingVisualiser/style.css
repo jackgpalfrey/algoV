@@ -1,6 +1,5 @@
 body {
 	background-color: #121212;
-	overflow: hidden;
 }
 
 .bar-container {
@@ -26,6 +25,7 @@ nav {
 	justify-content: center;
 	align-items: center;
 	background-color: #262626;
+	overflow: hidden;
 }
 
 nav * {
@@ -38,6 +38,7 @@ nav * {
 button,
 select {
 	background-color: #035efc;
+	overflow: hidden;
 }
 
 .bar {
@@ -49,10 +50,11 @@ select {
 	align-items: center;
 	border-radius: 20px;
 	user-select: none;
+	overflow: hidden;
 }
 
 .bar:hover {
-	filter: brightness(150%);
+	filter: brightness(120%);
 }
 
 option {
@@ -62,6 +64,7 @@ option {
 .algorithmsTitle {
 	background-color: #181818;
 	font-size: 1.1em;
+	overflow: hidden;
 }
 
 .button,
@@ -75,6 +78,7 @@ select {
 	place-items: center;
 	color: rgb(235, 235, 235);
 	font-weight: 800;
+	overflow: hidden;
 }
 
 select {
@@ -85,6 +89,7 @@ select {
 	box-shadow: none;
 	text-align-last: center;
 	outline: none;
+	overflow: hidden;
 }
 
 .button,
@@ -98,6 +103,7 @@ select {
 	padding: 0.5% 0;
 	background-color: #035efc;
 	font-weight: bold;
+	overflow: hidden;
 }
 
 .button * {
@@ -146,6 +152,7 @@ button:disabled,
 	margin-bottom: -0.6em;
 	cursor: pointer;
 	user-select: none;
+	overflow: hidden;
 }
 
 @media (max-width: 1000px) {

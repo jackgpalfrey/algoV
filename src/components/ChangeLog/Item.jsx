@@ -48,7 +48,7 @@ function Item(props){
         <div onClick={() => setIsOpen(!isOpen)} className='fullItemContainer'>
             <div className='TitleContainer' >
                 <p className='version'>{props.version}</p>
-                <p>{props.title}</p>
+                <p className='changeLog-title'>{props.title}</p>
             </div>
             {isOpen ? ItemInfo : null}
         </div>

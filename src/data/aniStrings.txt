@@ -1,2 +1,5 @@
 Christmas Animation: 
 ["doFor", [["do", [["setColor", ["$EVEN"], "red"],["setColor", ["$ODD"], "green"]],0],["do", [["setColor", ["$EVEN"], "green"],["setColor", ["$ODD"], "red"]],0]], 0, "$userSet"]
+
+
+["doSim", [["defaultColor", "BASE", "gold"],["defaultColor", "CHECKING", "red"],["defaultColor", "DONE", "red"],["defaultColor", "TEXT", "black"],["resetArray"]]]

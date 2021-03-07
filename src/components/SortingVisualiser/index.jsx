@@ -64,7 +64,8 @@ function SortingVisualiser(props){
 
     function AnimateEngine(command){
         try {
-            let commandCode = command[0]
+            let commandCode = command
+            if (Array.isArray(command)) commandCode = command[0]
             
             let response = ["PENDING", "In progress"]
             console.log(`Command: ${commandCode}`)
@@ -468,7 +469,8 @@ function SortingVisualiser(props){
                 width: barWidth,
                 margin: barWidth / 4 > 20 ? 20 : barWidth / 4,
                 fontSize: barWidth > 20 ? barWidth / 3 : 0,
-                color: COLORS.TEXT  
+                color: COLORS.TEXT,
+                fontWeight: "bold"
             }
 
             return (<div key={idx} title={item.value}className='bar' style={style}>{item.value}</div>)
@@ -479,7 +481,7 @@ function SortingVisualiser(props){
 
 
     return (
-        <div className='container'>
+        <div className='sort-container'>
             <div className='bar-container'>
                 <div className='inner-bar-container'>
                     {createBars()}

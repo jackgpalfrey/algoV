@@ -30,11 +30,14 @@
 	overflow: scroll;
 	height: 98%;
 	width: 100%;
+	overflow-x: hidden;
 }
 
+/*
 .docsPage-sidebar-container::-webkit-scrollbar {
 	display: none;
 }
+*/
 
 .docsPage-sideBarItem {
 	width: 93%;
@@ -47,6 +50,7 @@
 	padding: 0.25em 0;
 	cursor: pointer;
 	user-select: none;
+	font-size: 0.9em;
 }
 
 .docsPage-sidebar-section {
@@ -57,6 +61,7 @@
 	width: 85%;
 	border-radius: 1em;
 	margin-bottom: 1em;
+	padding: 0.5em;
 }
 
 .docsPage-sidebar-section::-webkit-scrollbar {
@@ -69,13 +74,14 @@
 	justify-content: center;
 	align-items: center;
 	margin-top: 0;
-	padding: 0.6em 0;
+	padding: 0.2em 0;
 	cursor: pointer;
 	user-select: none;
+	font-size: 1.1em;
 }
 
 .docsPage-sideBarItem:hover {
-	filter: brightness(60%);
+	background-color: rgba(146, 146, 146, 0.1);
 }
 
 .docsPage-titleBar {
@@ -88,7 +94,7 @@
 	align-items: center;
 	color: white;
 	font-weight: 500;
-	font-size: 1.4em;
+	font-size: 1.1em;
 }
 
 .docsPage-mainContent {
@@ -156,7 +162,11 @@
 }
 
 .arguments tr:nth-child(odd) {
-	background-color: #494949;
+	background-color: #303030;
+}
+
+.arguments tr:hover {
+	background-color: #555555;
 }
 
 .arguments th {
@@ -177,7 +187,7 @@
 }
 
 .docsPage-sideBarItem-selected:hover {
-	filter: brightness(100%);
+	background-color: #005ce6;
 }
 
 .docsPage-mainContent-example-title {

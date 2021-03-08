@@ -49,7 +49,7 @@ function Console(props){
         <div className='consoleBox'>
             <div className='consoleLine'>
                 <input placeholder='Console' value={commandText} onChange={consoleChangeHandler} style={{color: textColor}}className='console' onKeyDown={handleConsole}></input>
-                {isOpen ? <Link title='Open Documentation' to='/docs?AnimateEngineSort-clearLoop' > <i className="material-icons docsButton clickable">description</i> </Link> : null}
+                {isOpen ? <Link title='Open Documentation' to={`/docs?${props.docsKey || ''}`} > <i className="material-icons docsButton clickable">description</i> </Link> : null}
             </div>
             <p style={{color: textColor}}>{responseText}</p>
         </div>

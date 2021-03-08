@@ -524,7 +524,7 @@ function SortingVisualiser(props){
             </nav>
             <InfoCard algorithmType='sorting' algorithmID={activeAlgorithm}/>
 
-            <Console display={isTerminalOpen} AnimateEngine={AnimateEngine}/>
+            <Console display={isTerminalOpen} docsKey='AnimateEngineSort-clearLoop' AnimateEngine={AnimateEngine}/>
  
         </div>
         

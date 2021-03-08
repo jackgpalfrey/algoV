@@ -27,11 +27,6 @@
 	display: flex;
 	justify-content: space-between;
 	padding: 0.6em 2em;
-	cursor: pointer;
-}
-
-.TitleContainer:hover {
-	color: white;
 }
 
 .itemInfoContainer {

@@ -46,7 +46,7 @@ function Item(props){
 
     return (
         <div className='fullItemContainer'>
-            <div onClick={() => setIsOpen(!isOpen)} className='TitleContainer' >
+            <div onClick={() => setIsOpen(!isOpen)} className='TitleContainer clickable' >
                 <p className='version'>{props.version}</p>
                 <p className='changeLog-title'>{props.title}</p>
             </div>

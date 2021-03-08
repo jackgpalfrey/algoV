@@ -489,17 +489,17 @@ function SortingVisualiser(props){
                 
             </div>
             <nav>
-            <i className='material-icons consoleButton' title={isTerminalOpen ? 'Close Terminal': 'Open Terminal'} onClick={() => setIsTerminalOpen(!isTerminalOpen)}>{isTerminalOpen ? 'code_off': 'code'}</i>
+            <i className='material-icons consoleButton clickable dark' title={isTerminalOpen ? 'Close Terminal': 'Open Terminal'} onClick={() => setIsTerminalOpen(!isTerminalOpen)}>{isTerminalOpen ? 'code_off': 'code'}</i>
             <div className='sliderBox'>
                 <p className={animationActive ? 'disabled' : ''}>Animation Time ({animationSpeed}ms) </p>
-                <input disabled={animationActive} type="range" min="1" max="1000" value={animationSpeed} onChange={e => {
+                <input className='clickable' disabled={animationActive} type="range" min="1" max="1000" value={animationSpeed} onChange={e => {
                     setAnimationSpeed(parseInt(e.target.value)); 
                 }}></input>
             </div>
-                <button disabled={animationActive} onClick={() => {if(!animationActive) {AnimateEngine(["resetArray", numBars])}}} className={!animationActive ? 'button reset' : 'button-disabled reset'}>Reset</button>
-                <button disabled={animationActive} onClick={handleSortClick} className={!animationActive ? 'button sort' : 'button-disabled sort'}>Sort</button>
-                <select disabled={animationActive} value={activeAlgorithm} name={activeAlgorithm} onChange={e => {setActiveAlgorithm(e.target.value)}}>
-                <option disabled className='algorithmsTitle' value='otherTitle'>Sorting Algorithms</option>
+                <button disabled={animationActive} onClick={() => {if(!animationActive) {AnimateEngine(["resetArray", numBars])}}} className={`${!animationActive ? 'button reset' : 'button-disabled reset'} clickable`}>Reset</button>
+                <button disabled={animationActive} onClick={handleSortClick} className={`${!animationActive ? 'button sort' : 'button-disabled sort'} clickable`}>Sort</button>
+                <select className='clickable'disabled={animationActive} value={activeAlgorithm} name={activeAlgorithm} onChange={e => {setActiveAlgorithm(e.target.value)}}>
+                <option disabled className='algorithmsTitle clickable' value='otherTitle'>Sorting Algorithms</option>
                     <option value='bubbleSort'>Bubble Sort</option>
                     <option value='selectionSort'>Selection Sort</option>
                     <option value='insertionSort'>Insertion Sort</option>
@@ -512,7 +512,7 @@ function SortingVisualiser(props){
                 
                     <div className='sliderBox'>
                         <p className={animationActive ? 'disabled' : ''}>Number of Bars ({numBars})</p>
-                        <input disabled={animationActive} type="range" min="5" max={`${Math.round(window.innerWidth / 12) - 10}`} value={numBars} onChange={e => {
+                        <input className='clickable' disabled={animationActive} type="range" min="5" max={`${Math.round(window.innerWidth / 12) - 10}`} value={numBars} onChange={e => {
                             AnimateEngine(["resetArray",parseInt(e.target.value)])
                         }}></input>
                     </div>

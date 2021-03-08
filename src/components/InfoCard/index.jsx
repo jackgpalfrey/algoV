@@ -47,7 +47,7 @@ function InfoCard({algorithmType, algorithmID}){
             <div className='card-container' /*onMouseOver={() => setIsOpenHover(true)} onMouseLeave={() => setIsOpenHover(false)}*/ >
                 {isOpen || isOpenHover ? card : null}
                 <button onClick={() => setIsOpen(!isOpen)} className='openCardButton' >
-                {isOpen ? <i className="material-icons">close</i> : <i className="material-icons ">info</i> }
+                {isOpen ? <i className="material-icons clickable dark">close</i> : <i className="material-icons clickable dark">info</i> }
                 </button>  
             </div>
             )

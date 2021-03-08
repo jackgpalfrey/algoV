@@ -31,10 +31,7 @@
 	margin: -25px;
 	background-color: transparent;
 	border: none;
-}
-
-.openMenuButton:hover {
-	color: rgb(143, 143, 143);
+	pointer-events: all;
 }
 
 .openMenuButton:focus {
@@ -47,6 +44,7 @@
 
 .closed {
 	background-color: transparent;
+	pointer-events: none;
 }
 
 .dark-theme {
@@ -58,14 +56,6 @@
 	text-decoration: none;
 	margin-top: 2.3em;
 	filter: brightness(100%);
-}
-
-.link:hover {
-	filter: brightness(70%);
-}
-
-.current {
-	color: #03a1fc;
 }
 
 .unavailable {
@@ -90,4 +80,14 @@
 	font-weight: bold;
 	font-size: 1.2em;
 	text-align: center;
+}
+
+.current {
+	color: #03a1fc;
+}
+
+.current:hover {
+	filter: brightness(100%);
+	user-select: none;
+	cursor: default;
 }

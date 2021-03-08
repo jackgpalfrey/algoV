@@ -164,10 +164,11 @@
         "title": "Pathfinding Update",
         "info": "Add new Pathfinding visualiser",
         "modifications":   [["ADDED", "Scrollbar"],
-                            ["CHANGED", "Docs Pages to Alphabetical Order"]],
+                            ["CHANGED", "Docs Pages to Alphabetical Order"],
+                            ["ADDED", "Open Documentation Button to console"],
+                            ["FIXED", "Inability to click through hidden menu"]],
         "date": "10/03/21",
-        "dontDisplay": true,
-        "XdisplayAfter": "6/3/2021" 
+        "isNext": true
     },
     {"version": "0.12",
         "title": "Advanced Sort Algorithms",

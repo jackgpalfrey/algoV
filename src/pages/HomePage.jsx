@@ -34,9 +34,9 @@ function HomePage(){
     return (
         <div className='changeLog'>
             <div className='changeLogMenuItems'>
-                <div className='openAllChangesButton' onClick={() => setIsAllOpen(!isAllOpen)}>{isAllOpen ? 'Close All' : 'Open All'}</div>
+                <div className='openAllChangesButton clickable' onClick={() => setIsAllOpen(!isAllOpen)}>{isAllOpen ? 'Close All' : 'Open All'}</div>
                 <img className='homepage-img' src={icon} alt='AlgoV' width='100' height='50'/>
-                <div className='openAllChangesButton' onClick={() => setIsNewestFirst(!isNewestFirst)}>{isNewestFirst ? 'Order Oldest to Newest' : 'Order Newest to Oldest'}</div>
+                <div className='openAllChangesButton clickable' onClick={() => setIsNewestFirst(!isNewestFirst)}>{isNewestFirst ? 'Order Oldest to Newest' : 'Order Newest to Oldest'}</div>
             </div>
             <Container titleBgColor='' titleTxtColor='' infoBgColor='' infoTxtColor=''>
                 {changeItems}

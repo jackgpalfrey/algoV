@@ -34,10 +34,6 @@
 	cursor: pointer;
 }
 
-.openCardButton:hover {
-	color: rgb(143, 143, 143);
-}
-
 .openCardButton:focus {
 	outline: none;
 }
@@ -78,6 +74,11 @@
 	transform: scale(0.7);
 	margin-left: -0.3em;
 	color: rgba(255, 255, 255, 0.507);
+	cursor: help;
+}
+
+.help:hover {
+	filter: brightness(80%);
 }
 
 @media (max-width: 1000px) {

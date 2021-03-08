@@ -45,7 +45,7 @@ function DocsPage(){
             let pages = Object.values(value.pages)
             let items = pages.map((pageObj) => {
                 let activeItemKey = openItem.split('-')
-                let classes = "docsPage-sideBarItem"
+                let classes = "docsPage-sideBarItem clickable"
                 if (value.id === activeItemKey[0] && pageObj.id === activeItemKey[1]) classes += " docsPage-sideBarItem-selected"
                 return (<div onClick={() => {
                     setOpenItem(`${value.id}-${pageObj.id}`)
@@ -67,7 +67,7 @@ function DocsPage(){
                                 return curOpenTabs
                             })
                         }
-                    }}className="docsPage-sideBarTitle">{value.name}</div>
+                    }}className="docsPage-sideBarTitle clickable">{value.name}</div>
                     {openTabs.includes(value.id) ? items : null}
                 </div>
             )

@@ -41,7 +41,7 @@ function LatestChangesCard(props){
             <div className='latest-fullItemContainer'>
                 <div className='latest-TitleContainer' >
                     <p className='version'>{`${props.version}  -  ${props.title}`}</p>
-                    <i onClick={() => {props.closeFunc(false)}} className="material-icons latest-close">close</i>
+                    <i onClick={() => {props.closeFunc(false)}} className="material-icons latest-close clickable">close</i>
                 </div>
                 {ItemInfo}
             </div>

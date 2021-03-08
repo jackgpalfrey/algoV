@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Console from '../Console'
 import InfoCard from '../InfoCard'
-import './style.css'
+import './style-depr.css'
 
 
 const COLORS = {

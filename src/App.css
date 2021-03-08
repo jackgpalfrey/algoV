@@ -33,6 +33,18 @@
 	background: #ffffff42;
 }
 
+.clickable {
+	cursor: pointer;
+}
+
+.clickable:hover {
+	filter: brightness(80%);
+}
+
+.clickable.dark:hover {
+	filter: brightness(60%);
+}
+
 .scrollable-all::-webkit-scrollbar-thumb {
 	background: #3d3d3d;
 }
@@ -70,8 +82,4 @@ body {
 	color: rgba(255, 255, 255, 0.829);
 	cursor: pointer;
 	user-select: none;
-}
-
-.openAllChangesButton:hover {
-	color: white;
 }

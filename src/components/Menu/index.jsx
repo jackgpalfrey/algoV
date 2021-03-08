@@ -29,14 +29,14 @@ function Menu(props){
             <br />
             <br />
             <button onClick={() => setIsOpen(!isOpen)} className='openMenuButton' >
-                {isOpen ? <i className="material-icons ">menu_open</i> : <i className="material-icons ">menu</i> }
+                <i className="material-icons clickable dark">{isOpen ? 'menu_open' : 'menu' }</i>
             </button>
-            {isOpen ? [<NavLink exact className='link homeButton' activeClassName='current' to='/'><span title='Home'><i className="material-icons item">home</i></span></NavLink>,
-                       <NavLink className='link' activeClassName='current' to='/bars'><span title='Bars'><i className="material-icons item">bar_chart</i></span></NavLink>,
-                       <NavLink className='link unavailable' activeClassName='current' to='/grid'><span title='Grid'><i className="material-icons item">window</i></span></NavLink>,
-                       <NavLink className='link unavailable' activeClassName='current' to='/logic'><span title='Logic'><i className="material-icons item">device_hub</i></span></NavLink>,
-                       <NavLink className='link unavailable' activeClassName='current' to='/learn'><span title='Learn'><i className="material-icons item">class</i></span></NavLink>, 
-                       <NavLink className='link unavailable' activeClassName='current' to='/puzzles'><span title='Puzzles'><i className="material-icons item">extension</i></span></NavLink>] 
+            {isOpen ? [<NavLink exact className='link clickable homeButton' activeClassName='current' to='/'><span title='Home'><i className="material-icons item">home</i></span></NavLink>,
+                       <NavLink className='link clickable' activeClassName='current' to='/bars'><span title='Bars'><i className="material-icons item">bar_chart</i></span></NavLink>,
+                       <NavLink className='link clickable' activeClassName='current' to='/grid'><span title='Grid'><i className="material-icons item">window</i></span></NavLink>,
+                       <NavLink className='link clickable unavailable' activeClassName='current' to='/logic'><span title='Logic'><i className="material-icons item">device_hub</i></span></NavLink>,
+                       <NavLink className='link clickable unavailable' activeClassName='current' to='/learn'><span title='Learn'><i className="material-icons item">class</i></span></NavLink>, 
+                       <NavLink className='link clickable unavailable'  activeClassName='current' to='/puzzles'><span title='Puzzles'><i className="material-icons item">extension</i></span></NavLink>] 
                        : null}
 
             {isOpen && props.isLoggedIn ? <NavLink className='link unavailable' activeClassName='current' to='/settings'><span title='Settings & Logout'><i className="material-icons item">settings</i></span></NavLink> : null}

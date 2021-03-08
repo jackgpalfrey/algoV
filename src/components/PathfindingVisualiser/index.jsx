@@ -1,10 +1,10 @@
 import React from 'react'
+import './style.css'
 
 
 function PathfindingVisualiser(){
     return (
-        <div>
-            <p>Test</p>
+        <div className='grid-container'>
         </div>
     )
 }

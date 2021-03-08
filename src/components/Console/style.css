@@ -28,10 +28,6 @@
 	cursor: pointer;
 }
 
-.docsButton:hover {
-	filter: brightness(60%);
-}
-
 .consoleLine {
 	display: flex;
 	align-items: center;

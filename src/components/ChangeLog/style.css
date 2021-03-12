@@ -11,6 +11,10 @@
 	overflow-y: scroll;
 }
 
+.changelogContainer::-webkit-scrollbar {
+	display: none;
+}
+
 .fullItemContainer {
 	width: 100%;
 	justify-self: center;

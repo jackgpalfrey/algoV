@@ -152,11 +152,13 @@
         "title": "Pathfinding Update",
         "info": "Add new Pathfinding visualiser",
         "modifications":   [["ADDED", "Scrollbar"],
-                            ["CHANGED", "Docs Pages to Alphabetical Order"],
+                            ["ADDED", "Search to docs"],
+                            ["ADDED", "Foundations of Multi Language Support"],
                             ["ADDED", "Open Documentation Button to console"],
-                            ["FIXED", "Inability to click through hidden menu"],
+                            ["CHANGED", "Docs Pages to Alphabetical Order"],
                             ["CHANGED", "Runtime to show 0ms when run time not set instead of N/A to be consistent with comparisions and swaps"],
-                            ["ADDED", "Search to docs"]],
+                            ["FIXED", "Inability to click through hidden menu"]
+                            ],
         "date": "10/03/21",
         "isNext": true
     },

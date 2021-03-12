@@ -10,12 +10,12 @@ import reverseArray from '../../algoithms/sorting/reverseArray'
 import selectionSort from '../../algoithms/sorting/selectionSort'
 import Console from '../Console'
 import InfoCard from '../InfoCard'
-import algoData from '../../data/algorithmInfo.json'
 import './style.css'
 
 import getLocaleText from '../../util/getLocaleText'
 const consoleText = getLocaleText('general').console
 const text = getLocaleText('general').bars
+const algoData = getLocaleText('algorithmInfo')
 
 const COLORS = {
     BASE: '#035efc', 

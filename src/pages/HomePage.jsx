@@ -6,10 +6,6 @@ import './HomePageStyle.css'
 import icon from '../images/icon.png'
 
 
-//import changeLogData from '../data/changelogData.json'
-
-
-
 import getLocaleText from '../util/getLocaleText'
 const text = getLocaleText('general').changelog
 const changeLogData = getLocaleText('changeLog')

@@ -9,10 +9,13 @@ import {HashRouter as Router, Redirect, Route, Switch, useHistory} from 'react-r
 import GridPage from './pages/GridPage';
 import HomePage from './pages/HomePage';
 import UnavailablePage from './pages/UnavailablePage';
-import changelogData from './data/changelogData.json'
 import LatestChangesCard from './components/LatestChangesCard';
 import vars from './data/vars.json'
 import DocsPage from './pages/DocsPage';
+
+import getLocaleText from './util/getLocaleText'
+const changelogData = getLocaleText('changeLog')
+
 const allowInDevPages = vars.devMode
 const currentVersion = vars.versionNumber
 const versionID = vars.lastestChangeID

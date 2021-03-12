@@ -5,7 +5,13 @@
         "orderOldestToNewestButton": "Order Oldest to Newest",
         "orderNewestToOldestButton": "Order Newest to Oldest",
         "nextUpdateVersionKey": "Next Update",
-        "plannedForDate": "Planned for"
+        "plannedForDate": "Planned for",
+        "addedLabel": "ADDED",
+        "changedLabel": "CHANGED",
+        "deprecatedLabel": "DEPRECATED",
+        "removedLabel": "REMOVED",
+        "fixedLabel": "FIXED",
+        "generalLabel": "GENERAL"
     },
     "menu": {
         "home": "Home",

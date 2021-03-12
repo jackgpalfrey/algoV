@@ -12,9 +12,23 @@ const localeData = {
 	},
 };
 
-const lang = 'sp';
+const defaultLang = 'en';
 
-function getLocaleText(dataSet) {
+function getLocaleText(dataSet, language) {
+	let savedLangCookie = document.cookie
+		.split('; ')
+		.find((row) => row.startsWith('lang='));
+
+	let savedLang;
+	if (savedLangCookie) {
+		savedLang = savedLangCookie.split('=')[1];
+	} else {
+		savedLang = defaultLang;
+	}
+
+	let lang = language || savedLang;
+
+	console.log(`Language: ${lang}`);
 	let langData = localeData[lang];
 	if (langData !== undefined) {
 		if (langData[dataSet]) {

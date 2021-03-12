@@ -10,7 +10,7 @@ function PathfindingVisualiser(){
 
     return (
         <div className='grid-container'>
-            <Console display={true} docsKey='AnimateEngineSort-clearLoop' AnimateEngine={AnimateEngine}/>
+            <Console display={true} docsKey='AnimateEngineGrid-clearLoop' AnimateEngine={AnimateEngine}/>
         </div>
     )
 }

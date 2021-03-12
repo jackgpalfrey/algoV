@@ -497,7 +497,7 @@ function SortingVisualiser(props){
                 }}></input>
             </div>
                 <button disabled={animationActive} onClick={() => {if(!animationActive) {AnimateEngine(["resetArray", numBars])}}} className={`${!animationActive ? 'button reset' : 'button-disabled reset'} clickable`}>Reset</button>
-                <button disabled={animationActive} onClick={handleSortClick} className={`${!animationActive ? 'button sort' : 'button-disabled sort'} clickable`}>Sort</button>
+                <button disabled={animationActive} onClick={handleSortClick} className={`${!animationActive ? 'button sort' : 'button-disabled sort'} clickable`}>Run</button>
                 <select className='clickable'disabled={animationActive} value={activeAlgorithm} name={activeAlgorithm} onChange={e => {setActiveAlgorithm(e.target.value)}}>
                 <option disabled className='algorithmsTitle clickable' value='otherTitle'>Sorting Algorithms</option>
                     <option value='bubbleSort'>Bubble Sort</option>
@@ -519,12 +519,12 @@ function SortingVisualiser(props){
                     
                     
 
-                <p title={`Swaps: ${swaps} \nComparisons: ${comparisons}`} className={animationActive ? 'timeTaken disabled' : 'timeTaken'}>{runTime !== 0 ? `Time: ${runTime}ms`: `Time: N/A`}</p>
+                <p title={`Swaps: ${swaps} \nComparisons: ${comparisons}`} className='timeTaken'>{`Time: ${runTime}ms`}</p>
                 
             </nav>
             <InfoCard algorithmType='sorting' algorithmID={activeAlgorithm}/>
 
-            <Console display={isTerminalOpen} docsKey='AnimateEngineSort-clearLoop' AnimateEngine={AnimateEngine}/>
+            <Console display={isTerminalOpen} docsKey='AnimateEngineBars-clearLoop' AnimateEngine={AnimateEngine}/>
  
         </div>
         

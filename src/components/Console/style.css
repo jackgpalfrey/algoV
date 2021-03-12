@@ -18,7 +18,7 @@
 	border: none;
 	box-shadow: none;
 	color: white;
-	-ms-user-select: none;
+	user-select: none;
 }
 
 .docsButton {
@@ -26,6 +26,7 @@
 	display: inline-block;
 	margin-left: 0.5em;
 	cursor: pointer;
+	user-select: none;
 }
 
 .consoleLine {

@@ -121,14 +121,14 @@ button:disabled,
 .sliderBox input:disabled,
 .disabled {
 	color: white;
-	filter: brightness(60%);
+	opacity: 40%;
 	cursor: default;
 }
 
 select:disabled:hover,
 button:disabled:hover,
 .sliderBox input:disabled:hover .disabled:hover {
-	filter: brightness(60%);
+	filter: brightness(100%);
 }
 
 .sliderBox {

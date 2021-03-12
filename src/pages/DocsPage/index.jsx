@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom'
 import './style.css'
 import icon from '../../images/icon.png'
 import docData from '../../data/docs'
+import { Link } from 'react-router-dom'
 
 
     
@@ -93,7 +94,7 @@ function DocsPage(){
     }
     return (
         <div className='docsPage-container'>
-            <div className='docsPage-titleBar'><img className='docspage-img' src={icon} alt='AlgoV' width='80' height='40'/> Docs</div>
+            <div className='docsPage-titleBar'><Link to='/'><img className='docspage-img' src={icon} alt='AlgoV' width='80' height='40'/></Link> Docs</div>
             <div className='docsPage-searchBox'>Test</div>
             <div className='docsPage-mainContent'>
                 <div className='docsPage-mainContent-container'>

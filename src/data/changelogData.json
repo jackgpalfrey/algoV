@@ -167,7 +167,8 @@
                             ["CHANGED", "Docs Pages to Alphabetical Order"],
                             ["ADDED", "Open Documentation Button to console"],
                             ["FIXED", "Inability to click through hidden menu"],
-                            ["CHANGED", "Runtime to show 0ms when run time not set instead of N/A to be consistent with comparisions and swaps"]],
+                            ["CHANGED", "Runtime to show 0ms when run time not set instead of N/A to be consistent with comparisions and swaps"],
+                            ["ADDED", "Search to docs"]],
         "date": "10/03/21",
         "isNext": true
     },

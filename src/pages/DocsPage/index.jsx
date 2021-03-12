@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom'
     
 
 function DocsPage(){
+
     let firstItem = "General-Introduction"
     let firstOpenTabs = ["General"]
     let urlItem = useLocation() .search.replace('?','')
@@ -18,9 +19,11 @@ function DocsPage(){
     }
     const [openItem, setOpenItem] = useState(firstItem)
     const [openTabs, setOpenTabs] = useState(firstOpenTabs)
+    const [search, setSearch] = useState('')
 
     let itemKey = openItem.split('-')
     let data = docData[itemKey[0]].pages[itemKey[1]]
+
 
     function createRows(){
         let table = []
@@ -48,11 +51,14 @@ function DocsPage(){
                 let activeItemKey = openItem.split('-')
                 let classes = "docsPage-sideBarItem clickable"
                 if (value.id === activeItemKey[0] && pageObj.id === activeItemKey[1]) classes += " docsPage-sideBarItem-selected"
+                if (search[0] === '?' && !pageObj.sideTitle.toLowerCase().includes(`${search.substring(1).toLowerCase()}`)) classes += " docsPage-sideBarItem-hidden"
+                if (search[0] !== '?' && !pageObj.sideTitle.toLowerCase().startsWith(`${search.toLowerCase()}`)) classes += " docsPage-sideBarItem-hidden"
                 return (<div onClick={() => {
                     setOpenItem(`${value.id}-${pageObj.id}`)
                 }} className={classes}>{pageObj.sideTitle}</div>)
             })
             return (
+                <>
                 <div className= 'docsPage-sidebar-section'>
                     <div onClick={() => {
                         if (openTabs.includes(value.id)){
@@ -69,8 +75,9 @@ function DocsPage(){
                             })
                         }
                     }}className="docsPage-sideBarTitle clickable">{value.name}</div>
-                    {openTabs.includes(value.id) ? items : null}
+                    {openTabs.includes(value.id) || search !== '' ? items : null}
                 </div>
+                </>
             )
         })
 
@@ -110,6 +117,11 @@ function DocsPage(){
             </div>
             <div className='docsPage-sideBar'>
                 <div className= 'docsPage-sidebar-container'>
+                    <div className= 'docsPage-sidebar-section'>
+                        <input className='docsPage-sidebar-search' placeholder='Search:' onChange={(e) => {
+                            setSearch(e.target.value)
+                        }}/>
+                    </div>
                     {[createSideBar()]}
                 </div>
             </div>

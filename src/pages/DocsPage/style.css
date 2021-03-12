@@ -39,6 +39,18 @@
 }
 */
 
+.docsPage-sidebar-search {
+	box-shadow: none;
+	border: none;
+	height: 2em;
+	border-radius: 1em;
+	background-color: transparent;
+	width: 100%;
+	height: 100%;
+	padding: 0.4em;
+	color: white;
+}
+
 .docsPage-sideBarItem {
 	width: 93%;
 	display: flex;
@@ -192,4 +204,8 @@
 
 .docsPage-mainContent-example-container {
 	margin: 1em;
+}
+
+.docsPage-sideBarItem-hidden {
+	display: none;
 }

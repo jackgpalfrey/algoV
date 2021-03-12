@@ -8,7 +8,7 @@ const data = {
 				sideTitle: 'Introduction',
 				title: 'General   -   Introduction',
 				desc:
-					'Welcome To AlgoV Docs. Click On The Sections To The Left to see the relevant pages.',
+					'Welcome To AlgoV Docs. Click On The Sections To The Left to see the relevant pages. When using search normally items are compared with your search based on its first characters. However if you preface your search with a ? it will look for your search anywhere in the page titles',
 			},
 		},
 	},

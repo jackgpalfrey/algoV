@@ -3,6 +3,9 @@ import {NavLink} from 'react-router-dom'
 import './style.css'
 import vars from '../../data/vars.json'
 
+import getLocaleText from '../../util/getLocaleText'
+const text = getLocaleText('general').menu
+
 
 function Menu(props){
     const [isOpen, setIsOpen] = useState(false)
@@ -31,16 +34,16 @@ function Menu(props){
             <button onClick={() => setIsOpen(!isOpen)} className='openMenuButton' >
                 <i className="material-icons clickable dark">{isOpen ? 'menu_open' : 'menu' }</i>
             </button>
-            {isOpen ? [<NavLink exact className='link clickable homeButton' activeClassName='current' to='/'><span title='Home'><i className="material-icons item">home</i></span></NavLink>,
-                       <NavLink className='link clickable' activeClassName='current' to='/bars'><span title='Bars'><i className="material-icons item">bar_chart</i></span></NavLink>,
-                       <NavLink className='link clickable' activeClassName='current' to='/grid'><span title='Grid'><i className="material-icons item">window</i></span></NavLink>,
-                       <NavLink className='link clickable unavailable' activeClassName='current' to='/logic'><span title='Logic'><i className="material-icons item">device_hub</i></span></NavLink>,
-                       <NavLink className='link clickable unavailable' activeClassName='current' to='/learn'><span title='Learn'><i className="material-icons item">class</i></span></NavLink>, 
-                       <NavLink className='link clickable unavailable'  activeClassName='current' to='/puzzles'><span title='Puzzles'><i className="material-icons item">extension</i></span></NavLink>] 
+            {isOpen ? [<NavLink exact className='link clickable homeButton' activeClassName='current' to='/'><span title={text.home}><i className="material-icons item">home</i></span></NavLink>,
+                       <NavLink className='link clickable' activeClassName='current' to='/bars'><span title={text.bars}><i className="material-icons item">bar_chart</i></span></NavLink>,
+                       <NavLink className='link clickable' activeClassName='current' to='/grid'><span title={text.grid}><i className="material-icons item">window</i></span></NavLink>,
+                       <NavLink className='link clickable unavailable' activeClassName='current' to='/logic'><span title={text.logic}><i className="material-icons item">device_hub</i></span></NavLink>,
+                       <NavLink className='link clickable unavailable' activeClassName='current' to='/learn'><span title={text.learn}><i className="material-icons item">class</i></span></NavLink>, 
+                       <NavLink className='link clickable unavailable'  activeClassName='current' to='/puzzles'><span title={text.challenges}><i className="material-icons item">extension</i></span></NavLink>] 
                        : null}
 
-            {isOpen && props.isLoggedIn ? <NavLink className='link unavailable' activeClassName='current' to='/settings'><span title='Settings & Logout'><i className="material-icons item">settings</i></span></NavLink> : null}
-            {isOpen && !props.isLoggedIn ? <NavLink className='link unavailable' activeClassName='current' to='/login'><span className='login' title='Login'>Login</span></NavLink> : null}
+            {isOpen && props.isLoggedIn ? <NavLink className='link unavailable' activeClassName='current' to='/settings'><span title={text.settings}><i className="material-icons item">settings</i></span></NavLink> : null}
+            {isOpen && !props.isLoggedIn ? <NavLink className='link unavailable' activeClassName='current' to='/login'><span className='login' title={text.login}>{text.login}</span></NavLink> : null}
 
             
             

@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import './style.css'
 
+import getLocaleText from '../../util/getLocaleText'
+const text = getLocaleText('general').console
+
 function Console(props){
     const [isOpen, setIsOpen] = useState(props.display)
     const [textColor, setTextColor] = useState('white')
@@ -48,8 +51,8 @@ function Console(props){
     let terminal = (
         <div className='consoleBox'>
             <div className='consoleLine'>
-                <input placeholder='Console' value={commandText} onChange={consoleChangeHandler} style={{color: textColor}}className='console' onKeyDown={handleConsole}></input>
-                {isOpen ? <Link title='Open Documentation' to={`/docs?${props.docsKey || ''}`} > <i className="material-icons docsButton clickable">description</i> </Link> : null}
+                <input placeholder={text.placeholder} value={commandText} onChange={consoleChangeHandler} style={{color: textColor}}className='console' onKeyDown={handleConsole}></input>
+                {isOpen ? <Link title={text.openDocs} to={`/docs?${props.docsKey || ''}`} > <i className="material-icons docsButton clickable">description</i> </Link> : null}
             </div>
             <p style={{color: textColor}}>{responseText}</p>
         </div>

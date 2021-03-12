@@ -13,6 +13,9 @@ import InfoCard from '../InfoCard'
 import algoData from '../../data/algorithmInfo.json'
 import './style.css'
 
+import getLocaleText from '../../util/getLocaleText'
+const consoleText = getLocaleText('general').console
+const text = getLocaleText('general').bars
 
 const COLORS = {
     BASE: '#035efc', 
@@ -489,29 +492,29 @@ function SortingVisualiser(props){
                 
             </div>
             <nav>
-            <i className='material-icons consoleButton clickable dark' title={isTerminalOpen ? 'Close Terminal': 'Open Terminal'} onClick={() => setIsTerminalOpen(!isTerminalOpen)}>{isTerminalOpen ? 'code_off': 'code'}</i>
+            <i className='material-icons consoleButton clickable dark' title={isTerminalOpen ? consoleText.closeConsole : consoleText.openConsole} onClick={() => setIsTerminalOpen(!isTerminalOpen)}>{isTerminalOpen ? 'code_off': 'code'}</i>
             <div className='sliderBox'>
-                <p className={animationActive ? 'disabled' : ''}>Animation Time ({animationSpeed}ms) </p>
+                <p className={animationActive ? 'disabled' : ''}>{`${text.animationTimeSlider} (${animationSpeed}ms) `}</p>
                 <input className='clickable' disabled={animationActive} type="range" min="1" max="1000" value={animationSpeed} onChange={e => {
                     setAnimationSpeed(parseInt(e.target.value)); 
                 }}></input>
             </div>
-                <button disabled={animationActive} onClick={() => {if(!animationActive) {AnimateEngine(["resetArray", numBars])}}} className={`${!animationActive ? 'button reset' : 'button-disabled reset'} clickable`}>Reset</button>
-                <button disabled={animationActive} onClick={handleSortClick} className={`${!animationActive ? 'button sort' : 'button-disabled sort'} clickable`}>Run</button>
+                <button disabled={animationActive} onClick={() => {if(!animationActive) {AnimateEngine(["resetArray", numBars])}}} className={`${!animationActive ? 'button reset' : 'button-disabled reset'} clickable`}>{text.resetButton}</button>
+                <button disabled={animationActive} onClick={handleSortClick} className={`${!animationActive ? 'button sort' : 'button-disabled sort'} clickable`}>{text.runButton}</button>
                 <select className='clickable'disabled={animationActive} value={activeAlgorithm} name={activeAlgorithm} onChange={e => {setActiveAlgorithm(e.target.value)}}>
-                <option disabled className='algorithmsTitle clickable' value='otherTitle'>Sorting Algorithms</option>
+                <option disabled className='algorithmsTitle clickable' value='otherTitle'>{text.sortingAlgorithmsTitle}</option>
                     <option value='bubbleSort'>Bubble Sort</option>
                     <option value='selectionSort'>Selection Sort</option>
                     <option value='insertionSort'>Insertion Sort</option>
                     <option value='quickSort'>Quick Sort</option>
                     <option value='heapSort'>Heap Sort</option>
                     <option value='mergeSort'>Merge Sort</option>
-                    <option disabled className='algorithmsTitle' value='otherTitle'>Other Algorithms</option>
+                    <option disabled className='algorithmsTitle' value='otherTitle'>{text.otherAlgorithmsTitle}</option>
                     <option value='reverseArray'>Reverse Array</option>
                 </select>
                 
                     <div className='sliderBox'>
-                        <p className={animationActive ? 'disabled' : ''}>Number of Bars ({numBars})</p>
+                        <p className={animationActive ? 'disabled' : ''}>{`${text.numberOfBarsSlider} (${numBars})`}</p>
                         <input className='clickable' disabled={animationActive} type="range" min="5" max={`${Math.round(window.innerWidth / 12) - 10}`} value={numBars} onChange={e => {
                             AnimateEngine(["resetArray",parseInt(e.target.value)])
                         }}></input>
@@ -519,7 +522,7 @@ function SortingVisualiser(props){
                     
                     
 
-                <p title={`Swaps: ${swaps} \nComparisons: ${comparisons}`} className='timeTaken'>{`Time: ${runTime}ms`}</p>
+                <p title={`${text.swapsDisplay} ${swaps} \n${text.comparisonsDisplay} ${comparisons}`} className='timeTaken'>{`${text.runtimeDisplay} ${runTime}ms`}</p>
                 
             </nav>
             <InfoCard algorithmType='sorting' algorithmID={activeAlgorithm}/>

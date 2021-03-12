@@ -2,10 +2,11 @@ import React, { useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import './style.css'
 import icon from '../../images/icon.png'
-import docData from '../../data/docs'
 import { Link } from 'react-router-dom'
 
 
+import getLocaleText from '../../util/getLocaleText'
+const docData = getLocaleText('docs')
     
 
 function DocsPage(){

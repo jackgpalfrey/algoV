@@ -47,6 +47,16 @@
         "bestCaseTimeMeta": "Best Case Time Complexity:",
         "memoryMeta": "Memory Complexity:",
         "stableMeta": "Stable:",
-        "stableMetaDesc": "Whether the position of equal value stay the same relative to each other."
+        "stableMetaDesc": "Whether the position of bars with equal value stay the same relative to each other."
+    },
+    "docsPage": {
+        "titleText": "Docs",
+        "searchPlaceholder": "Search",
+        "mainContentSyntaxLabel": "Syntax:",
+        "mainContentExampleLabel": "Example:",
+        "tableArgumentsTitle": "Arguments",
+        "tableTypeTitle": "Type",
+        "tableExamplesTitle": "Examples",
+        "tableNotesTitle": "Notes"
     }
 }

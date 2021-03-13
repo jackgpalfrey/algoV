@@ -1,3 +1,31 @@
+html.darkTheme {
+	--background: #121212;
+	--higher-background: #262626;
+	--higher-higher-background: #303030;
+	--accent: #035efc;
+	--selected-menu: #03a1fc;
+	--menu-item-color: rgba(255, 255, 255, 0.397);
+	--text: white;
+	--subtle-text: rgb(170, 170, 170);
+	--transparent-text: rgba(255, 255, 255, 0.829);
+	--background-overlay: rgba(0, 0, 0, 0.4);
+	--scrollbar: #ffffff42;
+}
+
+html.lightTheme {
+	--background: #ffffff;
+	--higher-background: #7b868d;
+	--higher-higher-background: #c2c2c2;
+	--accent: #035efc;
+	--selected-menu: #036ffc;
+	--menu-item-color: rgba(68, 68, 68, 0.397);
+	--text: black;
+	--subtle-text: rgb(63, 63, 63);
+	--transparent-text: rgba(31, 31, 31, 0.829);
+	--background-overlay: rgba(0, 0, 0, 0.4);
+	--scrollbar: #ffffff42;
+}
+
 /* width */
 *::-webkit-scrollbar {
 	width: 0.3rem;
@@ -26,11 +54,10 @@
 
 /* Handle on hover */
 *:hover::-webkit-scrollbar-thumb {
-	background: #ffffff42;
+	background: var(--scrollbar);
 }
-
 *::-webkit-scrollbar-thumb:hover {
-	background: #ffffff42;
+	background: var(--scrollbar);
 }
 
 .clickable {
@@ -46,7 +73,7 @@
 }
 
 .scrollable-all::-webkit-scrollbar-thumb {
-	background: #3d3d3d;
+	background: var(--scrollbar);
 }
 
 body {
@@ -76,10 +103,10 @@ body {
 .openAllChangesButton {
 	width: 20%;
 	text-align: center;
-	background-color: #262626;
+	background-color: var(--higher-background);
 	padding: 0.5em;
 	margin-top: 1em;
-	color: rgba(255, 255, 255, 0.829);
+	color: var(--subtle-text);
 	cursor: pointer;
 	user-select: none;
 }

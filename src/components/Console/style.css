@@ -14,15 +14,15 @@
 .console {
 	width: 100%;
 	padding: 1em;
-	background-color: #262626;
+	background-color: var(--higher-background);
 	border: none;
 	box-shadow: none;
-	color: white;
+	color: var(--text);
 	user-select: none;
 }
 
 .docsButton {
-	color: rgb(167, 167, 167);
+	color: var(--subtle-text);
 	display: inline-block;
 	margin-left: 0.5em;
 	cursor: pointer;

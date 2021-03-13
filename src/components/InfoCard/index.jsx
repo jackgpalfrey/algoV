@@ -38,11 +38,11 @@ function InfoCard({algorithmType, algorithmID}){
     let card = (<div className='card scrollable-bright' /*onMouseOver={() => setIsOpenHover(true)} onMouseLeave={() => setIsOpenHover(false)}*/>
                     <p className='title'>{title}</p>
                     <hr></hr>
-                    <p className='meta'>{`${text.worstCaseTimeMeta} ${worstTimeComplexity}`}</p>
-                    <p className='meta'>{`${text.avgTimeMeta} ${avgTimeComplexity}`}</p>
-                    <p className='meta'>{`${text.bestCaseTimeMeta} ${bestTimeComplexity}`}</p>
-                    <p className='meta'>{`${text.memoryMeta} ${memoryComplexity}`}</p>
-                    <p className='meta'>{`${text.stableMeta} ${stable} `}<i className={'material-icons help'} title={text.stableMetaDesc}>help</i></p>
+                    <p className='meta'><span className='metaTitle'>{text.worstCaseTimeMeta}</span>{` ${worstTimeComplexity}`}</p>
+                    <p className='meta'><span className='metaTitle'>{text.avgTimeMeta}</span>{` ${avgTimeComplexity}`}</p>
+                    <p className='meta'><span className='metaTitle'>{text.bestCaseTimeMeta}</span>{` ${bestTimeComplexity}`}</p>
+                    <p className='meta'><span className='metaTitle'>{text.memoryMeta}</span>{` ${memoryComplexity}`}</p>
+                    <p className='meta'><span className='metaTitle'>{text.stableMeta}</span>{` ${stable}  `}<i className={'material-icons help'} title={text.stableMetaDesc}>help</i></p>
                     <hr></hr>
                     {descriptionArray.map((item,idx) => <p className='description'>{item}</p>)}
                     {credit ? <a className='credit' href={credit} >{`${creditText}: ${credit}`}</a> : null}     

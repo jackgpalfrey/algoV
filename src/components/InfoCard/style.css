@@ -13,8 +13,8 @@
 	top: 0;
 	height: 100vh;
 	width: 35vw;
-	background-color: #262626;
-	color: white;
+	background-color: var(--higher-background);
+	color: var(--text);
 	padding: 2em;
 	overflow: scroll;
 	cursor: context-menu;
@@ -30,7 +30,7 @@
 	right: 1em;
 	background-color: transparent;
 	border: none;
-	color: white;
+	color: var(--text);
 	cursor: pointer;
 }
 
@@ -55,7 +55,7 @@
 .description,
 .meta,
 .credit {
-	color: rgba(255, 255, 255, 0.829);
+	color: var(--transparent-text);
 	margin: 1em 0;
 	margin-right: 0;
 }
@@ -73,12 +73,16 @@
 .help {
 	transform: scale(0.7);
 	margin-left: -0.3em;
-	color: rgba(255, 255, 255, 0.507);
+	color: var(--subtle-text);
 	cursor: help;
 }
 
 .help:hover {
 	filter: brightness(80%);
+}
+
+.metaTitle {
+	font-weight: bold;
 }
 
 @media (max-width: 1000px) {

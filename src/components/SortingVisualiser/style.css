@@ -1,5 +1,5 @@
 body {
-	background-color: #121212;
+	background-color: var(--background);
 }
 
 .bar-container {
@@ -12,7 +12,7 @@ body {
 
 .inner-bar-container {
 	height: 100%;
-	width: 90%;
+	width: 95%;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
@@ -24,28 +24,33 @@ nav {
 	width: 100vw;
 	justify-content: center;
 	align-items: center;
-	background-color: #262626;
+	background-color: var(--higher-background);
 	overflow: hidden;
 }
 
 nav * {
 	height: 30px;
 	margin: 0 1.5em;
-	color: white;
+	color: var(--text);
 	user-select: none;
 }
 
 button,
 select {
-	background-color: #035efc;
+	background-color: var(--accent);
 	overflow: hidden;
+}
+
+select {
+	border: none;
+	outline: none;
+	box-shadow: none;
 }
 
 .bar {
 	display: flex;
-	background-color: red;
 	/*margin: 5px;*/
-	color: white;
+	color: var(--text);
 	justify-content: center;
 	align-items: center;
 	border-radius: 20px;
@@ -58,13 +63,22 @@ select {
 }
 
 option {
-	background-color: #262626;
+	background-color: var(--higher-background);
+	border: none;
+	outline: none;
+	box-shadow: none;
 }
 
 .algorithmsTitle {
-	background-color: #181818;
+	background-color: var(--background);
+	color: var(--text);
 	font-size: 1.1em;
 	overflow: hidden;
+}
+
+.algorithmsTitle:disabled {
+	color: var(--text);
+	opacity: 100%;
 }
 
 .button,
@@ -76,13 +90,13 @@ select {
 	margin: 0, 0rem;
 	border-radius: 10px;
 	place-items: center;
-	color: rgb(235, 235, 235);
+	color: var(--text);
 	font-weight: 800;
 	overflow: hidden;
 }
 
 select {
-	background-color: #035efc;
+	background-color: var(--accent);
 	padding: 0;
 	font-weight: bold;
 	border: none;
@@ -101,7 +115,7 @@ select {
 	align-content: center;
 	justify-content: center;
 	padding: 0.5% 0;
-	background-color: #035efc;
+	background-color: var(--accent);
 	font-weight: bold;
 	overflow: hidden;
 }
@@ -120,7 +134,7 @@ select:disabled,
 button:disabled,
 .sliderBox input:disabled,
 .disabled {
-	color: white;
+	color: var(--text);
 	opacity: 40%;
 	cursor: default;
 }

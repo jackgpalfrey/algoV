@@ -5,7 +5,9 @@ import App from './App.jsx';
 
 ReactDOM.render(
     <React.StrictMode>
-      <App />
+      <div className='varBase'>
+        <App />
+      </div>
     </React.StrictMode>
     ,
   document.getElementById('root')

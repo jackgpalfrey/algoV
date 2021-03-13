@@ -3,7 +3,7 @@
 	top: 0;
 	width: 100vw;
 	height: 100vh;
-	background-color: rgba(0, 0, 0, 0.4);
+	background-color: var(--background-overlay);
 }
 .menuCard {
 	box-sizing: content-box;
@@ -15,8 +15,8 @@
 	top: 0;
 	height: 100vh;
 	width: 6vw;
-	background-color: #262626;
-	color: white;
+	background-color: var(--higher-background);
+	color: var(--text);
 	text-align: center;
 	overflow: hidden;
 }
@@ -26,7 +26,7 @@
 }
 
 .openMenuButton {
-	color: white;
+	color: var(--text);
 	cursor: pointer;
 	margin: -25px;
 	background-color: transparent;
@@ -47,12 +47,8 @@
 	pointer-events: none;
 }
 
-.dark-theme {
-	justify-self: flex-end;
-}
-
 .link {
-	color: rgba(255, 255, 255, 0.397);
+	color: var(--menu-item-color);
 	text-decoration: none;
 	margin-top: 2.3em;
 	filter: brightness(100%);
@@ -83,7 +79,7 @@
 }
 
 .current {
-	color: #03a1fc;
+	color: var(--selected-menu);
 }
 
 .current:hover {

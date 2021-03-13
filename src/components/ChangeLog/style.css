@@ -20,14 +20,14 @@
 	justify-self: center;
 	align-self: center;
 	margin: 0.2em 0;
-	color: rgb(170, 170, 170);
+	color: var(--subtle-text);
 }
 
 .TitleContainer {
 	box-sizing: border-box;
 	font-size: 1.2rem;
 	width: 100%;
-	background-color: #262626;
+	background-color: var(--higher-background);
 	display: flex;
 	justify-content: space-between;
 	padding: 0.6em 2em;
@@ -36,7 +36,7 @@
 .itemInfoContainer {
 	width: 100%;
 	font-size: 1rem;
-	background-color: #303030;
+	background-color: var(--higher-higher-background);
 	box-sizing: border-box;
 	padding: 0.6em 2em;
 	text-align: center;
@@ -64,7 +64,7 @@
 
 .changelog-label {
 	filter: brightness(70%);
-	color: white;
+	color: var(--text);
 	padding: 0.05em 0.7em;
 	border-radius: 1em;
 	font-weight: 500;

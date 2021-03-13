@@ -313,7 +313,7 @@ function SortingVisualiser(props){
                     if (typeof numOfBars !== 'number') return ["ERROR", "Invalid Number of bars"]
                     let Randvalues = []
                     for (let i = 0; i < numOfBars; i++){
-                        Randvalues.push(Math.round(Math.random() * 60) + 13)
+                        Randvalues.push(Math.round(Math.random() * 73) + 13)
                     }
                     AnimateEngine(["setArray",Randvalues,"$BASE"])
                     break;

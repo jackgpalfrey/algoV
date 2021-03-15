@@ -5,6 +5,8 @@ import Console from '../Console';
 function PathfindingVisualiser() {
 	const [grid, setGrid] = useState();
 	const [isMouseDown, setIsMouseDown] = useState(false);
+	const [penColor, setPenColor] = useState('red');
+	const [penType, setPenType] = useState('wall');
 
 	useEffect(() => {
 		createGrid();
@@ -14,9 +16,18 @@ function PathfindingVisualiser() {
 		return;
 	}
 
+	function handleMouseDown(x, y) {
+		setGrid((prevState) => {
+			let prevGrid = prevState.slice();
+			prevGrid[y][x].color = penColor;
+			prevGrid[y][x].type = penType;
+			return prevGrid;
+		});
+	}
+
 	function createGrid() {
-		const NUM_OF_BARS_Y = 20;
-		const NUM_OF_BARS_X = 40;
+		const NUM_OF_BARS_Y = 30;
+		const NUM_OF_BARS_X = 50;
 		let yAxis = [];
 		for (let yPos = 0; yPos < NUM_OF_BARS_Y; yPos++) {
 			let xAxis = [];
@@ -25,6 +36,7 @@ function PathfindingVisualiser() {
 					x: xPos,
 					y: yPos,
 					color: 'transparent',
+					type: 'none',
 				});
 			}
 			yAxis.push(xAxis);
@@ -42,21 +54,13 @@ function PathfindingVisualiser() {
 					<div
 						onMouseEnter={() => {
 							if (!isMouseDown) return;
-							setGrid((prevState) => {
-								let prevGrid = prevState.slice();
-								prevGrid[val.y][val.x].color = 'blue';
-								return prevGrid;
-							});
+							handleMouseDown(val.x, val.y);
 						}}
 						onMouseDown={() => {
-							setGrid((prevState) => {
-								let prevGrid = prevState.slice();
-								prevGrid[val.y][val.x].color = 'blue';
-								return prevGrid;
-							});
+							handleMouseDown(val.x, val.y);
 						}}
-						className='grid-xAxis-Divs'
-						style={{ backgroundColor: val.color }}
+						className={`grid-xAxis-Divs node-type-${val.type}`}
+						style={{ backgroundColor: `${val.color}` }}
 					></div>
 				);
 			});

@@ -49,7 +49,7 @@
 	}
 }
 
-.node-type-wall {
+.node-type-end {
 	animation-name: end-animation;
 	animation-duration: 0.2s;
 }

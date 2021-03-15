@@ -34,13 +34,10 @@ function PathfindingVisualiser() {
 	function handleMouseDown(x, y, type) {
 		setGrid((prevState) => {
 			let toType = penType;
-			let toColor = penColor;
 			let prevGrid = prevState.slice();
 
 			if (mouseDown === 2 || type === 'eraser') {
-				console.log('RIGHT');
 				toType = 'none';
-				toColor = 'transparent';
 			}
 
 			if (penType === 'start') {
@@ -70,7 +67,6 @@ function PathfindingVisualiser() {
 				}
 			}
 
-			prevGrid[y][x].color = toColor;
 			prevGrid[y][x].type = toType;
 			return prevGrid;
 		});
@@ -113,7 +109,6 @@ function PathfindingVisualiser() {
 							handleMouseDown(val.x, val.y);
 						}}
 						className={`grid-xAxis-Divs node-type-${val.type}`}
-						style={{ backgroundColor: `${val.color}` }}
 					></div>
 				);
 			});
@@ -129,7 +124,6 @@ function PathfindingVisualiser() {
 		<div
 			className='grid-container'
 			onMouseDown={(e) => {
-				console.log(e.button);
 				if (e.button === 0) {
 					setMouseDown(1);
 				} else {
@@ -181,6 +175,7 @@ function PathfindingVisualiser() {
 					<option value='start'>Draw Start</option>
 					<option value='end'>Draw End</option>
 					<option value='wall'>Draw Wall</option>
+					<option value='none'>Eraser</option>
 				</select>
 				<button
 					disabled={animationActive}

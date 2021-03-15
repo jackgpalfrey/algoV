@@ -9,7 +9,7 @@
 }
 
 .grid-xAxis-Divs {
-	border: solid rgb(116, 116, 116) 1px;
+	border: solid transparent 1px;
 	width: 30px;
 	height: 30px;
 	text-align: center;
@@ -21,7 +21,7 @@
 	display: flex;
 	justify-content: center;
 	justify-items: center;
-	height: 100vh;
+	height: 90vh;
 	align-items: center;
 	overflow: hidden;
 	user-select: none;
@@ -31,7 +31,7 @@
 	display: flex;
 	justify-content: center;
 	justify-items: center;
-	height: 100vh;
+	height: 100%;
 	width: 100vw;
 	align-items: center;
 	overflow: hidden;
@@ -79,7 +79,10 @@
 }
 
 .node-type-wall {
-	border-color: transparent;
 	animation-name: wall-animation;
 	animation-duration: 0.2s;
+}
+
+.node-type-none {
+	border-color: rgb(116, 116, 116);
 }

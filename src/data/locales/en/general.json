@@ -41,6 +41,18 @@
         "comparisonsDisplay": "Comparisons:",
         "swapsDisplay": "Swaps:" 
     },
+    "grid": {
+        "animationTimeSlider": "Animation Time",
+        "resetButton": "Reset",
+        "runButton": "Run",
+        "closeConsole": "Close Terminal",
+        "pathfindingAlgorithmsTitle": "Pathfinding Algorithms",
+        "otherAlgorithmsTitle": "Other Algorithms",
+        "numberOfBarsSlider": "Number of Bars",
+        "runtimeDisplay": "Time:",
+        "comparisonsDisplay": "Comparisons:",
+        "swapsDisplay": "Swaps:" 
+    },
     "infoCard": {
         "worstCaseTimeMeta": "Worst Case Time Complexity:",
         "avgTimeMeta": "Average Time Complexity:",

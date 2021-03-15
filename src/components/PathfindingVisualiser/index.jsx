@@ -4,15 +4,23 @@ import Console from '../Console';
 
 import getLocaleText from '../../util/getLocaleText';
 const consoleText = getLocaleText('general').console;
-const text = getLocaleText('general').bars;
+const text = getLocaleText('general').grid;
 const algoData = getLocaleText('algorithmInfo');
 
 function PathfindingVisualiser() {
 	const [grid, setGrid] = useState();
 	const [mouseDown, setMouseDown] = useState(0);
 	const [penColor, setPenColor] = useState('red');
-	const [penType, setPenType] = useState('wall');
-	const [isTerminalOpen, setIsTerminalOpen] = useState(true);
+	const [penType, setPenType] = useState('start');
+	const [isTerminalOpen, setIsTerminalOpen] = useState(false);
+	const [animationActive, setAnimationActive] = useState(false);
+	const [animationSpeed, setAnimationSpeed] = useState(100);
+	const [activeAlgorithm, setActiveAlgorithm] = useState('heapSort');
+	const [runTime, setRunTime] = useState(0);
+	const [swaps, setSwaps] = useState(0);
+	const [comparisons, setComparisons] = useState(0);
+	const [startPos, setStartPos] = useState([0, 0]);
+	const [endPos, setEndPos] = useState([0, 0]);
 
 	useEffect(() => {
 		createGrid();
@@ -26,6 +34,7 @@ function PathfindingVisualiser() {
 		setGrid((prevState) => {
 			let toType = penType;
 			let toColor = penColor;
+			let prevGrid = prevState.slice();
 
 			if (mouseDown === 2 || type === 'eraser') {
 				console.log('RIGHT');
@@ -33,7 +42,29 @@ function PathfindingVisualiser() {
 				toColor = 'transparent';
 			}
 
-			let prevGrid = prevState.slice();
+			if (penType === 'start') {
+				let startY = startPos[0];
+				let startX = startPos[1];
+				prevGrid[startY][startX].color = 'transparent';
+				prevGrid[startY][startX].type = 'none';
+				setStartPos([y, x]);
+				setPenType('end');
+			} else if (penType === 'end') {
+				let endY = endPos[0];
+				let endX = endPos[1];
+				prevGrid[endY][endX].color = 'transparent';
+				prevGrid[endY][endX].type = 'none';
+				setEndPos([y, x]);
+				setPenType('wall');
+			} else if (penType === 'wall') {
+				if (
+					(startPos[0] === y && startPos[1] === x) ||
+					(endPos[0] === y && endPos[1] === x)
+				) {
+					return prevGrid;
+				}
+			}
+
 			prevGrid[y][x].color = toColor;
 			prevGrid[y][x].type = toType;
 			return prevGrid;
@@ -57,6 +88,7 @@ function PathfindingVisualiser() {
 			yAxis.push(xAxis);
 		}
 		setGrid(yAxis);
+		setPenType('start');
 	}
 
 	function renderGrid(array) {
@@ -84,6 +116,9 @@ function PathfindingVisualiser() {
 		return <div>{yDivs}</div>;
 	}
 
+	function handleRunClick() {
+		return;
+	}
 	return (
 		<div
 			className='grid-container'
@@ -112,6 +147,80 @@ function PathfindingVisualiser() {
 				>
 					{isTerminalOpen ? 'code_off' : 'code'}
 				</i>
+				<div className='sliderBox'>
+					<p
+						className={animationActive ? 'disabled' : ''}
+					>{`${text.animationTimeSlider} (${animationSpeed}ms) `}</p>
+					<input
+						className='clickable'
+						disabled={animationActive}
+						type='range'
+						min='1'
+						max='1000'
+						value={animationSpeed}
+						onChange={(e) => {
+							setAnimationSpeed(parseInt(e.target.value));
+						}}
+					></input>
+				</div>
+				<button
+					disabled={animationActive}
+					onClick={() => {
+						if (!animationActive) {
+							createGrid();
+						}
+					}}
+					className={`${
+						!animationActive ? 'button reset' : 'button-disabled reset'
+					} clickable`}
+				>
+					{text.resetButton}
+				</button>
+				<button
+					disabled={animationActive}
+					onClick={handleRunClick}
+					className={`${
+						!animationActive ? 'button sort' : 'button-disabled sort'
+					} clickable`}
+				>
+					{text.runButton}
+				</button>
+				<select
+					className='clickable'
+					disabled={animationActive}
+					value={`${activeAlgorithm}`}
+					name={`${activeAlgorithm}`}
+					onChange={(e) => {
+						setActiveAlgorithm(e.target.value);
+					}}
+				>
+					<option
+						disabled
+						className='algorithmsTitle clickable'
+						value='otherTitle'
+					>
+						{text.pathfindingAlgorithmsTitle}
+					</option>
+					<option value='astar'>A* Algorithm</option>
+					<option value='dijkstra'>Dijkstra Algorithm</option>
+				</select>
+				<select
+					className='clickable'
+					disabled={animationActive}
+					value={penType}
+					name={penType}
+					onChange={(e) => {
+						setPenType(e.target.value);
+					}}
+				>
+					<option value='start'>Draw Start</option>
+					<option value='end'>Draw End</option>
+					<option value='wall'>Draw Wall</option>
+				</select>
+				<p
+					title={`${text.swapsDisplay} ${swaps} \n${text.comparisonsDisplay} ${comparisons}`}
+					className='timeTaken'
+				>{`${text.runtimeDisplay} ${runTime}ms`}</p>
 			</nav>
 			<Console
 				display={isTerminalOpen}

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './style.css';
 import Console from '../Console';
+import InfoCard from '../InfoCard';
 
 import getLocaleText from '../../util/getLocaleText';
 const consoleText = getLocaleText('general').console;
@@ -15,7 +16,7 @@ function PathfindingVisualiser() {
 	const [isTerminalOpen, setIsTerminalOpen] = useState(false);
 	const [animationActive, setAnimationActive] = useState(false);
 	const [animationSpeed, setAnimationSpeed] = useState(100);
-	const [activeAlgorithm, setActiveAlgorithm] = useState('heapSort');
+	const [activeAlgorithm, setActiveAlgorithm] = useState('astar');
 	const [runTime, setRunTime] = useState(0);
 	const [swaps, setSwaps] = useState(0);
 	const [comparisons, setComparisons] = useState(0);
@@ -48,7 +49,11 @@ function PathfindingVisualiser() {
 				prevGrid[startY][startX].color = 'transparent';
 				prevGrid[startY][startX].type = 'none';
 				setStartPos([y, x]);
-				setPenType('end');
+				if (endPos[0] === 0 || endPos[1] === 0) {
+					setPenType('end');
+				} else {
+					setPenType('wall');
+				}
 			} else if (penType === 'end') {
 				let endY = endPos[0];
 				let endX = endPos[1];
@@ -98,7 +103,8 @@ function PathfindingVisualiser() {
 				return (
 					<div
 						onMouseEnter={() => {
-							if (mouseDown < 1) return;
+							if (mouseDown < 1 || penType === 'start' || penType === 'end')
+								return;
 							handleMouseDown(val.x, val.y);
 						}}
 						onMouseDown={(e) => {
@@ -163,6 +169,28 @@ function PathfindingVisualiser() {
 						}}
 					></input>
 				</div>
+				<select
+					className='clickable'
+					disabled={animationActive}
+					value={penType}
+					name={penType}
+					onChange={(e) => {
+						setPenType(e.target.value);
+					}}
+				>
+					<option value='start'>Draw Start</option>
+					<option value='end'>Draw End</option>
+					<option value='wall'>Draw Wall</option>
+				</select>
+				<button
+					disabled={animationActive}
+					onClick={handleRunClick}
+					className={`${
+						!animationActive ? 'button sort' : 'button-disabled sort'
+					} clickable`}
+				>
+					{text.runButton}
+				</button>
 				<button
 					disabled={animationActive}
 					onClick={() => {
@@ -175,15 +203,6 @@ function PathfindingVisualiser() {
 					} clickable`}
 				>
 					{text.resetButton}
-				</button>
-				<button
-					disabled={animationActive}
-					onClick={handleRunClick}
-					className={`${
-						!animationActive ? 'button sort' : 'button-disabled sort'
-					} clickable`}
-				>
-					{text.runButton}
 				</button>
 				<select
 					className='clickable'
@@ -204,19 +223,6 @@ function PathfindingVisualiser() {
 					<option value='astar'>A* Algorithm</option>
 					<option value='dijkstra'>Dijkstra Algorithm</option>
 				</select>
-				<select
-					className='clickable'
-					disabled={animationActive}
-					value={penType}
-					name={penType}
-					onChange={(e) => {
-						setPenType(e.target.value);
-					}}
-				>
-					<option value='start'>Draw Start</option>
-					<option value='end'>Draw End</option>
-					<option value='wall'>Draw Wall</option>
-				</select>
 				<p
 					title={`${text.swapsDisplay} ${swaps} \n${text.comparisonsDisplay} ${comparisons}`}
 					className='timeTaken'
@@ -227,6 +233,8 @@ function PathfindingVisualiser() {
 				docsKey='AnimateEngineGrid-clearLoop'
 				AnimateEngine={AnimateEngine}
 			/>
+
+			<InfoCard algorithmType='grid' algorithmID={activeAlgorithm} />
 		</div>
 	);
 }

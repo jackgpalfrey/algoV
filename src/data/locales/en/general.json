@@ -48,7 +48,6 @@
         "closeConsole": "Close Terminal",
         "pathfindingAlgorithmsTitle": "Pathfinding Algorithms",
         "otherAlgorithmsTitle": "Other Algorithms",
-        "numberOfBarsSlider": "Number of Bars",
         "runtimeDisplay": "Time:",
         "comparisonsDisplay": "Comparisons:",
         "swapsDisplay": "Swaps:" 

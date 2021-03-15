@@ -1,0 +1,40 @@
+.grid-xAxis-Divs,
+.grid-yAxis-Divs {
+	color: white;
+	user-select: none;
+}
+
+.grid-yAxis-Divs {
+	display: flex;
+}
+
+.grid-xAxis-Divs {
+	border: 1px white;
+	border: solid white 1px;
+	padding: 1em;
+	width: 5px;
+	height: 5px;
+	text-align: center;
+}
+
+.grid-gridContainer {
+	display: flex;
+	justify-content: center;
+	justify-items: center;
+	height: 100vh;
+	align-items: center;
+	overflow: hidden;
+	user-select: none;
+}
+
+.grid-gridInnerContainer {
+	display: flex;
+	justify-content: center;
+	justify-items: center;
+	height: 90vh;
+	width: 90vw;
+	align-items: center;
+	overflow: hidden;
+	border: solid white 1px;
+	user-select: none;
+}

@@ -43,6 +43,7 @@
     },
     "grid": {
         "animationTimeSlider": "Animation Time",
+        "nodeSizeSlider": "Size of Nodes",
         "resetButton": "Reset",
         "runButton": "Run",
         "closeConsole": "Close Terminal",
@@ -51,6 +52,7 @@
         "runtimeDisplay": "Time:",
         "comparisonsDisplay": "Comparisons:",
         "swapsDisplay": "Swaps:" 
+
     },
     "infoCard": {
         "worstCaseTimeMeta": "Worst Case Time Complexity:",

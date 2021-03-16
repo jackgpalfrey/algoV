@@ -18,6 +18,7 @@ function PathfindingVisualiser() {
 	const [animationActive, setAnimationActive] = useState(false);
 	const [animationSpeed, setAnimationSpeed] = useState(100);
 	const [activeAlgorithm, setActiveAlgorithm] = useState('astar');
+	const [sizeOfNodes, setSizeOfNodes] = useState(30);
 	const [runTime, setRunTime] = useState(0);
 	const [swaps, setSwaps] = useState(0);
 	const [comparisons, setComparisons] = useState(0);
@@ -83,8 +84,8 @@ function PathfindingVisualiser() {
 	}
 
 	function createGrid() {
-		const NUM_OF_BARS_Y = ((window.innerHeight / 100) * 83) / 30;
-		const NUM_OF_BARS_X = ((window.innerWidth / 100) * 93) / 30;
+		const NUM_OF_BARS_Y = ((window.innerHeight / 100) * 83) / sizeOfNodes;
+		const NUM_OF_BARS_X = ((window.innerWidth / 100) * 93) / sizeOfNodes;
 		let yAxis = [];
 		for (let yPos = 0; yPos < NUM_OF_BARS_Y; yPos++) {
 			let xAxis = [];
@@ -121,6 +122,7 @@ function PathfindingVisualiser() {
 							handleMouseDown(val.x, val.y);
 						}}
 						className={`grid-xAxis-Divs node-type-${val.type}`}
+						style={{ width: `${sizeOfNodes}px`, height: `${sizeOfNodes}px` }}
 					></div>
 				);
 			});
@@ -230,6 +232,24 @@ function PathfindingVisualiser() {
 					<option value='astar'>A* Algorithm</option>
 					<option value='dijkstra'>Dijkstra Algorithm</option>
 				</select>
+				<div className='sliderBox'>
+					<p
+						className={animationActive ? 'disabled' : ''}
+					>{`${text.nodeSizeSlider} (${sizeOfNodes}) `}</p>
+					<input
+						className='clickable'
+						disabled={animationActive}
+						type='range'
+						min='10'
+						max='50'
+						value={sizeOfNodes}
+						onChange={(e) => {
+							setSizeOfNodes(parseInt(e.target.value));
+							createGrid();
+						}}
+					></input>
+				</div>
+
 				<p
 					title={`${text.swapsDisplay} ${swaps} \n${text.comparisonsDisplay} ${comparisons}`}
 					className='timeTaken'

@@ -9,6 +9,7 @@ const text = getLocaleText('general').grid;
 const algoData = getLocaleText('algorithmInfo');
 
 function PathfindingVisualiser() {
+	//#region state
 	const [grid, setGrid] = useState();
 	const [mouseDown, setMouseDown] = useState(0);
 	const [penColor, setPenColor] = useState('red');
@@ -23,6 +24,8 @@ function PathfindingVisualiser() {
 	const [startPos, setStartPos] = useState([0, 0]);
 	const [endPos, setEndPos] = useState([0, 0]);
 
+	//#endregion
+
 	useEffect(() => {
 		createGrid();
 	}, []);
@@ -35,6 +38,13 @@ function PathfindingVisualiser() {
 		setGrid((prevState) => {
 			let toType = penType;
 			let prevGrid = prevState.slice();
+
+			if (
+				(startPos[0] === y && startPos[1] === x) ||
+				(endPos[0] === y && endPos[1] === x)
+			) {
+				return prevGrid;
+			}
 
 			if (mouseDown === 2 || type === 'eraser') {
 				toType = 'none';
@@ -73,8 +83,8 @@ function PathfindingVisualiser() {
 	}
 
 	function createGrid() {
-		const NUM_OF_BARS_Y = 30;
-		const NUM_OF_BARS_X = 50;
+		const NUM_OF_BARS_Y = ((window.innerHeight / 100) * 83) / 30;
+		const NUM_OF_BARS_X = ((window.innerWidth / 100) * 93) / 30;
 		let yAxis = [];
 		for (let yPos = 0; yPos < NUM_OF_BARS_Y; yPos++) {
 			let xAxis = [];
@@ -90,6 +100,8 @@ function PathfindingVisualiser() {
 		}
 		setGrid(yAxis);
 		setPenType('start');
+		setStartPos([0, 0]);
+		setEndPos([0, 0]);
 	}
 
 	function renderGrid(array) {

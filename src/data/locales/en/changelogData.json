@@ -157,7 +157,8 @@
                             ["ADDED", "Open Documentation Button to console"],
                             ["CHANGED", "Docs Pages to Alphabetical Order"],
                             ["CHANGED", "Runtime to show 0ms when run time not set instead of N/A to be consistent with comparisions and swaps"],
-                            ["FIXED", "Inability to click through hidden menu"]
+                            ["FIXED", "Inability to click through hidden menu"],
+                            ["CHANGED", "Latest Changes Card to only display after reoccuring visits"]
                             ],
         "date": "16/03/21",
         "isNext": true

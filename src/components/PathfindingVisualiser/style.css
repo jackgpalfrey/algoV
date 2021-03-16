@@ -39,7 +39,6 @@
 	user-select: none;
 	opacity: 60%;
 }
-
 @keyframes end-animation {
 	0% {
 		background-color: rgba(255, 0, 0, 0.116);
@@ -53,6 +52,7 @@
 	animation-name: end-animation;
 	animation-duration: 0.2s;
 }
+
 
 @keyframes start-animation {
 	0% {

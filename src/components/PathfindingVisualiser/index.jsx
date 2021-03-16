@@ -31,7 +31,7 @@ function PathfindingVisualiser() {
 		createGrid();
 	}, []);
 
-	function AnimateEngine() {
+	function AnimateEngine(command) {
 		return;
 	}
 
@@ -84,8 +84,8 @@ function PathfindingVisualiser() {
 	}
 
 	function createGrid() {
-		const NUM_OF_BARS_Y = ((window.innerHeight / 100) * 83) / sizeOfNodes;
-		const NUM_OF_BARS_X = ((window.innerWidth / 100) * 93) / sizeOfNodes;
+		const NUM_OF_BARS_Y = ((window.innerHeight / 100) * 85) / (sizeOfNodes + 1);
+		const NUM_OF_BARS_X = ((window.innerWidth / 100) * 100) / (sizeOfNodes + 1);
 		let yAxis = [];
 		for (let yPos = 0; yPos < NUM_OF_BARS_Y; yPos++) {
 			let xAxis = [];

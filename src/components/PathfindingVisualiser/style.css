@@ -6,6 +6,8 @@
 
 .grid-yAxis-Divs {
 	display: flex;
+	margin: 0;
+	padding: 0;
 }
 
 .grid-xAxis-Divs {
@@ -13,6 +15,8 @@
 	text-align: center;
 	animation: forwards;
 	user-select: none;
+	margin: 0;
+	padding: 0;
 }
 
 .grid-gridContainer {
@@ -33,7 +37,6 @@
 	width: 100vw;
 	align-items: center;
 	overflow: hidden;
-	border: solid rgb(116, 116, 116) 1px;
 	user-select: none;
 	opacity: 60%;
 }

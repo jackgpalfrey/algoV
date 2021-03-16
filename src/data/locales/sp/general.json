@@ -1,0 +1,73 @@
+{
+    "changelog": {
+        "openAllButton": "Open All",
+        "closeAllButton": "Close All",
+        "orderOldestToNewestButton": "Order Oldest to Newest",
+        "orderNewestToOldestButton": "Order Newest to Oldest",
+        "nextUpdateVersionKey": "Next Update",
+        "plannedForDate": "Planned for",
+        "addedLabel": "ADDED",
+        "changedLabel": "CHANGED",
+        "deprecatedLabel": "DEPRECATED",
+        "removedLabel": "REMOVED",
+        "fixedLabel": "FIXED",
+        "generalLabel": "GENERAL"
+    },
+    "menu": {
+        "home": "Home",
+        "bars": "Bars",
+        "grid": "Grid",
+        "logic": "Logic",
+        "learn": "Learn",
+        "challenges": "Challenges",
+        "login": "Login",
+        "settings": "Settings & Logout"
+    },
+    "console": {
+        "placeholder": "Console",
+        "openDocs": "Open Documentation",
+        "openConsole": "Open Terminal",
+        "closeConsole": "Close Terminal"
+    },
+    "bars": {
+        "animationTimeSlider": "Animation Time",
+        "resetButton": "Reset",
+        "runButton": "Run",
+        "sortingAlgorithmsTitle": "Sorting Algorithms",
+        "otherAlgorithmsTitle": "Other Algorithms",
+        "numberOfBarsSlider": "Number of Bars",
+        "runtimeDisplay": "Time:",
+        "comparisonsDisplay": "Comparisons:",
+        "swapsDisplay": "Swaps:" 
+    },
+    "grid": {
+        "animationTimeSlider": "Animation Time",
+        "nodeSizeSlider": "Size of Nodes",
+        "resetButton": "Reset",
+        "runButton": "Run",
+        "pathfindingAlgorithmsTitle": "Pathfinding Algorithms",
+        "otherAlgorithmsTitle": "Other Algorithms",
+        "runtimeDisplay": "Time:",
+        "comparisonsDisplay": "Comparisons:",
+        "swapsDisplay": "Swaps:" 
+
+    },
+    "infoCard": {
+        "worstCaseTimeMeta": "Worst Case Time Complexity:",
+        "avgTimeMeta": "Average Time Complexity:",
+        "bestCaseTimeMeta": "Best Case Time Complexity:",
+        "memoryMeta": "Memory Complexity:",
+        "stableMeta": "Stable:",
+        "stableMetaDesc": "Whether the position of bars with equal value stay the same relative to each other."
+    },
+    "docsPage": {
+        "titleText": "Docs",
+        "searchPlaceholder": "Search",
+        "mainContentSyntaxLabel": "Syntax:",
+        "mainContentExampleLabel": "Example:",
+        "tableArgumentsTitle": "Arguments",
+        "tableTypeTitle": "Type",
+        "tableExamplesTitle": "Examples",
+        "tableNotesTitle": "Notes"
+    }
+}

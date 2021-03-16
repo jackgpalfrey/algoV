@@ -3,12 +3,17 @@ import enAlgoData from '../data/locales/en/algorithmInfo.json';
 import enChangeLog from '../data/locales/en/changelogData.json';
 import enDocs from '../data/locales/en/docs';
 
+import spGeneral from '../data/locales/sp/general.json';
+
 const localeData = {
 	en: {
 		general: enGeneral,
 		algorithmInfo: enAlgoData,
 		changeLog: enChangeLog,
 		docs: enDocs,
+	},
+	sp: {
+		general: spGeneral,
 	},
 };
 

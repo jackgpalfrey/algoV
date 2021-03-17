@@ -584,16 +584,28 @@ function SortingVisualiser(props) {
 					>
 						{text.sortingAlgorithmsTitle}
 					</option>
-					<option value='bubbleSort'>Bubble Sort</option>
-					<option value='selectionSort'>Selection Sort</option>
-					<option value='insertionSort'>Insertion Sort</option>
-					<option value='quickSort'>Quick Sort</option>
-					<option value='heapSort'>Heap Sort</option>
-					<option value='mergeSort'>Merge Sort</option>
+					<option value='bubbleSort'>
+						{algoData.sorting['bubbleSort'].title}
+					</option>
+					<option value='selectionSort'>
+						{algoData.sorting['selectionSort'].title}
+					</option>
+					<option value='insertionSort'>
+						{algoData.sorting['insertionSort'].title}
+					</option>
+					<option value='quickSort'>
+						{algoData.sorting['quickSort'].title}
+					</option>
+					<option value='heapSort'>{algoData.sorting['heapSort'].title}</option>
+					<option value='mergeSort'>
+						{algoData.sorting['mergeSort'].title}
+					</option>
 					<option disabled className='algorithmsTitle' value='otherTitle'>
 						{text.otherAlgorithmsTitle}
 					</option>
-					<option value='reverseArray'>Reverse Array</option>
+					<option value='reverseArray'>
+						{algoData.sorting['reverseArray'].title}
+					</option>
 				</select>
 
 				<div className='sliderBox'>

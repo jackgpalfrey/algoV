@@ -4,6 +4,9 @@ import enChangeLog from '../data/locales/en/changelogData.json';
 import enDocs from '../data/locales/en/docs';
 
 import spGeneral from '../data/locales/sp/general.json';
+import spAlgoData from '../data/locales/sp/algorithmInfo.json';
+import spChangeLog from '../data/locales/sp/changelogData.json';
+import spDocs from '../data/locales/sp/docs';
 
 const localeData = {
 	en: {
@@ -14,6 +17,9 @@ const localeData = {
 	},
 	sp: {
 		general: spGeneral,
+		algorithmInfo: spAlgoData,
+		changeLog: spChangeLog,
+		docs: spDocs,
 	},
 };
 

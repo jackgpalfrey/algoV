@@ -83,9 +83,10 @@ function PathfindingVisualiser() {
 		});
 	}
 
-	function createGrid() {
-		const NUM_OF_BARS_Y = ((window.innerHeight / 100) * 85) / (sizeOfNodes + 1);
-		const NUM_OF_BARS_X = ((window.innerWidth / 100) * 100) / (sizeOfNodes + 1);
+	function createGrid(nodeSize) {
+		nodeSize = nodeSize || sizeOfNodes;
+		const NUM_OF_BARS_Y = ((window.innerHeight / 100) * 86) / nodeSize;
+		const NUM_OF_BARS_X = ((window.innerWidth / 100) * 98) / nodeSize;
 		let yAxis = [];
 		for (let yPos = 0; yPos < NUM_OF_BARS_Y; yPos++) {
 			let xAxis = [];
@@ -245,7 +246,7 @@ function PathfindingVisualiser() {
 						value={sizeOfNodes}
 						onChange={(e) => {
 							setSizeOfNodes(parseInt(e.target.value));
-							createGrid();
+							createGrid(parseInt(e.target.value));
 						}}
 					></input>
 				</div>

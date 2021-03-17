@@ -1,73 +1,73 @@
 {
     "changelog": {
-        "openAllButton": "Open All",
-        "closeAllButton": "Close All",
-        "orderOldestToNewestButton": "Order Oldest to Newest",
-        "orderNewestToOldestButton": "Order Newest to Oldest",
-        "nextUpdateVersionKey": "Next Update",
-        "plannedForDate": "Planned for",
-        "addedLabel": "ADDED",
-        "changedLabel": "CHANGED",
-        "deprecatedLabel": "DEPRECATED",
-        "removedLabel": "REMOVED",
-        "fixedLabel": "FIXED",
+        "openAllButton": "Abrir todo",
+        "closeAllButton": "cerrar todo",
+        "orderOldestToNewestButton": "Ordenar más viejo a más nuevo",
+        "orderNewestToOldestButton": "Ordenar más nuevo a más viejo",
+        "nextUpdateVersionKey": "Próxima actualización",
+        "plannedForDate": "Prevista para",
+        "addedLabel": "AÑADIDO",
+        "changedLabel": "CAMBIADO",
+        "deprecatedLabel": "DESAPROBADO",
+        "removedLabel": "ELIMINADO",
+        "fixedLabel": "FIJO",
         "generalLabel": "GENERAL"
     },
     "menu": {
-        "home": "Home",
-        "bars": "Bars",
-        "grid": "Grid",
-        "logic": "Logic",
-        "learn": "Learn",
-        "challenges": "Challenges",
+        "home": "Casa",
+        "bars": "Rejas",
+        "grid": "Rejilla",
+        "logic": "Lógica",
+        "learn": "Aprender",
+        "challenges": "Retos",
         "login": "Login",
-        "settings": "Settings & Logout"
+        "settings": "Configuración y cierre de sesión"
     },
     "console": {
-        "placeholder": "Console",
-        "openDocs": "Open Documentation",
-        "openConsole": "Open Terminal",
-        "closeConsole": "Close Terminal"
+        "placeholder": "Consola",
+        "openDocs": "Abrir Documentación",
+        "openConsole": "Abrir Consola",
+        "closeConsole": "Cerrar Consola"
     },
     "bars": {
-        "animationTimeSlider": "Animation Time",
-        "resetButton": "Reset",
-        "runButton": "Run",
-        "sortingAlgorithmsTitle": "Sorting Algorithms",
-        "otherAlgorithmsTitle": "Other Algorithms",
-        "numberOfBarsSlider": "Number of Bars",
-        "runtimeDisplay": "Time:",
-        "comparisonsDisplay": "Comparisons:",
-        "swapsDisplay": "Swaps:" 
+        "animationTimeSlider": "Tiempo de animación",
+        "resetButton": "Reajustar",
+        "runButton": "Ejecutarse",
+        "sortingAlgorithmsTitle": "Algoritmos de ordenación",
+        "otherAlgorithmsTitle": "Otros algoritmos",
+        "numberOfBarsSlider": "Numeros de las rejas",
+        "runtimeDisplay": "Tiempo:",
+        "comparisonsDisplay": "Compararaciónes:",
+        "swapsDisplay": "Intercambiar:" 
     },
     "grid": {
-        "animationTimeSlider": "Animation Time",
-        "nodeSizeSlider": "Size of Nodes",
-        "resetButton": "Reset",
-        "runButton": "Run",
-        "pathfindingAlgorithmsTitle": "Pathfinding Algorithms",
-        "otherAlgorithmsTitle": "Other Algorithms",
-        "runtimeDisplay": "Time:",
-        "comparisonsDisplay": "Comparisons:",
-        "swapsDisplay": "Swaps:" 
+        "animationTimeSlider": "Tiempo de animación",
+        "nodeSizeSlider": "Tamano de las cajas",
+        "resetButton": "Reajustar",
+        "runButton": "Ejecutarse",
+        "pathfindingAlgorithmsTitle": "Algoritmos de pathfinding",
+        "otherAlgorithmsTitle": "Otros algoritmos",
+        "runtimeDisplay": "Tiempo:",
+        "comparisonsDisplay": "Compararaciónes:",
+        "swapsDisplay": "Intercambiar:" 
 
     },
     "infoCard": {
-        "worstCaseTimeMeta": "Worst Case Time Complexity:",
-        "avgTimeMeta": "Average Time Complexity:",
-        "bestCaseTimeMeta": "Best Case Time Complexity:",
-        "memoryMeta": "Memory Complexity:",
-        "stableMeta": "Stable:",
-        "stableMetaDesc": "Whether the position of bars with equal value stay the same relative to each other."
+        "worstCaseTimeMeta": "Peor Complejidad De Tiempo En El Caso:",
+        "avgTimeMeta": "Complejidad media del tiempo:",
+        "bestCaseTimeMeta": "Mejor Complejidad De Tiempo En El Caso:",
+        "memoryMeta": "Complejidad De La Memoria:",
+        "stableMeta": "Estable:",
+        "stableMetaDesc": "Si la posición de las barras con el mismo valor se mantiene igual an relación entre sí."
     },
     "docsPage": {
-        "titleText": "Docs",
-        "searchPlaceholder": "Search",
+        "titleText": "Documentos",
+        "searchPlaceholder": "Buscar",
         "mainContentSyntaxLabel": "Syntax:",
-        "mainContentExampleLabel": "Example:",
-        "tableArgumentsTitle": "Arguments",
-        "tableTypeTitle": "Type",
-        "tableExamplesTitle": "Examples",
-        "tableNotesTitle": "Notes"
+        "mainContentExampleLabel": "Ejemplo:",
+        "tableArgumentsTitle": "Argumento",
+        "tableTypeTitle": "Tipo",
+        "tableExamplesTitle": "Ejemplos",
+        "tableNotesTitle": "Notas"
     }
 }

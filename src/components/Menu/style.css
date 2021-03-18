@@ -14,7 +14,7 @@
 	left: 0;
 	top: 0;
 	height: 100vh;
-	width: 6vw;
+	width: 6em;
 	background-color: var(--higher-background);
 	color: var(--text);
 	text-align: center;
@@ -28,10 +28,13 @@
 .openMenuButton {
 	color: var(--text);
 	cursor: pointer;
-	margin: -25px;
+	position: relative;
+	top: 0;
+	margin-top: -25px;
 	background-color: transparent;
 	border: none;
 	pointer-events: all;
+	z-index: 2;
 }
 
 .openMenuButton:focus {

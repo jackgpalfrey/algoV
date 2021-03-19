@@ -32,7 +32,61 @@ function PathfindingVisualiser() {
 	}, []);
 
 	function AnimateEngine(command) {
-		return;
+		try {
+			let commandCode = command;
+			if (Array.isArray(command)) commandCode = commandCode[0];
+
+			console.log(command);
+			let response = ['PENDING', 'In progress'];
+
+			switch (commandCode) {
+				case 'setState':
+					let indexArray = command[1];
+					let type = command[2];
+					let data = command[3];
+
+					console.log(indexArray);
+					console.log(type);
+					console.log(data);
+
+					if (!indexArray || !Array.isArray(indexArray))
+						return ['ERROR', 'Invalid Indexs'];
+					if (!type || typeof type !== 'string')
+						return ['ERROR', 'Invalid Type'];
+
+					type = type.toLowerCase();
+					if (typeof data !== 'string') return ['ERROR', 'Invalid Data'];
+
+					setGrid((prevState) => {
+						let newGrid = prevState.slice();
+
+						indexArray.forEach((value, index) => {
+							console.log(newGrid[value[0]][value[1]]);
+							newGrid[value[1]][value[0]][type] = data;
+						});
+
+						return newGrid;
+					});
+
+					switch (type) {
+						case 'type':
+							break;
+						case 'TLtext':
+							break;
+						case 'TRtext':
+							break;
+						case 'BLtext':
+							break;
+						case 'BRtext':
+							break;
+						case 'descText':
+							break;
+					}
+					break;
+			}
+		} catch (error) {
+			return ['ERROR', 'Try Failed'];
+		}
 	}
 
 	function handleMouseDown(x, y, type) {
@@ -94,8 +148,12 @@ function PathfindingVisualiser() {
 				xAxis.push({
 					x: xPos,
 					y: yPos,
-					color: 'transparent',
 					type: 'none',
+					TLtext: '',
+					TRtext: '',
+					BLtext: '',
+					BRtext: '',
+					descText: '',
 				});
 			}
 			yAxis.push(xAxis);

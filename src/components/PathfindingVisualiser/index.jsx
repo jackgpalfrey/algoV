@@ -4,6 +4,7 @@ import Console from '../Console';
 import InfoCard from '../InfoCard';
 
 import getLocaleText from '../../util/getLocaleText';
+import { addEmitHelpers, couldStartTrivia } from 'typescript';
 const consoleText = getLocaleText('general').console;
 const text = getLocaleText('general').grid;
 const algoData = getLocaleText('algorithmInfo');
@@ -14,7 +15,6 @@ function PathfindingVisualiser() {
 	//#region state
 	const [grid, setGrid] = useState();
 	const [mouseDown, setMouseDown] = useState(0);
-	const [penColor, setPenColor] = useState('red');
 	const [penType, setPenType] = useState('start');
 	const [isTerminalOpen, setIsTerminalOpen] = useState(false);
 	const [animationActive, setAnimationActive] = useState(false);
@@ -69,14 +69,18 @@ function PathfindingVisualiser() {
 							if (type === 'type' && data === 'start') {
 								let startY = startPos[1];
 								let startX = startPos[0];
-								newGrid[startY][startX].type = 'none';
-								setStartPos([value[0], value[1]]);
+								let prevType = 'none';
+								newGrid[startY][startX].type = prevType;
+								let curType = grid[value[1]][value[0]].type;
+								setStartPos([value[0], value[1], curType]);
 							}
 							if (type === 'type' && data === 'end') {
-								let endY = endPos[1];
-								let endX = endPos[0];
-								newGrid[endY][endX].type = 'none';
-								setEndPos([value[0], value[1]]);
+								let startY = endPos[1];
+								let startX = endPos[0];
+								let prevType = 'none';
+								newGrid[startY][startX].type = prevType;
+								let curType = grid[value[1]][value[0]].type;
+								setEndPos([value[0], value[1], curType]);
 							}
 							newGrid[value[1]][value[0]][type] = data;
 						});
@@ -96,7 +100,8 @@ function PathfindingVisualiser() {
 
 		if (
 			(startPos[0] === x && startPos[1] === y) ||
-			(endPos[0] === x && endPos[1] === y)
+			(endPos[0] === x && endPos[1] === y) ||
+			animationActive
 		) {
 			return;
 		}
@@ -150,8 +155,8 @@ function PathfindingVisualiser() {
 		}
 		setGrid(yAxis);
 		setPenType('start');
-		setStartPos([0, 0]);
-		setEndPos([0, 0]);
+		setStartPos([0, 0, 'none']);
+		setEndPos([0, 0, 'none']);
 	}
 
 	function renderGrid(array) {

@@ -24,8 +24,8 @@ function PathfindingVisualiser() {
 	const [runTime, setRunTime] = useState(0);
 	const [swaps, setSwaps] = useState(0);
 	const [comparisons, setComparisons] = useState(0);
-	const [startPos, setStartPos] = useState([0, 0]);
-	const [endPos, setEndPos] = useState([0, 0]);
+	const [startPos, setStartPos] = useState([-1, -1]);
+	const [endPos, setEndPos] = useState([-1, -1]);
 	const [draggingTlle, setDraggingTile] = useState(0);
 
 	//#endregion
@@ -158,6 +158,34 @@ function PathfindingVisualiser() {
 		if (!array) return;
 		let yDivs = array.map((xAxis) => {
 			let xDivs = xAxis.map((val) => {
+				let icon = '';
+
+				let endX = endPos[0];
+				let endXdiff = endX - val.x;
+				let endY = endPos[1];
+				let endYdiff = endY - val.y;
+
+				if (val.type === 'end') {
+					icon = 'flag';
+				} else if (val.type === 'start') {
+					if (Math.abs(endYdiff) > Math.abs(endXdiff)) {
+						if (endYdiff < 0) {
+							icon = 'keyboard_arrow_up';
+						} else {
+							icon = 'keyboard_arrow_down';
+						}
+					} else {
+						if (endXdiff > 0) {
+							icon = 'keyboard_arrow_right';
+						} else {
+							icon = 'keyboard_arrow_left';
+						}
+					}
+					if (endX === 0 && endY === 0) {
+						icon = 'keyboard_arrow_right';
+					}
+				}
+
 				return (
 					<div
 						onMouseMove={(e) => {
@@ -186,16 +214,13 @@ function PathfindingVisualiser() {
 						onMouseUp={() => {
 							setDraggingTile(0);
 						}}
+						onContextMenu={(e) => {
+							e.preventDefault();
+						}}
 						className={`grid-xAxis-Divs node-type-${val.type}`}
 						style={{ width: `${sizeOfNodes}px`, height: `${sizeOfNodes}px` }}
 					>
-						<i className='material-icons'>
-							{val.type === 'end'
-								? 'flag'
-								: val.type === 'start'
-								? 'keyboard_arrow_right'
-								: null}
-						</i>
+						<i className='material-icons'>{icon}</i>
 					</div>
 				);
 			});

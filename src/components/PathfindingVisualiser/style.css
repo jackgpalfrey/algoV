@@ -50,8 +50,9 @@
 	justify-content: center;
 	text-align: center;
 	border-color: rgb(116, 116, 116);
-	color: red;
+	color: rgb(255, 0, 0);
 	animation-duration: 0.2s;
+	/* filter: brightness(150%); */
 }
 
 
@@ -94,3 +95,5 @@
 	color: black;
 	border-color: rgb(116, 116, 116);
 }
+
+

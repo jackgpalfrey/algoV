@@ -8,6 +8,8 @@ const consoleText = getLocaleText('general').console;
 const text = getLocaleText('general').grid;
 const algoData = getLocaleText('algorithmInfo');
 
+const TILES = ['wall', 'start', 'end', 'none'];
+
 function PathfindingVisualiser() {
 	//#region state
 	const [grid, setGrid] = useState();
@@ -24,6 +26,7 @@ function PathfindingVisualiser() {
 	const [comparisons, setComparisons] = useState(0);
 	const [startPos, setStartPos] = useState([0, 0]);
 	const [endPos, setEndPos] = useState([0, 0]);
+	const [draggingTlle, setDraggingTile] = useState(0);
 
 	//#endregion
 
@@ -50,39 +53,44 @@ function PathfindingVisualiser() {
 					console.log(data);
 
 					if (!indexArray || !Array.isArray(indexArray))
-						return ['ERROR', 'Invalid Indexs'];
+						return ['ERROR', 'Invalid Indexes'];
 					if (!type || typeof type !== 'string')
 						return ['ERROR', 'Invalid Type'];
 
 					type = type.toLowerCase();
+					if (type === 'type' && !TILES.includes(data)) {
+						return ['ERROR', 'Invalid Type'];
+					}
 					if (typeof data !== 'string') return ['ERROR', 'Invalid Data'];
 
 					setGrid((prevState) => {
 						let newGrid = prevState.slice();
 
 						indexArray.forEach((value, index) => {
-							console.log(newGrid[value[0]][value[1]]);
+							if (value[1] > newGrid.length || value[0] > newGrid[0].length) {
+								return newGrid;
+							}
+
+							if (type === 'type' && data === 'start') {
+								let startY = startPos[1];
+								let startX = startPos[0];
+								newGrid[startY][startX].type = 'none';
+								setStartPos([value[0], value[1]]);
+							}
+							if (type === 'type' && data === 'end') {
+								let endY = endPos[1];
+								let endX = endPos[0];
+								newGrid[endY][endX].type = 'none';
+								setEndPos([value[0], value[1]]);
+							}
 							newGrid[value[1]][value[0]][type] = data;
+							console.log(newGrid[value[1]][value[0]]);
 						});
 
 						return newGrid;
 					});
 
-					switch (type) {
-						case 'type':
-							break;
-						case 'TLtext':
-							break;
-						case 'TRtext':
-							break;
-						case 'BLtext':
-							break;
-						case 'BRtext':
-							break;
-						case 'descText':
-							break;
-					}
-					break;
+					return ['SUCCESS', 'Exectuted Successfully'];
 			}
 		} catch (error) {
 			return ['ERROR', 'Try Failed'];
@@ -90,51 +98,40 @@ function PathfindingVisualiser() {
 	}
 
 	function handleMouseDown(x, y, type) {
-		setGrid((prevState) => {
-			let toType = penType;
-			let prevGrid = prevState.slice();
+		let toType = type || penType;
 
+		if (
+			(startPos[0] === x && startPos[1] === y) ||
+			(endPos[0] === x && endPos[1] === y)
+		) {
+			return;
+		}
+		if (mouseDown === 2 || type === 'eraser') {
+			toType = 'none';
+		}
+
+		if (penType === 'start') {
+			AnimateEngine(['setState', [[x, y]], 'type', 'start']);
+			if (endPos[0] === 0 || endPos[1] === 0) {
+				setPenType('end');
+			} else {
+				setPenType('wall');
+			}
+			return;
+		} else if (penType === 'end') {
+			AnimateEngine(['setState', [[x, y]], 'type', 'end']);
+			setPenType('wall');
+			return;
+		} else if (penType === 'wall') {
 			if (
 				(startPos[0] === y && startPos[1] === x) ||
 				(endPos[0] === y && endPos[1] === x)
 			) {
-				return prevGrid;
+				return;
 			}
-
-			if (mouseDown === 2 || type === 'eraser') {
-				toType = 'none';
-			}
-
-			if (penType === 'start') {
-				let startY = startPos[0];
-				let startX = startPos[1];
-				prevGrid[startY][startX].color = 'transparent';
-				prevGrid[startY][startX].type = 'none';
-				setStartPos([y, x]);
-				if (endPos[0] === 0 || endPos[1] === 0) {
-					setPenType('end');
-				} else {
-					setPenType('wall');
-				}
-			} else if (penType === 'end') {
-				let endY = endPos[0];
-				let endX = endPos[1];
-				prevGrid[endY][endX].color = 'transparent';
-				prevGrid[endY][endX].type = 'none';
-				setEndPos([y, x]);
-				setPenType('wall');
-			} else if (penType === 'wall') {
-				if (
-					(startPos[0] === y && startPos[1] === x) ||
-					(endPos[0] === y && endPos[1] === x)
-				) {
-					return prevGrid;
-				}
-			}
-
-			prevGrid[y][x].type = toType;
-			return prevGrid;
-		});
+		}
+		console.log(toType);
+		AnimateEngine(['setState', [[x, y]], 'type', toType]);
 	}
 
 	function createGrid(nodeSize) {
@@ -170,15 +167,31 @@ function PathfindingVisualiser() {
 			let xDivs = xAxis.map((val) => {
 				return (
 					<div
-						onMouseEnter={() => {
-							if (mouseDown < 1 || penType === 'start' || penType === 'end')
+						onMouseMove={(e) => {
+							if (e.buttons <= 0 || penType === 'start' || penType === 'end')
 								return;
-							handleMouseDown(val.x, val.y);
+
+							if (draggingTlle === 1) {
+								handleMouseDown(val.x, val.y, 'start');
+							} else if (draggingTlle === 2) {
+								handleMouseDown(val.x, val.y, 'end');
+							} else {
+								handleMouseDown(val.x, val.y);
+							}
 						}}
 						onMouseDown={(e) => {
+							if (val.type === 'start') {
+								setDraggingTile(1);
+							}
+							if (val.type === 'end') {
+								setDraggingTile(2);
+							}
 							if (e.button === 2)
 								return handleMouseDown(val.x, val.y, 'eraser');
 							handleMouseDown(val.x, val.y);
+						}}
+						onMouseUp={() => {
+							setDraggingTile(0);
 						}}
 						className={`grid-xAxis-Divs node-type-${val.type}`}
 						style={{ width: `${sizeOfNodes}px`, height: `${sizeOfNodes}px` }}
@@ -193,6 +206,7 @@ function PathfindingVisualiser() {
 	function handleRunClick() {
 		return;
 	}
+
 	return (
 		<div
 			className='grid-container'

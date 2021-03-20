@@ -188,7 +188,15 @@ function PathfindingVisualiser() {
 						}}
 						className={`grid-xAxis-Divs node-type-${val.type}`}
 						style={{ width: `${sizeOfNodes}px`, height: `${sizeOfNodes}px` }}
-					></div>
+					>
+						<i className='material-icons'>
+							{val.type === 'end'
+								? 'flag'
+								: val.type === 'start'
+								? 'keyboard_arrow_right'
+								: null}
+						</i>
+					</div>
 				);
 			});
 			return <div className='grid-yAxis-Divs'>{xDivs}</div>;

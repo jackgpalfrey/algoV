@@ -21,20 +21,17 @@ function Console(props) {
 		setTimeout(() => {
 			setResponseText('');
 		}, 1000);
-		console.log(response[1]);
 	}
 
 	function handleConsole(e) {
 		if (e.key !== 'Enter') return;
 		let command = commandText.replaceAll("'", '"');
 		command = commandText.replaceAll('(', '[').replaceAll(')', ']');
-		console.log(`Command: ${command}`);
 		try {
 			let jsonCommand = JSON.parse(command);
 			let response = props.AnimateEngine(jsonCommand);
 			responseHandler(response);
 		} catch (error) {
-			console.log(error);
 			responseHandler(['ERROR', 'Invalid Syntax']);
 		}
 	}

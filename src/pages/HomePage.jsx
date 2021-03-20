@@ -12,7 +12,6 @@ const changeLogData = getLocaleText('changeLog');
 function HomePage() {
 	const [isAllOpen, setIsAllOpen] = useState(false);
 	const [isNewestFirst, setIsNewestFirst] = useState(true);
-	console.log(isAllOpen);
 
 	let changeLogItems = changeLogData.slice();
 	if (isNewestFirst) changeLogItems = changeLogItems.reverse();
@@ -44,8 +43,6 @@ function HomePage() {
 				</Item>
 			);
 	});
-
-	console.log(getLocaleText('general'));
 
 	return (
 		<div className='changeLog'>

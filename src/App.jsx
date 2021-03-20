@@ -39,13 +39,10 @@ function App() {
 			version = version.split('=')[1].split('.');
 			if (version.length > 2) version.pop();
 			version = version.join('');
-			console.log(version);
 		}
-		console.log(version);
 		let curVer = currentVersion.split('.');
 		if (curVer.length > 2) curVer.pop();
 		curVer = curVer.join('');
-		console.log(curVer);
 		if (parseInt(curVer) > parseInt(version)) {
 			setShowNewVersion(true);
 		}

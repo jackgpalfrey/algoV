@@ -39,7 +39,6 @@ function getLocaleText(dataSet, language) {
 
 	let lang = language || savedLang;
 
-	console.log(`Language: ${lang}`);
 	let langData = localeData[lang];
 	if (langData !== undefined) {
 		if (langData[dataSet]) {

@@ -76,7 +76,6 @@ function SortingVisualiser(props) {
 			if (Array.isArray(command)) commandCode = command[0];
 
 			let response = ['PENDING', 'In progress'];
-			console.log(`Command: ${commandCode}`);
 			switch (commandCode) {
 				case 'setState':
 					let indexArray = command[1];
@@ -321,7 +320,6 @@ function SortingVisualiser(props) {
 						return ['ERROR', 'Wait Time Invalid'];
 					let timeoutID = setTimeout(() => {
 						command[1].forEach((value) => {
-							console.log(value);
 							AnimateEngine(value);
 						});
 					}, command[2]);
@@ -383,11 +381,9 @@ function SortingVisualiser(props) {
 						}
 					} else if (typeof specificLoop === 'number') {
 						let loop = activeLoops.splice(specificLoop, 1)[0];
-						console.log(loop);
 						clearInterval(loop);
 					} else if (typeof specificLoop === 'string') {
 						let loop = activeLoops.indexOf(parseInt(specificLoop))[0];
-						console.log(loop);
 						clearInterval(loop);
 					}
 
@@ -488,7 +484,7 @@ function SortingVisualiser(props) {
 
 	function handleSortClick() {
 		if (animationActive) return false;
-		console.log(AnimateEngine(['executeInternalAnimation', activeAlgorithm]));
+		AnimateEngine(['executeInternalAnimation', activeAlgorithm]);
 	}
 
 	function createBars() {

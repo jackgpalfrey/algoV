@@ -39,7 +39,6 @@ function PathfindingVisualiser() {
 			let commandCode = command;
 			if (Array.isArray(command)) commandCode = commandCode[0];
 
-			console.log(command);
 			let response = ['PENDING', 'In progress'];
 
 			switch (commandCode) {
@@ -47,10 +46,6 @@ function PathfindingVisualiser() {
 					let indexArray = command[1];
 					let type = command[2];
 					let data = command[3];
-
-					console.log(indexArray);
-					console.log(type);
-					console.log(data);
 
 					if (!indexArray || !Array.isArray(indexArray))
 						return ['ERROR', 'Invalid Indexes'];
@@ -84,7 +79,6 @@ function PathfindingVisualiser() {
 								setEndPos([value[0], value[1]]);
 							}
 							newGrid[value[1]][value[0]][type] = data;
-							console.log(newGrid[value[1]][value[0]]);
 						});
 
 						return newGrid;
@@ -130,7 +124,6 @@ function PathfindingVisualiser() {
 				return;
 			}
 		}
-		console.log(toType);
 		AnimateEngine(['setState', [[x, y]], 'type', toType]);
 	}
 

@@ -63,6 +63,22 @@ function PathfindingVisualiser() {
 					);
 					break;
 
+				case 'st':
+				case 'setType':
+					console.log('TRIGGER');
+					let indexs = command[1];
+					let typeToSet = command[2];
+					AnimateEngineController.setGridState(
+						indexs,
+						'type',
+						typeToSet,
+						startPos,
+						endPos,
+						setStartPos,
+						setEndPos
+					);
+					break;
+
 				case 'do':
 					let subCommands = command[1];
 					let interval = command[2];
@@ -118,6 +134,10 @@ function PathfindingVisualiser() {
 						setStartPos,
 						setEndPos
 					);
+					break;
+
+				case 'clearAnimation':
+					AnimateEngineController.clearGridAnimationTiles(setGrid);
 					break;
 
 				case 'setRuntimeDisplay':
@@ -197,6 +217,7 @@ function PathfindingVisualiser() {
 			}
 			return ['SUCCESS', 'Exectuted Successfully'];
 		} catch (error) {
+			console.log(error);
 			return ['ERROR', 'Try Failed'];
 		}
 	}

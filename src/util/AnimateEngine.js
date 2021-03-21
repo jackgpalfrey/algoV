@@ -7,6 +7,7 @@ class AnimateEngine {
 	};
 
 	TILES = ['wall', 'start', 'end', 'none'];
+	ANIMATIONTILES = ['route', 'checking', 'next'];
 
 	constructor() {}
 
@@ -97,6 +98,9 @@ class AnimateEngine {
 		if (!type || typeof type !== 'string') return ['ERROR', 'Invalid Type'];
 
 		type = type.toLowerCase();
+		if (type === 'type' && (!data || data == '')) {
+			data = 'none';
+		}
 		if (type === 'type' && !this.TILES.includes(data)) {
 			return ['ERROR', 'Invalid Type'];
 		}
@@ -106,8 +110,82 @@ class AnimateEngine {
 			let newGrid = prevState.slice();
 
 			indexArray.forEach((value) => {
-				if (value[1] > newGrid.length || value[0] > newGrid[0].length) {
+				if (!Array.isArray(value)) {
+					if (value === '$ALL') {
+						for (let y = 0; y < newGrid.length; y++) {
+							for (let x = 0; x < newGrid[0].length; x++) {
+								newGrid[y][x].type = data;
+							}
+						}
+					} else if (value === '$LTQUAD') {
+						for (let y = 0; y < Math.abs(newGrid.length / 2); y++) {
+							for (let x = 0; x < newGrid[0].length / 2; x++) {
+								newGrid[y][x].type = data;
+							}
+						}
+					} else if (value === '$LBQUAD') {
+						for (
+							let y = Math.abs(newGrid.length / 2);
+							y < newGrid.length;
+							y++
+						) {
+							for (let x = 0; x < newGrid[0].length / 2; x++) {
+								newGrid[y][x].type = data;
+							}
+						}
+					} else if (value === '$RTQUAD') {
+						console.log(newGrid[0].length / 2);
+						console.log(newGrid[0].length);
+						for (let y = 0; y < Math.abs(newGrid.length / 2); y++) {
+							for (
+								let x = Math.abs(newGrid[0].length / 2);
+								x < newGrid[0].length;
+								x++
+							) {
+								newGrid[y][x].type = data;
+							}
+						}
+					} else if (value === '$RBQUAD') {
+						console.log(newGrid[0].length / 2);
+						console.log(newGrid[0].length);
+						for (
+							let y = Math.abs(newGrid.length / 2);
+							y < newGrid.length;
+							y++
+						) {
+							for (
+								let x = Math.abs(newGrid[0].length / 2);
+								x < newGrid[0].length;
+								x++
+							) {
+								newGrid[y][x].type = data;
+							}
+						}
+					}
 					return newGrid;
+				}
+
+				if (
+					value.length !== 2 ||
+					typeof value[0] !== 'number' ||
+					typeof value[1] !== 'number'
+				)
+					return;
+
+				if (
+					Math.abs(value[1]) > newGrid.length ||
+					Math.abs(value[0]) > newGrid[0].length
+				) {
+					return newGrid;
+				}
+
+				// Handles negative indexes
+				if (value[0] < 0) {
+					value[0] = newGrid[0].length + value[0];
+				}
+
+				if (value[1] < 0) {
+					value[1] = newGrid.length + value[1];
 				}
 
 				if (type === 'type' && data === 'start') {
@@ -126,6 +204,7 @@ class AnimateEngine {
 					let curType = newGrid[value[1]][value[0]].type;
 					setEndPosFunction([value[0], value[1], curType]);
 				}
+
 				newGrid[value[1]][value[0]][type] = data;
 			});
 
@@ -229,6 +308,22 @@ class AnimateEngine {
 		setPenTypeFunction('start');
 		setStartPosFunction([0, 0, 'none']);
 		setEndPosFunction([0, 0, 'none']);
+	}
+
+	clearGridAnimationTiles(setGridFunction) {
+		setGridFunction((prevState) => {
+			let newGrid = prevState.slice();
+
+			newGrid.forEach((yAxis) => {
+				yAxis.forEach((node) => {
+					if (this.ANIMATIONTILES.includes(node.type)) {
+						node.type = 'none';
+					}
+				});
+			});
+
+			return newGrid;
+		});
 	}
 
 	// Sets a data display eg. Runtime

@@ -158,7 +158,9 @@
                             ["CHANGED", "Docs Pages to Alphabetical Order"],
                             ["CHANGED", "Runtime to show 0ms when run time not set instead of N/A to be consistent with comparisions and swaps"],
                             ["FIXED", "Inability to click through hidden menu"],
-                            ["CHANGED", "Latest Changes Card to only display after reoccuring visits"]
+                            ["CHANGED", "Latest Changes Card to only display after reoccuring visits"],
+                            ["CHANGED", "MOVED AnimateEngine Code to seperate File to reduce code duplication"],
+                            ["ADDED", "Grid Visualiser"]
                             ],
         "date": "16/03/21",
         "isNext": true

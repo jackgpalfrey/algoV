@@ -4,7 +4,10 @@ import Console from '../Console';
 import InfoCard from '../InfoCard';
 
 import getLocaleText from '../../util/getLocaleText';
-import { addEmitHelpers, couldStartTrivia } from 'typescript';
+import AnimateEngineCore from '../../util/AnimateEngine';
+
+const AnimateEngineController = new AnimateEngineCore();
+
 const consoleText = getLocaleText('general').console;
 const text = getLocaleText('general').grid;
 const algoData = getLocaleText('algorithmInfo');
@@ -28,6 +31,8 @@ function PathfindingVisualiser() {
 	const [endPos, setEndPos] = useState([-1, -1]);
 	const [draggingTlle, setDraggingTile] = useState(0);
 
+	AnimateEngineController.__setMainDataFunction__(setGrid);
+
 	//#endregion
 
 	useEffect(() => {
@@ -47,49 +52,150 @@ function PathfindingVisualiser() {
 					let type = command[2];
 					let data = command[3];
 
-					if (!indexArray || !Array.isArray(indexArray))
-						return ['ERROR', 'Invalid Indexes'];
-					if (!type || typeof type !== 'string')
-						return ['ERROR', 'Invalid Type'];
+					AnimateEngineController.setGridState(
+						indexArray,
+						type,
+						data,
+						startPos,
+						endPos,
+						setStartPos,
+						setEndPos
+					);
+					break;
 
-					type = type.toLowerCase();
-					if (type === 'type' && !TILES.includes(data)) {
-						return ['ERROR', 'Invalid Type'];
-					}
-					if (typeof data !== 'string') return ['ERROR', 'Invalid Data'];
+				case 'do':
+					let subCommands = command[1];
+					let interval = command[2];
 
-					setGrid((prevState) => {
-						let newGrid = prevState.slice();
+					AnimateEngineController.do(
+						subCommands,
+						interval,
+						animationSpeed,
+						AnimateEngine
+					);
+					break;
 
-						indexArray.forEach((value, index) => {
-							if (value[1] > newGrid.length || value[0] > newGrid[0].length) {
-								return newGrid;
-							}
+				case 'doFor':
+					let commandsToRun = command[1];
+					let repeats = command[2];
+					let intervalBetweenEach = command[3];
 
-							if (type === 'type' && data === 'start') {
-								let startY = startPos[1];
-								let startX = startPos[0];
-								let prevType = 'none';
-								newGrid[startY][startX].type = prevType;
-								let curType = grid[value[1]][value[0]].type;
-								setStartPos([value[0], value[1], curType]);
-							}
-							if (type === 'type' && data === 'end') {
-								let startY = endPos[1];
-								let startX = endPos[0];
-								let prevType = 'none';
-								newGrid[startY][startX].type = prevType;
-								let curType = grid[value[1]][value[0]].type;
-								setEndPos([value[0], value[1], curType]);
-							}
-							newGrid[value[1]][value[0]][type] = data;
-						});
+					AnimateEngineController.doFor(
+						commandsToRun,
+						intervalBetweenEach,
+						repeats,
+						animationSpeed,
+						AnimateEngine
+					);
+					break;
 
-						return newGrid;
-					});
+				case 'doSim':
+					let toRunCommands = command[1];
+					AnimateEngine(['do', toRunCommands, 0]);
+					break;
 
-					return ['SUCCESS', 'Exectuted Successfully'];
+				case 'doIn':
+					let commandsToExecute = command[1];
+					let waitFor = command[2];
+
+					AnimateEngineController.doIn(
+						commandsToExecute,
+						waitFor,
+						AnimateEngine
+					);
+
+					break;
+
+				case 'rg':
+				case 'resetGrid':
+					let nodeSize = command[1] || sizeOfNodes;
+					AnimateEngineController.resetGrid(
+						nodeSize,
+						window.innerWidth,
+						window.innerHeight,
+						setGrid,
+						setPenType,
+						setStartPos,
+						setEndPos
+					);
+					break;
+
+				case 'setRuntimeDisplay':
+					let newRuntime = command[1];
+					AnimateEngineController.setDisplay(newRuntime, setRunTime);
+					break;
+
+				case 'setComparisonsDisplay':
+					let newComparisons = command[1];
+					AnimateEngineController.setDisplay(newComparisons, setComparisons);
+					break;
+
+				case 'setSwapsDisplay':
+					let newSwaps = command[1];
+					AnimateEngineController.setDisplay(newSwaps, setSwaps);
+					break;
+
+				case 'startAnimation':
+					setAnimationActive(true);
+					break;
+
+				case 'endAnimation':
+					setAnimationActive(false);
+					break;
+
+				case 'r':
+				case 'reload':
+					window.location.reload();
+					break;
+
+				case 'executeInternalAnimation': //TODO:
+					// let animationKey = command[1];
+					// if (!animationKey || typeof animationKey !== 'string')
+					// 	return ['ERROR', 'Invalid Animation Key'];
+					// let resultData = [];
+					// switch (animationKey) {
+					// 	case 'bubbleSort':
+					// 		resultData = bubbleSort(getNumbersFromArrayState());
+					// 		break;
+					// 	case 'selectionSort':
+					// 		resultData = selectionSort(getNumbersFromArrayState());
+					// 		break;
+					// 	case 'insertionSort':
+					// 		resultData = insertionSort(getNumbersFromArrayState());
+					// 		break;
+					// 	case 'quickSort':
+					// 		return alert('Currently Unavailable');
+					// 		resultData = quickSort(getNumbersFromArrayState());
+					// 		break;
+					// 	case 'heapSort':
+					// 		resultData = heapSort(getNumbersFromArrayState());
+					// 		break;
+					// 	case 'mergeSort':
+					// 		return alert('Currently Unavailable');
+					// 		resultData = mergeSort(getNumbersFromArrayState());
+					// 		break;
+					// 	case 'reverseArray':
+					// 		resultData = reverseArray(getNumbersFromArrayState());
+					// 		break;
+					// 	default:
+					// 		return ['ERROR', 'Invalid Animation Key'];
+					// 		break;
+					// }
+
+					// AnimateEngine(['doSim', [resultData]]);
+					break;
+
+				case 'version':
+					let version = document.cookie
+						.split('; ')
+						.find((row) => row.startsWith('version='))
+						.split('=')[1];
+					alert(`Version: ${version}`);
+					break;
+
+				default:
 			}
+			return ['SUCCESS', 'Exectuted Successfully'];
 		} catch (error) {
 			return ['ERROR', 'Try Failed'];
 		}
@@ -134,29 +240,7 @@ function PathfindingVisualiser() {
 
 	function createGrid(nodeSize) {
 		nodeSize = nodeSize || sizeOfNodes;
-		const NUM_OF_BARS_Y = ((window.innerHeight / 100) * 86) / nodeSize;
-		const NUM_OF_BARS_X = ((window.innerWidth / 100) * 98) / nodeSize;
-		let yAxis = [];
-		for (let yPos = 0; yPos < NUM_OF_BARS_Y; yPos++) {
-			let xAxis = [];
-			for (let xPos = 0; xPos < NUM_OF_BARS_X; xPos++) {
-				xAxis.push({
-					x: xPos,
-					y: yPos,
-					type: 'none',
-					TLtext: '',
-					TRtext: '',
-					BLtext: '',
-					BRtext: '',
-					descText: '',
-				});
-			}
-			yAxis.push(xAxis);
-		}
-		setGrid(yAxis);
-		setPenType('start');
-		setStartPos([0, 0, 'none']);
-		setEndPos([0, 0, 'none']);
+		AnimateEngine(['resetGrid', nodeSize]);
 	}
 
 	function renderGrid(array) {

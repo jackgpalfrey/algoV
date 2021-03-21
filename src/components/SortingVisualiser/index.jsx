@@ -82,7 +82,7 @@ function SortingVisualiser(props) {
 
 			let response = ['PENDING', 'In progress'];
 			switch (commandCode) {
-				case 'setState': // Transfered
+				case 'setState':
 					let indexArray = command[1];
 					let type = command[2];
 					let data = command[3];
@@ -93,35 +93,35 @@ function SortingVisualiser(props) {
 					break;
 
 				case 'sc':
-				case 'setColor': // Transfered
+				case 'setColor':
 					let idxes = command[1];
 					let color = command[2];
 
 					AnimateEngineController.setBarsState(idxes, 'color', color, setArray);
 					break;
 
-				case 'swap': // Transfered
+				case 'swap':
 					let id1 = command[1];
 					let id2 = command[2];
 
 					AnimateEngineController.swapBars(id1, id2, setArray);
 					break;
 
-				case 'setValue': // Transfered
+				case 'setValue':
 					let idxs = command[1];
 					let value = command[2];
 
 					AnimateEngineController.setBarsState(idxs, 'value', value);
 					break;
 
-				case 'setArray': // Transfered
+				case 'setArray':
 					let values = command[1];
 					let colorCode = command[2];
 
 					AnimateEngineController.setBars(values, colorCode, setNumBars);
 					break;
 
-				case 'do': // DONE
+				case 'do':
 					let subCommands = command[1];
 					let interval = command[2];
 
@@ -133,7 +133,7 @@ function SortingVisualiser(props) {
 					);
 					break;
 
-				case 'doFor': // DONE
+				case 'doFor':
 					let commandsToRun = command[1];
 					let repeats = command[2];
 					let intervalBetweenEach = command[3];
@@ -147,12 +147,12 @@ function SortingVisualiser(props) {
 					);
 					break;
 
-				case 'doSim': // DONE
+				case 'doSim':
 					let toRunCommands = command[1];
 					AnimateEngine(['do', toRunCommands, 0]);
 					break;
 
-				case 'doIn': // DONE
+				case 'doIn':
 					let commandsToExecute = command[1];
 					let waitFor = command[2];
 
@@ -165,7 +165,7 @@ function SortingVisualiser(props) {
 					break;
 
 				case 'ra':
-				case 'resetArray': // Done
+				case 'resetArray':
 					let numOfBars = command[1];
 					if (!numOfBars || typeof numOfBars !== 'number' || numOfBars <= 0)
 						numOfBars = numBars;
@@ -173,26 +173,26 @@ function SortingVisualiser(props) {
 					AnimateEngineController.resetBars(numOfBars, setNumBars);
 					break;
 
-				case 'setRuntimeDisplay': // Done
+				case 'setRuntimeDisplay':
 					let newRuntime = command[1];
 					AnimateEngineController.setDisplay(newRuntime, setRunTime);
 					break;
 
-				case 'setComparisonsDisplay': // Done
+				case 'setComparisonsDisplay':
 					let newComparisons = command[1];
 					AnimateEngineController.setDisplay(newComparisons, setComparisons);
 					break;
 
-				case 'setSwapsDisplay': // Done
+				case 'setSwapsDisplay':
 					let newSwaps = command[1];
 					AnimateEngineController.setDisplay(newSwaps, setSwaps);
 					break;
 
-				case 'startAnimation': // Done
+				case 'startAnimation':
 					setAnimationActive(true);
 					break;
 
-				case 'endAnimation': // Done
+				case 'endAnimation':
 					setAnimationActive(false);
 					break;
 
@@ -280,7 +280,7 @@ function SortingVisualiser(props) {
 					alert(`Version: ${version}`);
 					break;
 
-				case 'defaultColor': // DONE
+				case 'defaultColor':
 					let codeForColor = command[1];
 					let colorForCode = command[2];
 					AnimateEngineController.setDefaultBarColors(

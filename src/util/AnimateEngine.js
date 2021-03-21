@@ -6,12 +6,15 @@ class AnimateEngine {
 		TEXT: 'white',
 	};
 
+	TILES = ['wall', 'start', 'end', 'none'];
+
 	constructor() {}
 
+	// Sets Main Data Manipulation Function eg. setArray / setGrid
 	__setMainDataFunction__(setStateFunction) {
 		this.setStateFunction = setStateFunction;
 	}
-	// Sets State in the Bar Visualiser
+	// Sets Bar State in the Bar Visualiser
 	setBarsState(indexArray, type, data) {
 		// Check to see if input is valid
 		if (!indexArray || !Array.isArray(indexArray))
@@ -78,6 +81,59 @@ class AnimateEngine {
 		});
 	}
 
+	// Sets Node State in Grid Visualiser
+	setGridState(
+		indexArray,
+		type,
+		data,
+		startPos,
+		endPos,
+		setStartPosFunction,
+		setEndPosFunction
+	) {
+		// Validity Checks
+		if (!indexArray || !Array.isArray(indexArray))
+			return ['ERROR', 'Invalid Indexes'];
+		if (!type || typeof type !== 'string') return ['ERROR', 'Invalid Type'];
+
+		type = type.toLowerCase();
+		if (type === 'type' && !this.TILES.includes(data)) {
+			return ['ERROR', 'Invalid Type'];
+		}
+		if (typeof data !== 'string') return ['ERROR', 'Invalid Data'];
+
+		this.setStateFunction((prevState) => {
+			let newGrid = prevState.slice();
+
+			indexArray.forEach((value) => {
+				if (value[1] > newGrid.length || value[0] > newGrid[0].length) {
+					return newGrid;
+				}
+
+				if (type === 'type' && data === 'start') {
+					let startY = startPos[1];
+					let startX = startPos[0];
+					let prevType = 'none';
+					newGrid[startY][startX].type = prevType;
+					let curType = newGrid[value[1]][value[0]].type;
+					setStartPosFunction([value[0], value[1], curType]);
+				}
+				if (type === 'type' && data === 'end') {
+					let startY = endPos[1];
+					let startX = endPos[0];
+					let prevType = 'none';
+					newGrid[startY][startX].type = prevType;
+					let curType = newGrid[value[1]][value[0]].type;
+					setEndPosFunction([value[0], value[1], curType]);
+				}
+				newGrid[value[1]][value[0]][type] = data;
+			});
+
+			return newGrid;
+		});
+	}
+
+	// Swaps two bars in the Bar Visulaiser
 	swapBars(idx1, idx2) {
 		// Checks If Indexes are valid
 		if (idx1 == undefined || typeof idx1 !== 'number')
@@ -108,6 +164,7 @@ class AnimateEngine {
 		});
 	}
 
+	// Sets Bars to given values in Bar Visualiser
 	setBars(values, color, setNumBarsFunction) {
 		// Validity Checks
 		if (!values || !Array.isArray(values)) return ['ERROR', 'Invalid Values'];
@@ -127,6 +184,7 @@ class AnimateEngine {
 		});
 	}
 
+	// Resets Bars In Bar Visualiser
 	resetBars(numOfBars, setNumBarsFunction) {
 		if (typeof numOfBars !== 'number' || numOfBars <= 0)
 			return ['ERROR', 'Invalid Number of bars'];
@@ -138,15 +196,53 @@ class AnimateEngine {
 		this.setBars(randValues, this.BARSCOLORS['BASE'], setNumBarsFunction);
 	}
 
+	// Resets Nodes in Grid Visauliser
+	resetGrid(
+		sizeOfNodes,
+		areaWidth,
+		areaHeight,
+		setGridFunction,
+		setPenTypeFunction,
+		setStartPosFunction,
+		setEndPosFunction
+	) {
+		const NUM_OF_BARS_Y = ((areaHeight / 100) * 86) / sizeOfNodes;
+		const NUM_OF_BARS_X = ((areaWidth / 100) * 98) / sizeOfNodes;
+		let yAxis = [];
+		for (let yPos = 0; yPos < NUM_OF_BARS_Y; yPos++) {
+			let xAxis = [];
+			for (let xPos = 0; xPos < NUM_OF_BARS_X; xPos++) {
+				xAxis.push({
+					x: xPos,
+					y: yPos,
+					type: 'none',
+					TLtext: '',
+					TRtext: '',
+					BLtext: '',
+					BRtext: '',
+					descText: '',
+				});
+			}
+			yAxis.push(xAxis);
+		}
+		setGridFunction(yAxis);
+		setPenTypeFunction('start');
+		setStartPosFunction([0, 0, 'none']);
+		setEndPosFunction([0, 0, 'none']);
+	}
+
+	// Sets a data display eg. Runtime
 	setDisplay(newData, setDataFunction) {
 		if (!newData) return ['ERROR', 'Invalid Data'];
 		setDataFunction(newData);
 	}
 
+	// Sets Default Colors for Bar Visualiser
 	setDefaultBarColors(colorCode, color) {
 		this.BARSCOLORS[colorCode] = color;
 	}
 
+	// Executes given commands in order with given interval between each exection
 	do(
 		commandsToRun,
 		intervalBetweenCommands,
@@ -187,6 +283,7 @@ class AnimateEngine {
 		}, intervalBetweenCommands);
 	}
 
+	// Executes given commands over and over for given number of repeats with given interval between each exectuion
 	doFor(
 		commandsToRun,
 		intervalBetweenCommands,
@@ -236,6 +333,7 @@ class AnimateEngine {
 		}, intervalBetweenCommands * commandsToRun.length);
 	}
 
+	// Executes given command after given time frame
 	doIn(commandsToRun, timeUntilExectution, AnimateEngineFunction) {
 		if (!commandsToRun || !Array.isArray(commandsToRun))
 			return ['ERROR', 'Invalid Sub Commands'];

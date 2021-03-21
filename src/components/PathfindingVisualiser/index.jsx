@@ -164,6 +164,8 @@ function PathfindingVisualiser() {
 		let yDivs = array.map((xAxis) => {
 			let xDivs = xAxis.map((val) => {
 				let icon = '';
+				let startX = startPos[0];
+				let startY = startPos[1];
 
 				let endX = endPos[0];
 				let endXdiff = endX - val.x;
@@ -189,6 +191,14 @@ function PathfindingVisualiser() {
 					if (endX === 0 && endY === 0) {
 						icon = 'keyboard_arrow_right';
 					}
+				}
+
+				let extraClass = '=';
+
+				if (val.x === startX && val.y === startY) {
+					extraClass = 'startPos';
+				} else if (val.x === endX && val.y === endY) {
+					extraClass = 'endPos';
 				}
 
 				return (
@@ -222,7 +232,7 @@ function PathfindingVisualiser() {
 						onContextMenu={(e) => {
 							e.preventDefault();
 						}}
-						className={`grid-xAxis-Divs node-type-${val.type}`}
+						className={`grid-xAxis-Divs node-type-${val.type} ${extraClass}`}
 						style={{ width: `${sizeOfNodes}px`, height: `${sizeOfNodes}px` }}
 					>
 						<i className='material-icons'>{icon}</i>

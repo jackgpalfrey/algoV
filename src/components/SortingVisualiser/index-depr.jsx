@@ -19,7 +19,7 @@ const consoleText = getLocaleText('general').console;
 const text = getLocaleText('general').bars;
 const algoData = getLocaleText('algorithmInfo');
 
-const AnimateEngineController = new AnimateEngineCore();
+const AnimateEngineController = new AnimateEngineCore('Instanciated');
 
 const COLORS = {
 	BASE: '#035efc',
@@ -61,7 +61,6 @@ function SortingVisualiser(props) {
 	const [activeTimeouts, setActiveTimeouts] = useState([]);
 	const [activeIntervals, setActiveIntervals] = useState([]);
 
-	AnimateEngineController.__setMainDataFunction__(setArray);
 	//#endregion
 
 	useEffect(
@@ -82,117 +81,304 @@ function SortingVisualiser(props) {
 
 			let response = ['PENDING', 'In progress'];
 			switch (commandCode) {
-				case 'setState': // Transfered
+				case 'setState':
 					let indexArray = command[1];
 					let type = command[2];
 					let data = command[3];
 
 					console.log(AnimateEngine);
-					AnimateEngineController.setBarsState(indexArray, type, data);
+					AnimateEngineController.setBarsState(
+						indexArray,
+						type,
+						data,
+						setArray
+					);
+					// if (!indexArray || !Array.isArray(indexArray))
+					// 	return ['ERROR', 'Invalid Indexs'];
+					// if (!type || typeof type !== 'string')
+					// 	return ['ERROR', 'Invalid Type'];
+
+					// type = type.toLowerCase();
+
+					// if (type === 'color') {
+					// 	if (typeof data !== 'string') return ['ERROR', 'Invalid Data'];
+					// 	if (data.includes('$')) data = COLORS[data.replace('$', '')];
+					// } else if (type === 'value') {
+					// 	if (typeof data !== 'number') return ['ERROR', 'Invalid Data'];
+					// } else {
+					// 	return ['ERROR', 'Invalid Type'];
+					// }
+
+					// setArray((prevState) => {
+					// 	let newArray = prevState.slice();
+
+					// 	indexArray.forEach((idx) => {
+					// 		if (typeof idx == 'number' && idx >= 0 && idx < newArray.length) {
+					// 			newArray[idx][type] = data;
+					// 		}
+					// 		if (
+					// 			typeof idx == 'number' &&
+					// 			idx < 0 &&
+					// 			Math.abs(idx) <= newArray.length
+					// 		) {
+					// 			newArray[newArray.length - Math.abs(idx)][type] = data;
+					// 		} else if (idx === '$ALL') {
+					// 			for (let y = 0; y < newArray.length; y++) {
+					// 				newArray[y][type] = data;
+					// 			}
+					// 		} else if (idx === '$LHALF') {
+					// 			for (let y = 0; y < Math.ceil(newArray.length / 2); y++) {
+					// 				newArray[y][type] = data;
+					// 			}
+					// 		} else if (idx === '$RHALF') {
+					// 			for (
+					// 				let y = Math.floor(newArray.length / 2);
+					// 				y < newArray.length;
+					// 				y++
+					// 			) {
+					// 				newArray[y][type] = data;
+					// 			}
+					// 		} else if (idx === '$ODD') {
+					// 			for (let y = 0; y < newArray.length; y++) {
+					// 				if (y % 2 === 0) newArray[y][type] = data;
+					// 			}
+					// 		} else if (idx === '$EVEN') {
+					// 			for (let y = 0; y < newArray.length; y++) {
+					// 				if (y % 2 === 1) newArray[y][type] = data;
+					// 			}
+					// 		} else if (idx === '$MID') {
+					// 			newArray[Math.floor((newArray.length - 1) / 2)][type] = data;
+					// 			newArray[Math.ceil((newArray.length - 1) / 2)][type] = data;
+					// 		}
+					// 	});
+
+					// 	return newArray;
+					// });
 
 					break;
 
 				case 'sc':
-				case 'setColor': // Transfered
+				case 'setColor': // Sets color of bars. Syntax: ["setColor",[array of ids or $ALL, $LHALF, $RHALF], "valid css color OR valid inbuilt variable prefixed with $"]
 					let idxes = command[1];
 					let color = command[2];
 
-					AnimateEngineController.setBarsState(idxes, 'color', color, setArray);
+					AnimateEngine(['setState', idxes, 'color', color]);
 					break;
 
-				case 'swap': // Transfered
+				case 'swap':
 					let id1 = command[1];
 					let id2 = command[2];
+					if (id1 == undefined || typeof id1 !== 'number')
+						return ['ERROR', 'Invalid id1'];
+					if (id2 == undefined || typeof id2 !== 'number')
+						return ['ERROR', 'Invalid id2'];
+					setArray((prevState) => {
+						id1 = command[1];
+						id2 = command[2];
+						let newArray = prevState.slice();
 
-					AnimateEngineController.swapBars(id1, id2, setArray);
+						if (id1 < 0) id1 = newArray.length - Math.abs(id1);
+						if (id2 < 0) id2 = newArray.length - Math.abs(id2);
+
+						if (
+							id1 >= 0 &&
+							id1 < newArray.length &&
+							id2 >= 0 &&
+							id2 < newArray.length
+						) {
+							const tmp1 = { ...newArray[id1] };
+							const tmp2 = { ...newArray[id2] };
+							newArray[id1] = tmp2;
+							newArray[id2] = tmp1;
+						}
+
+						return newArray;
+					});
+
 					break;
 
-				case 'setValue': // Transfered
+				case 'setValue':
 					let idxs = command[1];
 					let value = command[2];
 
-					AnimateEngineController.setBarsState(idxs, 'value', value);
+					AnimateEngine(['setState', idxs, 'value', value]);
 					break;
 
-				case 'setArray': // Transfered
+				case 'setArray':
 					let values = command[1];
 					let colorCode = command[2];
 
-					AnimateEngineController.setBars(values, colorCode, setNumBars);
+					if (!values || !Array.isArray(values))
+						return ['ERROR', 'Invalid Values'];
+					if (!colorCode || typeof colorCode !== 'string')
+						return ['ERROR', 'Invalid Color'];
+					setArray((prevState) => {
+						let newArray = [];
+						let color = command[2];
+						if (color.includes('$')) color = COLORS[color.replace('$', '')];
+
+						values.forEach((value) => {
+							if (typeof value == 'number') {
+								newArray.push({ value: value, color: color });
+							}
+						});
+						setNumBars(newArray.length);
+						return newArray;
+					});
 					break;
 
-				case 'do': // DONE
+				case 'do':
 					let subCommands = command[1];
 					let interval = command[2];
 
-					AnimateEngineController.do(
-						subCommands,
-						interval,
-						animationSpeed,
-						AnimateEngine
-					);
+					if (!subCommands || !Array.isArray(subCommands))
+						return ['ERROR', 'Invalid Sub Commands'];
+					if (
+						(!interval && interval != 0) ||
+						(typeof interval !== 'number' && interval != '$userSet') ||
+						interval < 0
+					)
+						return ['ERROR', 'Invalid Interval'];
+					if (interval == '$userSet') interval = animationSpeed;
+
+					if (interval == 0) {
+						for (let i = 0; i < subCommands.length; i++) {
+							AnimateEngine(subCommands[i]);
+						}
+						break;
+					}
+
+					AnimateEngine(subCommands[0]);
+					let currentCommandIdx = 1;
+
+					let intervalID = setInterval(() => {
+						if (currentCommandIdx >= subCommands.length) {
+							clearInterval(intervalID);
+							//AnimateEngine(["clearLoop", `${intervalID}`])
+							return;
+						}
+
+						AnimateEngine(subCommands[currentCommandIdx]);
+						currentCommandIdx++;
+					}, interval);
+
+					setActiveIntervals((prevState) => {
+						let curIntervals = prevState.slice();
+						curIntervals.push(intervalID);
+						return curIntervals;
+					});
 					break;
 
-				case 'doFor': // DONE
+				case 'doFor':
 					let commandsToRun = command[1];
 					let repeats = command[2];
 					let intervalBetweenEach = command[3];
 
-					AnimateEngineController.doFor(
-						commandsToRun,
-						intervalBetweenEach,
-						repeats,
-						animationSpeed,
-						AnimateEngine
-					);
+					if (!commandsToRun || !Array.isArray(commandsToRun))
+						return ['ERROR', 'Invalid Sub Commands'];
+					if (
+						(!repeats && repeats !== 0) ||
+						typeof repeats !== 'number' ||
+						repeats < 0
+					)
+						return ['ERROR', 'Invalid Repeats'];
+					if (
+						(!intervalBetweenEach && intervalBetweenEach !== 0) ||
+						(typeof intervalBetweenEach !== 'number' &&
+							intervalBetweenEach !== '$userSet') ||
+						intervalBetweenEach < 0
+					)
+						return ['ERROR', 'Invalid Interval'];
+
+					if (intervalBetweenEach === '$userSet') {
+						intervalBetweenEach = parseInt(animationSpeed);
+					}
+
+					let currentIteration = 1;
+
+					AnimateEngine(['do', commandsToRun, intervalBetweenEach]);
+
+					let intervalIdentifier = setInterval(() => {
+						if (currentIteration >= repeats && repeats !== 0) {
+							clearInterval(intervalIdentifier);
+							return;
+						}
+
+						AnimateEngine(['do', commandsToRun, intervalBetweenEach]);
+
+						currentIteration++;
+					}, intervalBetweenEach * commandsToRun.length);
+
+					setActiveIntervals((prevState) => {
+						let curAIntervals = prevState.slice();
+						curAIntervals.push(intervalIdentifier);
+						return curAIntervals;
+					});
 					break;
 
-				case 'doSim': // DONE
+				case 'doSim':
 					let toRunCommands = command[1];
 					AnimateEngine(['do', toRunCommands, 0]);
 					break;
 
-				case 'doIn': // DONE
+				case 'doIn':
 					let commandsToExecute = command[1];
 					let waitFor = command[2];
 
-					AnimateEngineController.doIn(
-						commandsToExecute,
-						waitFor,
-						AnimateEngine
-					);
+					if (!commandsToExecute || !Array.isArray(commandsToExecute))
+						return ['ERROR', 'Invalid Sub Commands'];
+					if (!waitFor || typeof waitFor !== 'number' || waitFor <= 0)
+						return ['ERROR', 'Wait Time Invalid'];
+					let timeoutID = setTimeout(() => {
+						command[1].forEach((value) => {
+							AnimateEngine(value);
+						});
+					}, command[2]);
+
+					setActiveTimeouts((prevState) => {
+						let curTimeouts = prevState.slice();
+						curTimeouts.push(timeoutID);
+						return curTimeouts;
+					});
 
 					break;
 
 				case 'ra':
-				case 'resetArray': // Done
+				case 'resetArray':
 					let numOfBars = command[1];
-					if (!numOfBars || typeof numOfBars !== 'number' || numOfBars <= 0)
-						numOfBars = numBars;
-
-					AnimateEngineController.resetBars(numOfBars, setNumBars);
+					if (!numOfBars) numOfBars = numBars;
+					if (typeof numOfBars !== 'number')
+						return ['ERROR', 'Invalid Number of bars'];
+					let Randvalues = [];
+					for (let i = 0; i < numOfBars; i++) {
+						Randvalues.push(Math.round(Math.random() * 73) + 13);
+					}
+					AnimateEngine(['setArray', Randvalues, '$BASE']);
 					break;
 
-				case 'setRuntimeDisplay': // Done
+				case 'setRuntimeDisplay':
 					let newRuntime = command[1];
-					AnimateEngineController.setDisplay(newRuntime, setRunTime);
+					if (!newRuntime) return ['ERROR', 'Invalid Runtime'];
+					setRunTime(newRuntime);
 					break;
 
-				case 'setComparisonsDisplay': // Done
+				case 'setComparisonsDisplay':
 					let newComparisons = command[1];
-					AnimateEngineController.setDisplay(newComparisons, setComparisons);
+					if (!newComparisons) return ['ERROR', 'Invalid Comparisons'];
+					setComparisons(newComparisons);
 					break;
 
-				case 'setSwapsDisplay': // Done
+				case 'setSwapsDisplay':
 					let newSwaps = command[1];
-					AnimateEngineController.setDisplay(newSwaps, setSwaps);
+					if (!newSwaps) return ['ERROR', 'Invalid Swaps'];
+					setSwaps(newSwaps);
 					break;
 
-				case 'startAnimation': // Done
+				case 'startAnimation':
 					setAnimationActive(true);
 					break;
 
-				case 'endAnimation': // Done
+				case 'endAnimation':
 					setAnimationActive(false);
 					break;
 
@@ -280,13 +466,10 @@ function SortingVisualiser(props) {
 					alert(`Version: ${version}`);
 					break;
 
-				case 'defaultColor': // DONE
+				case 'defaultColor':
 					let codeForColor = command[1];
 					let colorForCode = command[2];
-					AnimateEngineController.setDefaultBarColors(
-						codeForColor,
-						colorForCode
-					);
+					COLORS[codeForColor] = colorForCode;
 					break;
 
 				default:

@@ -96,4 +96,10 @@
 	border-color: rgb(116, 116, 116);
 }
 
+.startPos {
+	background-color: green;
+}
 
+.endPos {
+	background-color: red;
+}

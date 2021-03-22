@@ -161,7 +161,9 @@
                             ["CHANGED", "Latest Changes Card to only display after reoccuring visits"],
                             ["CHANGED", "MOVED AnimateEngine Code to seperate File to reduce code duplication"],
                             ["ADDED", "Grid Visualiser"],
-                            ["ADDED", "Dev Cookie Key"]
+                            ["ADDED", "Dev Cookie Key"],
+                            ["CHANGED", "Moved version and reload commands to console instead of AnimateEngine. Therefore Animations can no longer execute these commands."],
+                            ["ADDED", "setLang and setDev commands. These are console commands so cannot be used with AnimateEngine"]
                             ],
         "date": "16/03/21",
         "isNext": true

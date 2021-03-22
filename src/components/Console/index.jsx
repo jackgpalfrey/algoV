@@ -28,13 +28,14 @@ function Console(props) {
 		let command = commandText.replaceAll("'", '"');
 		command = commandText.replaceAll('(', '[').replaceAll(')', ']');
 
-		switch (
-			command
-				.replaceAll('[', '')
-				.replaceAll(']', '')
-				.replaceAll('"', '')
-				.replaceAll('"', '')
-		) {
+		let commandKey = command
+			.replaceAll('[', '')
+			.replaceAll(']', '')
+			.replaceAll('"', '')
+			.replaceAll('"', '')
+			.split(' ');
+
+		switch (commandKey[0]) {
 			case 'version':
 				let version = document.cookie
 					.split('; ')
@@ -48,6 +49,20 @@ function Console(props) {
 			case 'reload':
 				window.location.reload();
 				responseHandler(['SUCCESS', 'Exectued Successfully']);
+				return;
+
+			case 'setLang':
+				document.cookie = `lang=${commandKey[1]}`;
+				responseHandler(['SUCCESS', 'Exectued Successfully']);
+				window.location.reload();
+				return;
+
+			case 'setDev':
+				if (commandKey[1] != '1' && commandKey[1] != '0')
+					return responseHandler(['ERROR', 'Invalid key']);
+				document.cookie = `dev=${commandKey[1]}`;
+				responseHandler(['SUCCESS', 'Exectued Successfully']);
+				window.location.reload();
 				return;
 		}
 

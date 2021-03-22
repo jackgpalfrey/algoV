@@ -51,7 +51,6 @@ function sort(array: number[], animations: object[], data: any){
         data.swaps++
         swap(array, 0, k, animations)
         heapify(array, k, 0, animations, data)
-        //animations.push({command: 'setColor',id: [k],color: '$DONE'})
         k--
     }
 

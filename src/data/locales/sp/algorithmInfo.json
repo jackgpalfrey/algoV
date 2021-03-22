@@ -1,0 +1,77 @@
+{
+    "sorting": {
+        "bubbleSort": {
+            "title": "Bubble sort",
+            "bestTimeComplexity": "O(n)",
+            "avgTimeComplexity": "O(n²)",
+            "worstTimeComplexity": "O(n²)",
+            "memoryComplexity": "O(1)",
+            "stable": "Sí",
+            "description": "Algoritmo de Bubble Sort. El algoritmo comienza al principio del conjunto de datos. Compara los dos primeros elementos, y si el primero es mayor que el segundo, los intercambia. Continúa haciendo esto para cada par de elementos adyacentes al final del conjunto de datos. A continuación, comienza de nuevo con los dos primeros elementos, repitiendo hasta que no se hayan producido cambios en la última pasada. El tiempo promedio y el peor desempeño de este algoritmo es o(n2), por lo que rara vez se utiliza para ordenar grandes conjuntos de datos sin ordenar.",
+            "creditText": "Descripción y metaforma",
+            "credit": "https://en.wikipedia.org/wiki/Sorting_algorithm"
+        },
+        "selectionSort": {
+            "title": "Selection Sort",
+            "bestTimeComplexity": "O(n²)",
+            "avgTimeComplexity": "O(n²)",
+            "worstTimeComplexity": "O(n²)",
+            "memoryComplexity": "O(1)",
+            "stable": "No",
+            "description": "Selection Sort es una ordenación de comparación in situ. Tiene o(n2) complejidad, lo que lo hace ineficiente en listas grandes, y generalmente tiene un desempeño peor que el similar Insertion Sort. Selection Sort se destaca por su simplicidad, y también tiene ventajas de rendimiento sobre algoritmos más complicados en ciertas situaciones. \n el algoritmo busca el valor mínimo, lo intercambia con el valor en la primera posición y repite estos pasos para el resto de la lista. No hace más de n swaps, y por lo tanto es útil cuando el intercambio es muy caro.",
+            "creditText": "Descripción y metaforma",
+            "credit": "https://en.wikipedia.org/wiki/Sorting_algorithm"
+        },
+        "insertionSort": {
+            "title": "Insertion Sort",
+            "bestTimeComplexity": "O(n)",
+            "avgTimeComplexity": "O(n²)",
+            "worstTimeComplexity": "O(n²)",
+            "memoryComplexity": "O(1)",
+            "stable": "Sí",
+            "description": "Insertion Sort es un algoritmo de ordenación simple que es relativamente eficiente para las listas pequeñas y, en su mayoría, las listas ordenadas, y se utiliza a menudo como parte de algoritmos más sofisticados. Funciona tomando elementos de la lista uno por uno e insertándolos en su posición correcta en una nueva lista ordenada similar a cómo ponemos dinero en nuestra cartera.en arrays, la nueva lista y los elementos restantes pueden compartir el espacio de la matriz, pero la inserción es cara, lo que requiere el desplazamiento de todos los siguientes elementos uno a uno.",
+            "creditText": "Descripció y metaforma",
+            "credit": "https://en.wikipedia.org/wiki/Sorting_algorithm"
+        },
+        "quickSort": {
+            "title": "Quick Sort",
+            "bestTimeComplexity": "O(n log n)",
+            "avgTimeComplexity": "O(n log n)",
+            "worstTimeComplexity": "O(n²)",
+            "memoryComplexity": "O(log n)",
+            "stable": "No",
+            "description": "Quick Sort es un algoritmo de divide y vencerás que se basa en una operación de partición: para particionar una matriz, se selecciona un elemento denominado pivote. Todos elementos más pequeños que el pivote se mueven antes y todos los elementos mayores se mueven después de él. Esto se puede hacer eficientemente en tiempo lineal y en el lugar. Las sublistas menor y mayor se ordenan de forma recursiva. Esto produce una complejidad de tiempo promedio de o(n log n), con baja sobrecarga, y por lo tanto este es un algoritmo popular. Las implementaciones eficientes de quicksort (con particiones in situ) suelen ser inestables",
+            "creditText": "Descripción y metaforma",
+            "credit": "https://en.wikipedia.org/wiki/Sorting_algorithm"
+        },
+        "heapSort": {
+            "title": "Heap Sort",
+            "bestTimeComplexity": "O(n log n)",
+            "avgTimeComplexity": "O(n log n)",
+            "worstTimeComplexity": "O(n log n)",
+            "memoryComplexity": "O(1)",
+            "stable": "No",
+            "description": "Heapsort es una versión mucho más eficiente de la selección de tipo. También funciona determinando el elemento más grande (o más pequeño) de la lista, colocándolo al final (o al principio) de la lista, luego continuando con el resto de la lista, pero realiza esta tarea eficientemente usando una estructura de datos llamada heap, un tipo especial de árbol binario. Una vez que la lista de datos se ha convertido en un montón, se garantiza que el nodo raíz es el elemento más grande (o más pequeño). Cuando se quita y se coloca al final de la lista, el montón se reorganiza de modo que el elemento más grande restante se mueva a la raíz. Al utilizar el montón, la búsqueda del siguiente elemento más grande tarda o(log n) en tiempo, en lugar de o(n) para una exploración lineal, como en la clasificación de selección simple. Esto permite que Heapsort se ejecute en el tiempo o(n log n), y esto también es la peor complejidad del caso.",
+            "creditText": "Descripción y metaforma",
+            "credit": "https://en.wikipedia.org/wiki/Sorting_algorithm"
+        },
+        "mergeSort": {
+            "title": "Merge Sort",
+            "bestTimeComplexity": "O(n log n)",
+            "avgTimeComplexity": "O(n log n)",
+            "worstTimeComplexity": "O(n log n)",
+            "memoryComplexity": "O(n)",
+            "stable": "Yes",
+            "description": "Merge sort aprovecha la facilidad de combinar listas ya ordenadas en una nueva lista ordenada. Comienza por comparar cada dos elementos (es decir, 1 con 2, luego 3 con 4...) y cambiarlos si el primero debe venir después del segundo. A continuación, combina cada una de las listas resultantes de dos en listas de cuatro, luego combina esas listas de cuatro, y así sucesivamente; hasta que por fin dos listas se fusionan en la lista ordenada final. Se escala bien a listas muy grandes, porque su peor tiempo de ejecución es o(n log n). También se aplica fácilmente a las listas, no solo a las matrices, ya que solo requiere acceso secuencial, no acceso aleatorio. Sin embargo, tiene una complejidad adicional de espacio o(n) e implica un gran número de copias en implementaciones simples. \n Merge Sort ha visto un aumento relativamente reciente en popularidad para implementaciones prácticas, debido a su uso en el sofisticado algoritmo Timsort, que se utiliza para la rutina de ordenación estándar en Python y Java. La misma clase de fusión es la rutina estándar en Perl,entre otros, y se ha utilizado en Java al menos desde 2000",
+            "creditText": "Descripción y metaforma",
+            "credit": "https://en.wikipedia.org/wiki/Sorting_algorithm"
+        },
+        "reverseArray": {
+            "title": "Matriz Inversa"
+        }
+    },
+    "grid": {
+        
+    }
+    
+}

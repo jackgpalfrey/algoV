@@ -33,13 +33,24 @@
         "animationTimeSlider": "Animation Time",
         "resetButton": "Reset",
         "runButton": "Run",
-        "closeConsole": "Close Terminal",
         "sortingAlgorithmsTitle": "Sorting Algorithms",
         "otherAlgorithmsTitle": "Other Algorithms",
         "numberOfBarsSlider": "Number of Bars",
         "runtimeDisplay": "Time:",
         "comparisonsDisplay": "Comparisons:",
         "swapsDisplay": "Swaps:" 
+    },
+    "grid": {
+        "animationTimeSlider": "Animation Time",
+        "nodeSizeSlider": "Size of Nodes",
+        "resetButton": "Reset",
+        "runButton": "Run",
+        "pathfindingAlgorithmsTitle": "Pathfinding Algorithms",
+        "otherAlgorithmsTitle": "Other Algorithms",
+        "runtimeDisplay": "Time:",
+        "comparisonsDisplay": "Comparisons:",
+        "swapsDisplay": "Swaps:" 
+
     },
     "infoCard": {
         "worstCaseTimeMeta": "Worst Case Time Complexity:",

@@ -8,7 +8,7 @@ const data = {
 				sideTitle: 'Introduction',
 				title: 'General   -   Introduction',
 				desc:
-					'Welcome To AlgoV Docs. Click On The Sections To The Left to see the relevant pages. When using search normally items are compared with your search based on its first characters. However if you preface your search with a ? it will look for your search anywhere in the page titles',
+					'Welcome To AlgoV Docs. Click On The Sections To The Left to see the relevant pages. When using search normally items are compared with your search based on its first characters. However if you preface your search with a ? it will look for your search anywhere in the page titles or you can use a : to search titles and descriptions',
 			},
 		},
 	},
@@ -844,42 +844,6 @@ const data = {
 					],
 				],
 			},
-			defaultColor: {
-				id: 'defaultColor',
-				sideTitle: 'defaultColor',
-				title: 'AnimateEngine (Grid)   -   defaultColor',
-				desc:
-					'defaultColor is used to change the default colors used by algorithms in the Grid Visualiser.',
-				syntaxHTML: (
-					<span>
-						[
-						<span className='docsPage-mainContent-exampleStyle-command'>
-							'defaultColor'
-						</span>
-						,<span style={{ color: 'pink' }}>Variable Name</span>,{' '}
-						<span style={{ color: 'turquoise' }}>Color</span>]
-					</span>
-				),
-				exampleHTML: (
-					<span>
-						[
-						<span className='docsPage-mainContent-exampleStyle-command'>
-							'defaultColor'
-						</span>
-						,<span style={{ color: 'pink' }}>'BASE'</span>,{' '}
-						<span style={{ color: 'turquoise' }}>'red'</span>]
-					</span>
-				),
-				arguments: [
-					[
-						'Varaible Name',
-						'String',
-						"'BASE'",
-						'Standard Variables: BASE, CHECKING, ROUTE, NEXT',
-					],
-					['Color', 'CSS Color Value', '"red"', ['None']],
-				],
-			},
 			do: {
 				id: 'do',
 				sideTitle: 'do',
@@ -1110,7 +1074,7 @@ const data = {
 					</span>
 				),
 			},
-			resetArray: {
+			resetGrid: {
 				id: 'resetArray',
 				sideTitle: 'resetArray',
 				title: 'AnimateEngine (Grid)   -   resetArray',
@@ -1141,85 +1105,6 @@ const data = {
 						'Optional number',
 						'32',
 						'Leaving Number of nodes Out will reset array to number of nodes set by the user',
-					],
-				],
-			},
-			setArray: {
-				id: 'setArray',
-				sideTitle: 'setArray',
-				title: 'AnimateEngine (Grid)   -   setArray',
-				desc:
-					'setArray is used to change the entire array to the given values in the Grid Visualiser.',
-				syntaxHTML: (
-					<span>
-						[
-						<span className='docsPage-mainContent-exampleStyle-command'>
-							'setArray'
-						</span>
-						,<span style={{ color: 'pink' }}>[Array of Nodes]</span>]
-					</span>
-				),
-				exampleHTML: (
-					<span>
-						[
-						<span className='docsPage-mainContent-exampleStyle-command'>
-							'setArray'
-						</span>
-						,
-						<span style={{ color: 'pink' }}>
-							[{`{color: 'red', type: 'open', tr: 32, tl: 12, br: '', bl: ''}`}]
-						</span>
-						]
-					</span>
-				),
-				arguments: [
-					[
-						'Array of Nodes',
-						'Array with objects',
-						"{color: 'red', type: 'open', tr: 32, tl: 12, br: '', bl: '', onHover: ''}",
-						'Node Data: color - Color of square, type - Type of Square (eg. WALL, START, END, WEIGHT<1> etc, tl,tr,br,bl,onHover - Text of related locations eg. Top Left ',
-					],
-				],
-			},
-			setColor: {
-				id: 'setColor',
-				sideTitle: 'setColor',
-				title: 'AnimateEngine (Grid)   -   setColor',
-				desc:
-					'setColor is an abstracted command based on setState used to change the color of Nodes in the Grid Visualiser.',
-				alias: 'sc',
-				syntaxHTML: (
-					<span>
-						[
-						<span className='docsPage-mainContent-exampleStyle-command'>
-							'setColor'
-						</span>
-						,<span style={{ color: 'pink' }}>[Array of Coords]</span>,{' '}
-						<span style={{ color: 'turquoise' }}>Color</span>]
-					</span>
-				),
-				exampleHTML: (
-					<span>
-						[
-						<span className='docsPage-mainContent-exampleStyle-command'>
-							'setColor'
-						</span>
-						,<span style={{ color: 'pink' }}>[[0,1],[1,2],[3,-1],'$MID']</span>,{' '}
-						<span style={{ color: 'turquoise' }}>'red'</span>]
-					</span>
-				),
-				arguments: [
-					[
-						'Array of Indexes',
-						'Array with numbers or Index Variables',
-						'[[0,1],[1,2],[3,-1],"$MID"]',
-						'Negative Numbers reference from the last node on the respective axis. Available Index Variables: $ALL, $TLQUAD, $TRQUAD, $BLQUAD, $BRQUAD, $MID, $ODD, $EVEN',
-					],
-					[
-						'Color',
-						'CSS Color Value OR Color Variable',
-						'"red" / "$CHECKING"',
-						['Available Color Varaibles: $BASE, $CHECKING, $ROUTE, $NEXT'],
 					],
 				],
 			},
@@ -1354,7 +1239,7 @@ const data = {
 				sideTitle: 'setText',
 				title: 'AnimateEngine (Grid)   -   setText',
 				desc:
-					'setText is used to manipulate the text of Nodes in the Grid Visualiser.',
+					'WARNING: NOT CURRENTLY IMPLEMENTED! setText is used to manipulate the text of Nodes in the Grid Visualiser.',
 				syntaxHTML: (
 					<span>
 						[

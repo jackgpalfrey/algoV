@@ -3,7 +3,6 @@
 	right: 0;
 	top: 0;
 	height: 100vh;
-	width: 5vw;
 }
 
 .card {
@@ -72,7 +71,6 @@
 
 .help {
 	transform: scale(0.7);
-	margin-left: -0.3em;
 	color: var(--subtle-text);
 	cursor: help;
 }

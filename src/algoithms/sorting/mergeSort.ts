@@ -1,8 +1,6 @@
 function mergeArrays(leftArray: any, rightArray: any, animations: any){
     let leftIndex = 0 , rightIndex = 0
 
-    console.log(leftArray)
-
     while(leftIndex < leftArray.length && rightIndex < rightArray.length){
         animations.push({command: 'swap',id1: rightArray[rightIndex][0], id2: rightArray[rightIndex][0]})
         let tmp = leftArray[leftIndex]
@@ -58,9 +56,7 @@ function mergeSort(array: number[]): [object[],number]{
     const endTime = performance.now()
     const runTime = endTime - startTime
 
-    //animations = [{command: 'setArray',array: sortedArray}]
 
-    console.log(animations)
     return [animations, runTime]
 }
 

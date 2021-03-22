@@ -13,9 +13,13 @@ import InfoCard from '../InfoCard';
 import './style.css';
 
 import getLocaleText from '../../util/getLocaleText';
+import AnimateEngineCore from '../../util/AnimateEngine';
+
 const consoleText = getLocaleText('general').console;
 const text = getLocaleText('general').bars;
 const algoData = getLocaleText('algorithmInfo');
+
+const AnimateEngineController = new AnimateEngineCore();
 
 const COLORS = {
 	BASE: '#035efc',
@@ -57,6 +61,7 @@ function SortingVisualiser(props) {
 	const [activeTimeouts, setActiveTimeouts] = useState([]);
 	const [activeIntervals, setActiveIntervals] = useState([]);
 
+	AnimateEngineController.__setMainDataFunction__(setArray);
 	//#endregion
 
 	useEffect(
@@ -76,187 +81,55 @@ function SortingVisualiser(props) {
 			if (Array.isArray(command)) commandCode = command[0];
 
 			let response = ['PENDING', 'In progress'];
-			console.log(`Command: ${commandCode}`);
 			switch (commandCode) {
 				case 'setState':
 					let indexArray = command[1];
 					let type = command[2];
 					let data = command[3];
 
-					if (!indexArray || !Array.isArray(indexArray))
-						return ['ERROR', 'Invalid Indexs'];
-					if (!type || typeof type !== 'string')
-						return ['ERROR', 'Invalid Type'];
-
-					type = type.toLowerCase();
-
-					if (type === 'color') {
-						if (typeof data !== 'string') return ['ERROR', 'Invalid Data'];
-						if (data.includes('$')) data = COLORS[data.replace('$', '')];
-					} else if (type === 'value') {
-						if (typeof data !== 'number') return ['ERROR', 'Invalid Data'];
-					} else {
-						return ['ERROR', 'Invalid Type'];
-					}
-
-					setArray((prevState) => {
-						let newArray = prevState.slice();
-
-						indexArray.forEach((idx) => {
-							if (typeof idx == 'number' && idx >= 0 && idx < newArray.length) {
-								newArray[idx][type] = data;
-							}
-							if (
-								typeof idx == 'number' &&
-								idx < 0 &&
-								Math.abs(idx) <= newArray.length
-							) {
-								newArray[newArray.length - Math.abs(idx)][type] = data;
-							} else if (idx === '$ALL') {
-								for (let y = 0; y < newArray.length; y++) {
-									newArray[y][type] = data;
-								}
-							} else if (idx === '$LHALF') {
-								for (let y = 0; y < Math.ceil(newArray.length / 2); y++) {
-									newArray[y][type] = data;
-								}
-							} else if (idx === '$RHALF') {
-								for (
-									let y = Math.floor(newArray.length / 2);
-									y < newArray.length;
-									y++
-								) {
-									newArray[y][type] = data;
-								}
-							} else if (idx === '$ODD') {
-								for (let y = 0; y < newArray.length; y++) {
-									if (y % 2 === 0) newArray[y][type] = data;
-								}
-							} else if (idx === '$EVEN') {
-								for (let y = 0; y < newArray.length; y++) {
-									if (y % 2 === 1) newArray[y][type] = data;
-								}
-							} else if (idx === '$MID') {
-								newArray[Math.floor((newArray.length - 1) / 2)][type] = data;
-								newArray[Math.ceil((newArray.length - 1) / 2)][type] = data;
-							}
-						});
-
-						return newArray;
-					});
+					AnimateEngineController.setBarsState(indexArray, type, data);
 
 					break;
 
 				case 'sc':
-				case 'setColor': // Sets color of bars. Syntax: ["setColor",[array of ids or $ALL, $LHALF, $RHALF], "valid css color OR valid inbuilt variable prefixed with $"]
+				case 'setColor':
 					let idxes = command[1];
 					let color = command[2];
 
-					AnimateEngine(['setState', idxes, 'color', color]);
+					AnimateEngineController.setBarsState(idxes, 'color', color, setArray);
 					break;
 
 				case 'swap':
 					let id1 = command[1];
 					let id2 = command[2];
-					if (id1 == undefined || typeof id1 !== 'number')
-						return ['ERROR', 'Invalid id1'];
-					if (id2 == undefined || typeof id2 !== 'number')
-						return ['ERROR', 'Invalid id2'];
-					setArray((prevState) => {
-						id1 = command[1];
-						id2 = command[2];
-						let newArray = prevState.slice();
 
-						if (id1 < 0) id1 = newArray.length - Math.abs(id1);
-						if (id2 < 0) id2 = newArray.length - Math.abs(id2);
-
-						if (
-							id1 >= 0 &&
-							id1 < newArray.length &&
-							id2 >= 0 &&
-							id2 < newArray.length
-						) {
-							const tmp1 = { ...newArray[id1] };
-							const tmp2 = { ...newArray[id2] };
-							newArray[id1] = tmp2;
-							newArray[id2] = tmp1;
-						}
-
-						return newArray;
-					});
-
+					AnimateEngineController.swapBars(id1, id2, setArray);
 					break;
 
 				case 'setValue':
 					let idxs = command[1];
 					let value = command[2];
 
-					AnimateEngine(['setState', idxs, 'value', value]);
+					AnimateEngineController.setBarsState(idxs, 'value', value);
 					break;
 
 				case 'setArray':
 					let values = command[1];
 					let colorCode = command[2];
 
-					if (!values || !Array.isArray(values))
-						return ['ERROR', 'Invalid Values'];
-					if (!colorCode || typeof colorCode !== 'string')
-						return ['ERROR', 'Invalid Color'];
-					setArray((prevState) => {
-						let newArray = [];
-						let color = command[2];
-						if (color.includes('$')) color = COLORS[color.replace('$', '')];
-
-						values.forEach((value) => {
-							if (typeof value == 'number') {
-								newArray.push({ value: value, color: color });
-							}
-						});
-						setNumBars(newArray.length);
-						return newArray;
-					});
+					AnimateEngineController.setBars(values, colorCode, setNumBars);
 					break;
 
 				case 'do':
 					let subCommands = command[1];
 					let interval = command[2];
 
-					if (!subCommands || !Array.isArray(subCommands))
-						return ['ERROR', 'Invalid Sub Commands'];
-					if (
-						(!interval && interval != 0) ||
-						(typeof interval !== 'number' && interval != '$userSet') ||
-						interval < 0
-					)
-						return ['ERROR', 'Invalid Interval'];
-					if (interval == '$userSet') interval = animationSpeed;
-
-					if (interval == 0) {
-						for (let i = 0; i < subCommands.length; i++) {
-							AnimateEngine(subCommands[i]);
-						}
-						break;
-					}
-
-					AnimateEngine(subCommands[0]);
-					let currentCommandIdx = 1;
-
-					let intervalID = setInterval(() => {
-						if (currentCommandIdx >= subCommands.length) {
-							clearInterval(intervalID);
-							//AnimateEngine(["clearLoop", `${intervalID}`])
-							return;
-						}
-
-						AnimateEngine(subCommands[currentCommandIdx]);
-						currentCommandIdx++;
-					}, interval);
-
-					setActiveIntervals((prevState) => {
-						let curIntervals = prevState.slice();
-						curIntervals.push(intervalID);
-						return curIntervals;
-					});
+					AnimateEngineController.do(
+						subCommands,
+						interval,
+						animationSpeed,
+						AnimateEngine
+					);
 					break;
 
 				case 'doFor':
@@ -264,46 +137,13 @@ function SortingVisualiser(props) {
 					let repeats = command[2];
 					let intervalBetweenEach = command[3];
 
-					if (!commandsToRun || !Array.isArray(commandsToRun))
-						return ['ERROR', 'Invalid Sub Commands'];
-					if (
-						(!repeats && repeats !== 0) ||
-						typeof repeats !== 'number' ||
-						repeats < 0
-					)
-						return ['ERROR', 'Invalid Repeats'];
-					if (
-						(!intervalBetweenEach && intervalBetweenEach !== 0) ||
-						(typeof intervalBetweenEach !== 'number' &&
-							intervalBetweenEach !== '$userSet') ||
-						intervalBetweenEach < 0
-					)
-						return ['ERROR', 'Invalid Interval'];
-
-					if (intervalBetweenEach === '$userSet') {
-						intervalBetweenEach = parseInt(animationSpeed);
-					}
-
-					let currentIteration = 1;
-
-					AnimateEngine(['do', commandsToRun, intervalBetweenEach]);
-
-					let intervalIdentifier = setInterval(() => {
-						if (currentIteration >= repeats && repeats !== 0) {
-							clearInterval(intervalIdentifier);
-							return;
-						}
-
-						AnimateEngine(['do', commandsToRun, intervalBetweenEach]);
-
-						currentIteration++;
-					}, intervalBetweenEach * commandsToRun.length);
-
-					setActiveIntervals((prevState) => {
-						let curAIntervals = prevState.slice();
-						curAIntervals.push(intervalIdentifier);
-						return curAIntervals;
-					});
+					AnimateEngineController.doFor(
+						commandsToRun,
+						intervalBetweenEach,
+						repeats,
+						animationSpeed,
+						AnimateEngine
+					);
 					break;
 
 				case 'doSim':
@@ -315,54 +155,36 @@ function SortingVisualiser(props) {
 					let commandsToExecute = command[1];
 					let waitFor = command[2];
 
-					if (!commandsToExecute || !Array.isArray(commandsToExecute))
-						return ['ERROR', 'Invalid Sub Commands'];
-					if (!waitFor || typeof waitFor !== 'number' || waitFor <= 0)
-						return ['ERROR', 'Wait Time Invalid'];
-					let timeoutID = setTimeout(() => {
-						command[1].forEach((value) => {
-							console.log(value);
-							AnimateEngine(value);
-						});
-					}, command[2]);
-
-					setActiveTimeouts((prevState) => {
-						let curTimeouts = prevState.slice();
-						curTimeouts.push(timeoutID);
-						return curTimeouts;
-					});
+					AnimateEngineController.doIn(
+						commandsToExecute,
+						waitFor,
+						AnimateEngine
+					);
 
 					break;
 
 				case 'ra':
 				case 'resetArray':
 					let numOfBars = command[1];
-					if (!numOfBars) numOfBars = numBars;
-					if (typeof numOfBars !== 'number')
-						return ['ERROR', 'Invalid Number of bars'];
-					let Randvalues = [];
-					for (let i = 0; i < numOfBars; i++) {
-						Randvalues.push(Math.round(Math.random() * 73) + 13);
-					}
-					AnimateEngine(['setArray', Randvalues, '$BASE']);
+					if (!numOfBars || typeof numOfBars !== 'number' || numOfBars <= 0)
+						numOfBars = numBars;
+
+					AnimateEngineController.resetBars(numOfBars, setNumBars);
 					break;
 
 				case 'setRuntimeDisplay':
 					let newRuntime = command[1];
-					if (!newRuntime) return ['ERROR', 'Invalid Runtime'];
-					setRunTime(newRuntime);
+					AnimateEngineController.setDisplay(newRuntime, setRunTime);
 					break;
 
 				case 'setComparisonsDisplay':
 					let newComparisons = command[1];
-					if (!newComparisons) return ['ERROR', 'Invalid Comparisons'];
-					setComparisons(newComparisons);
+					AnimateEngineController.setDisplay(newComparisons, setComparisons);
 					break;
 
 				case 'setSwapsDisplay':
 					let newSwaps = command[1];
-					if (!newSwaps) return ['ERROR', 'Invalid Swaps'];
-					setSwaps(newSwaps);
+					AnimateEngineController.setDisplay(newSwaps, setSwaps);
 					break;
 
 				case 'startAnimation':
@@ -383,11 +205,9 @@ function SortingVisualiser(props) {
 						}
 					} else if (typeof specificLoop === 'number') {
 						let loop = activeLoops.splice(specificLoop, 1)[0];
-						console.log(loop);
 						clearInterval(loop);
 					} else if (typeof specificLoop === 'string') {
 						let loop = activeLoops.indexOf(parseInt(specificLoop))[0];
-						console.log(loop);
 						clearInterval(loop);
 					}
 
@@ -462,7 +282,10 @@ function SortingVisualiser(props) {
 				case 'defaultColor':
 					let codeForColor = command[1];
 					let colorForCode = command[2];
-					COLORS[codeForColor] = colorForCode;
+					AnimateEngineController.setDefaultBarColors(
+						codeForColor,
+						colorForCode
+					);
 					break;
 
 				default:
@@ -488,7 +311,7 @@ function SortingVisualiser(props) {
 
 	function handleSortClick() {
 		if (animationActive) return false;
-		console.log(AnimateEngine(['executeInternalAnimation', activeAlgorithm]));
+		AnimateEngine(['executeInternalAnimation', activeAlgorithm]);
 	}
 
 	function createBars() {
@@ -584,16 +407,28 @@ function SortingVisualiser(props) {
 					>
 						{text.sortingAlgorithmsTitle}
 					</option>
-					<option value='bubbleSort'>Bubble Sort</option>
-					<option value='selectionSort'>Selection Sort</option>
-					<option value='insertionSort'>Insertion Sort</option>
-					<option value='quickSort'>Quick Sort</option>
-					<option value='heapSort'>Heap Sort</option>
-					<option value='mergeSort'>Merge Sort</option>
+					<option value='bubbleSort'>
+						{algoData.sorting['bubbleSort'].title}
+					</option>
+					<option value='selectionSort'>
+						{algoData.sorting['selectionSort'].title}
+					</option>
+					<option value='insertionSort'>
+						{algoData.sorting['insertionSort'].title}
+					</option>
+					<option value='quickSort'>
+						{algoData.sorting['quickSort'].title}
+					</option>
+					<option value='heapSort'>{algoData.sorting['heapSort'].title}</option>
+					<option value='mergeSort'>
+						{algoData.sorting['mergeSort'].title}
+					</option>
 					<option disabled className='algorithmsTitle' value='otherTitle'>
 						{text.otherAlgorithmsTitle}
 					</option>
-					<option value='reverseArray'>Reverse Array</option>
+					<option value='reverseArray'>
+						{algoData.sorting['reverseArray'].title}
+					</option>
 				</select>
 
 				<div className='sliderBox'>

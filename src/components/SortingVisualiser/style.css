@@ -22,6 +22,8 @@ nav {
 	display: flex;
 	height: 10vh;
 	width: 100vw;
+	padding: none;
+	margin: none;
 	justify-content: center;
 	align-items: center;
 	background-color: var(--higher-background);
@@ -72,7 +74,7 @@ option {
 .algorithmsTitle {
 	background-color: var(--background);
 	color: var(--text);
-	font-size: 1.1em;
+	font-size: 1.05em;
 	overflow: hidden;
 }
 
@@ -87,7 +89,6 @@ select {
 	box-sizing: border-box;
 	width: 10%;
 	height: 50%;
-	margin: 0, 0rem;
 	border-radius: 10px;
 	place-items: center;
 	color: var(--text);

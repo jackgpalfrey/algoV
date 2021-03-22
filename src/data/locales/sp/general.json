@@ -1,0 +1,73 @@
+{
+    "changelog": {
+        "openAllButton": "Abrir todo",
+        "closeAllButton": "cerrar todo",
+        "orderOldestToNewestButton": "Ordenar más viejo a más nuevo",
+        "orderNewestToOldestButton": "Ordenar más nuevo a más viejo",
+        "nextUpdateVersionKey": "Próxima actualización",
+        "plannedForDate": "Prevista para",
+        "addedLabel": "AÑADIDO",
+        "changedLabel": "CAMBIADO",
+        "deprecatedLabel": "DESAPROBADO",
+        "removedLabel": "ELIMINADO",
+        "fixedLabel": "FIJO",
+        "generalLabel": "GENERAL"
+    },
+    "menu": {
+        "home": "Casa",
+        "bars": "Rejas",
+        "grid": "Rejilla",
+        "logic": "Lógica",
+        "learn": "Aprender",
+        "challenges": "Retos",
+        "login": "Login",
+        "settings": "Configuración y cierre de sesión"
+    },
+    "console": {
+        "placeholder": "Consola",
+        "openDocs": "Abrir Documentación",
+        "openConsole": "Abrir Consola",
+        "closeConsole": "Cerrar Consola"
+    },
+    "bars": {
+        "animationTimeSlider": "Tiempo de animación",
+        "resetButton": "Reajustar",
+        "runButton": "Ejecutarse",
+        "sortingAlgorithmsTitle": "Algoritmos de ordenación",
+        "otherAlgorithmsTitle": "Otros algoritmos",
+        "numberOfBarsSlider": "Numeros de las rejas",
+        "runtimeDisplay": "Tiempo:",
+        "comparisonsDisplay": "Compararaciónes:",
+        "swapsDisplay": "Intercambiar:" 
+    },
+    "grid": {
+        "animationTimeSlider": "Tiempo de animación",
+        "nodeSizeSlider": "Tamano de las cajas",
+        "resetButton": "Reajustar",
+        "runButton": "Ejecutarse",
+        "pathfindingAlgorithmsTitle": "Algoritmos de pathfinding",
+        "otherAlgorithmsTitle": "Otros algoritmos",
+        "runtimeDisplay": "Tiempo:",
+        "comparisonsDisplay": "Compararaciónes:",
+        "swapsDisplay": "Intercambiar:" 
+
+    },
+    "infoCard": {
+        "worstCaseTimeMeta": "Peor Complejidad De Tiempo En El Caso:",
+        "avgTimeMeta": "Complejidad media del tiempo:",
+        "bestCaseTimeMeta": "Mejor Complejidad De Tiempo En El Caso:",
+        "memoryMeta": "Complejidad De La Memoria:",
+        "stableMeta": "Estable:",
+        "stableMetaDesc": "Si la posición de las barras con el mismo valor se mantiene igual an relación entre sí."
+    },
+    "docsPage": {
+        "titleText": "Documentos",
+        "searchPlaceholder": "Buscar",
+        "mainContentSyntaxLabel": "Syntax:",
+        "mainContentExampleLabel": "Ejemplo:",
+        "tableArgumentsTitle": "Argumento",
+        "tableTypeTitle": "Tipo",
+        "tableExamplesTitle": "Ejemplos",
+        "tableNotesTitle": "Notas"
+    }
+}

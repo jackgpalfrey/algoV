@@ -16,14 +16,29 @@ const TILES = ['wall', 'start', 'end', 'none'];
 
 function PathfindingVisualiser() {
 	//#region state
+	let sortingCookie = document.cookie
+		.split('; ')
+		.find((row) => row.startsWith('grid='));
+	if (!sortingCookie || sortingCookie == '') {
+		sortingCookie = '100,astar';
+	} else {
+		sortingCookie = sortingCookie.split('=')[1];
+	}
+
+	const cookieData = sortingCookie.replace(' ', '').split(',');
+
 	const [grid, setGrid] = useState();
 	const [mouseDown, setMouseDown] = useState(0);
 	const [penType, setPenType] = useState('start');
 	const [isTerminalOpen, setIsTerminalOpen] = useState(false);
 	const [animationActive, setAnimationActive] = useState(false);
-	const [animationSpeed, setAnimationSpeed] = useState(100);
-	const [activeAlgorithm, setActiveAlgorithm] = useState('astar');
-	const [sizeOfNodes, setSizeOfNodes] = useState(30);
+	const [animationSpeed, setAnimationSpeed] = useState(
+		parseInt(cookieData[0]) || 100
+	);
+	const [activeAlgorithm, setActiveAlgorithm] = useState(
+		cookieData[1] || 'astar'
+	);
+	const [sizeOfNodes, setSizeOfNodes] = useState(cookieData[2] || 30);
 	const [runTime, setRunTime] = useState(0);
 	const [swaps, setSwaps] = useState(0);
 	const [comparisons, setComparisons] = useState(0);
@@ -35,14 +50,21 @@ function PathfindingVisualiser() {
 
 	//#endregion
 
+	useEffect(
+		(effect) => {
+			document.cookie = `grid=${animationSpeed},${activeAlgorithm},${sizeOfNodes};`;
+		},
+		[animationSpeed, activeAlgorithm, sizeOfNodes]
+	);
+
 	useEffect(() => {
 		createGrid();
 	}, []);
 
 	function AnimateEngine(command) {
 		try {
-			let commandCode = command;
-			if (Array.isArray(command)) commandCode = commandCode[0];
+			let commandCode = [command];
+			if (Array.isArray(command)) commandCode = command[0];
 
 			let response = ['PENDING', 'In progress'];
 
@@ -459,7 +481,7 @@ function PathfindingVisualiser() {
 						className='clickable'
 						disabled={animationActive}
 						type='range'
-						min='10'
+						min='20'
 						max='50'
 						value={sizeOfNodes}
 						onChange={(e) => {

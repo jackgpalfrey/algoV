@@ -229,11 +229,6 @@ function SortingVisualiser(props) {
 					AnimateEngine(['clearWaits']);
 					break;
 
-				case 'r':
-				case 'reload':
-					window.location.reload();
-					break;
-
 				case 'executeInternalAnimation':
 					let animationKey = command[1];
 					if (!animationKey || typeof animationKey !== 'string')
@@ -269,14 +264,6 @@ function SortingVisualiser(props) {
 					}
 
 					AnimateEngine(['doSim', [resultData]]);
-					break;
-
-				case 'version':
-					let version = document.cookie
-						.split('; ')
-						.find((row) => row.startsWith('version='))
-						.split('=')[1];
-					alert(`Version: ${version}`);
 					break;
 
 				case 'defaultColor':

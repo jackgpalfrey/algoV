@@ -27,6 +27,30 @@ function Console(props) {
 		if (e.key !== 'Enter') return;
 		let command = commandText.replaceAll("'", '"');
 		command = commandText.replaceAll('(', '[').replaceAll(')', ']');
+
+		switch (
+			command
+				.replaceAll('[', '')
+				.replaceAll(']', '')
+				.replaceAll('"', '')
+				.replaceAll('"', '')
+		) {
+			case 'version':
+				let version = document.cookie
+					.split('; ')
+					.find((row) => row.startsWith('version='))
+					.split('=')[1];
+				alert(`Current Version: ${version}`);
+				responseHandler(['SUCCESS', 'Exectued Successfully']);
+				return;
+
+			case 'r':
+			case 'reload':
+				window.location.reload();
+				responseHandler(['SUCCESS', 'Exectued Successfully']);
+				return;
+		}
+
 		try {
 			let jsonCommand = JSON.parse(command);
 			let response = props.AnimateEngine(jsonCommand);

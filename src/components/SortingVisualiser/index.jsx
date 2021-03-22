@@ -87,7 +87,6 @@ function SortingVisualiser(props) {
 					let type = command[2];
 					let data = command[3];
 
-					console.log(AnimateEngine);
 					AnimateEngineController.setBarsState(indexArray, type, data);
 
 					break;

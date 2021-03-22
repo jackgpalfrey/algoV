@@ -56,7 +56,6 @@ function mergeSort(array: number[]): [object[],number]{
     const endTime = performance.now()
     const runTime = endTime - startTime
 
-    //animations = [{command: 'setArray',array: sortedArray}]
 
     return [animations, runTime]
 }

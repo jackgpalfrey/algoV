@@ -37,12 +37,10 @@ if (!sortingCookie || sortingCookie == '') {
 if (sortingCookie == 1 && !allowInDevPages) {
 	allowInDevPages = true;
 	if (
-		window.confirm(
+		!window.confirm(
 			'WARNING: \nYou are in developer mode. Parts of the page may be unstable. \nClick OK to continue or Cancel to return to non developer mode.'
 		)
 	) {
-		console.log('DEVELOPER MODE ACTIVE');
-	} else {
 		document.cookie = `dev=0`;
 		window.location.reload();
 	}

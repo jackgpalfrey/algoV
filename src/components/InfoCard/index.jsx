@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import './style.css';
-//import data from '../../data/algorithmInfo.json'
 
 import getLocaleText from '../../util/getLocaleText';
 const text = getLocaleText('general').infoCard;

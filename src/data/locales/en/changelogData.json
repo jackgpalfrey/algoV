@@ -160,7 +160,8 @@
                             ["FIXED", "Inability to click through hidden menu"],
                             ["CHANGED", "Latest Changes Card to only display after reoccuring visits"],
                             ["CHANGED", "MOVED AnimateEngine Code to seperate File to reduce code duplication"],
-                            ["ADDED", "Grid Visualiser"]
+                            ["ADDED", "Grid Visualiser"],
+                            ["ADDED", "Dev Cookie Key"]
                             ],
         "date": "16/03/21",
         "isNext": true

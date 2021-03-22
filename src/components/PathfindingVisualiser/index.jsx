@@ -87,7 +87,6 @@ function PathfindingVisualiser() {
 
 				case 'st':
 				case 'setType':
-					console.log('TRIGGER');
 					let indexs = command[1];
 					let typeToSet = command[2];
 					AnimateEngineController.setGridState(
@@ -191,40 +190,21 @@ function PathfindingVisualiser() {
 					break;
 
 				case 'executeInternalAnimation': //TODO:
-					// let animationKey = command[1];
-					// if (!animationKey || typeof animationKey !== 'string')
-					// 	return ['ERROR', 'Invalid Animation Key'];
-					// let resultData = [];
-					// switch (animationKey) {
-					// 	case 'bubbleSort':
-					// 		resultData = bubbleSort(getNumbersFromArrayState());
-					// 		break;
-					// 	case 'selectionSort':
-					// 		resultData = selectionSort(getNumbersFromArrayState());
-					// 		break;
-					// 	case 'insertionSort':
-					// 		resultData = insertionSort(getNumbersFromArrayState());
-					// 		break;
-					// 	case 'quickSort':
-					// 		return alert('Currently Unavailable');
-					// 		resultData = quickSort(getNumbersFromArrayState());
-					// 		break;
-					// 	case 'heapSort':
-					// 		resultData = heapSort(getNumbersFromArrayState());
-					// 		break;
-					// 	case 'mergeSort':
-					// 		return alert('Currently Unavailable');
-					// 		resultData = mergeSort(getNumbersFromArrayState());
-					// 		break;
-					// 	case 'reverseArray':
-					// 		resultData = reverseArray(getNumbersFromArrayState());
-					// 		break;
-					// 	default:
-					// 		return ['ERROR', 'Invalid Animation Key'];
-					// 		break;
-					// }
+					break;
+					let animationKey = command[1];
+					if (!animationKey || typeof animationKey !== 'string')
+						return ['ERROR', 'Invalid Animation Key'];
+					let resultData = [];
+					switch (animationKey) {
+						case 'bubbleSort':
+							//resultData = bubbleSort(getNumbersFromArrayState());
+							break;
+						default:
+							return ['ERROR', 'Invalid Animation Key'];
+							break;
+					}
 
-					// AnimateEngine(['doSim', [resultData]]);
+					AnimateEngine(['doSim', [resultData]]);
 					break;
 
 				case 'version':
@@ -239,7 +219,6 @@ function PathfindingVisualiser() {
 			}
 			return ['SUCCESS', 'Exectuted Successfully'];
 		} catch (error) {
-			console.log(error);
 			return ['ERROR', 'Try Failed'];
 		}
 	}

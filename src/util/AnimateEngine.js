@@ -134,8 +134,6 @@ class AnimateEngine {
 							}
 						}
 					} else if (value === '$RTQUAD') {
-						console.log(newGrid[0].length / 2);
-						console.log(newGrid[0].length);
 						for (let y = 0; y < Math.abs(newGrid.length / 2); y++) {
 							for (
 								let x = Math.abs(newGrid[0].length / 2);
@@ -146,8 +144,6 @@ class AnimateEngine {
 							}
 						}
 					} else if (value === '$RBQUAD') {
-						console.log(newGrid[0].length / 2);
-						console.log(newGrid[0].length);
 						for (
 							let y = Math.abs(newGrid.length / 2);
 							y < newGrid.length;

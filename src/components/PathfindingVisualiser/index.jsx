@@ -184,11 +184,6 @@ function PathfindingVisualiser() {
 					setAnimationActive(false);
 					break;
 
-				case 'r':
-				case 'reload':
-					window.location.reload();
-					break;
-
 				case 'executeInternalAnimation': //TODO:
 					break;
 					let animationKey = command[1];
@@ -205,14 +200,6 @@ function PathfindingVisualiser() {
 					}
 
 					AnimateEngine(['doSim', [resultData]]);
-					break;
-
-				case 'version':
-					let version = document.cookie
-						.split('; ')
-						.find((row) => row.startsWith('version='))
-						.split('=')[1];
-					alert(`Version: ${version}`);
 					break;
 
 				default:

@@ -21,9 +21,22 @@ import DocsPage from './pages/DocsPage';
 import getLocaleText from './util/getLocaleText';
 const changelogData = getLocaleText('changeLog');
 
-const allowInDevPages = vars.devMode;
+let allowInDevPages = vars.devMode;
 const currentVersion = vars.versionNumber;
 const versionID = vars.lastestChangeID;
+
+let sortingCookie = document.cookie
+	.split('; ')
+	.find((row) => row.startsWith('dev='));
+if (!sortingCookie || sortingCookie == '') {
+	sortingCookie = '0';
+} else {
+	sortingCookie = sortingCookie.split('=')[1];
+}
+
+if (sortingCookie == 1) {
+	allowInDevPages = true;
+}
 
 function App() {
 	const [showNewVersion, setShowNewVersion] = useState(false);

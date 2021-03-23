@@ -4,7 +4,7 @@ import Console from '../Console';
 import InfoCard from '../InfoCard';
 
 import getLocaleText from '../../util/getLocaleText';
-import AnimateEngineCore from '../../util/AnimateEngine';
+import AnimateEngineCore from '../../util/AnimateEngine.ts';
 
 const AnimateEngineController = new AnimateEngineCore();
 

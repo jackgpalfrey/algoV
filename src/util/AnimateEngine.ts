@@ -1,28 +1,27 @@
 class AnimateEngine {
-	BARSCOLORS = {
+	setStateFunction: Function = () => {};
+	BARSCOLORS: any = {
 		BASE: '#035efc',
 		CHECKING: 'red',
 		DONE: '#0f8707',
 		TEXT: 'white',
 	};
 
-	TILES = ['wall', 'start', 'end', 'none'];
-	ANIMATIONTILES = ['route', 'checking', 'next'];
-
-	constructor() {}
+	TILES: Array<string> = ['wall', 'start', 'end', 'none'];
+	ANIMATIONTILES: Array<string> = ['route', 'checking', 'next'];
 
 	// Sets Main Data Manipulation Function eg. setArray / setGrid
-	__setMainDataFunction__(setStateFunction) {
+	__setMainDataFunction__(setStateFunction: Function) {
 		this.setStateFunction = setStateFunction;
 	}
 	// Sets Bar State in the Bar Visualiser
-	setBarsState(indexArray, type, data) {
+	setBarsState(indexArray: Array<number | string>, dataToChange: 'color' | 'value', data: string) {
 		// Check to see if input is valid
 		if (!indexArray || !Array.isArray(indexArray))
 			return ['ERROR', 'Invalid Indexs'];
-		if (!type || typeof type !== 'string') return ['ERROR', 'Invalid Type'];
+		if (!dataToChange || typeof dataToChange !== 'string') return ['ERROR', 'Invalid Type'];
 
-		type = type.toLowerCase();
+		let type: string = dataToChange.toLowerCase();
 
 		// Checks to see if data is valid
 		if (type === 'color') {
@@ -35,8 +34,8 @@ class AnimateEngine {
 			return ['ERROR', 'Invalid Type'];
 		}
 
-		this.setStateFunction((prevState) => {
-			let newArray = prevState.slice();
+		this.setStateFunction((prevState: Array<Object>) => {
+			let newArray: any = prevState.slice();
 
 			indexArray.forEach((idx) => {
 				if (typeof idx == 'number' && idx >= 0 && idx < newArray.length) {
@@ -84,13 +83,13 @@ class AnimateEngine {
 
 	// Sets Node State in Grid Visualiser
 	setGridState(
-		indexArray,
-		type,
-		data,
-		startPos,
-		endPos,
-		setStartPosFunction,
-		setEndPosFunction
+		indexArray: Array<[number,number] | string >,
+		type: string,
+		data: string,
+		startPos: [number, number],
+		endPos: [number,number],
+		setStartPosFunction: Function,
+		setEndPosFunction: Function
 	) {
 		// Validity Checks
 		if (!indexArray || !Array.isArray(indexArray))
@@ -106,7 +105,7 @@ class AnimateEngine {
 		}
 		if (typeof data !== 'string') return ['ERROR', 'Invalid Data'];
 
-		this.setStateFunction((prevState) => {
+		this.setStateFunction((prevState: any) => {
 			let newGrid = prevState.slice();
 
 			indexArray.forEach((value) => {
@@ -185,8 +184,8 @@ class AnimateEngine {
 				}
 
 				if (type === 'type' && data === 'start') {
-					let startY = startPos[1];
-					let startX = startPos[0];
+					let startY: number = startPos[1];
+					let startX: number = startPos[0];
 					let prevType = 'none';
 					newGrid[startY][startX].type = prevType;
 					let curType = newGrid[value[1]][value[0]].type;
@@ -209,14 +208,14 @@ class AnimateEngine {
 	}
 
 	// Swaps two bars in the Bar Visulaiser
-	swapBars(idx1, idx2) {
+	swapBars(idx1: number, idx2: number) {
 		// Checks If Indexes are valid
 		if (idx1 == undefined || typeof idx1 !== 'number')
 			return ['ERROR', 'Invalid id1'];
 		if (idx2 == undefined || typeof idx2 !== 'number')
 			return ['ERROR', 'Invalid id2'];
 
-		this.setStateFunction((prevState) => {
+		this.setStateFunction((prevState: any) => {
 			let newArray = prevState.slice();
 
 			// Handles Negative Indexes
@@ -240,13 +239,13 @@ class AnimateEngine {
 	}
 
 	// Sets Bars to given values in Bar Visualiser
-	setBars(values, color, setNumBarsFunction) {
+	setBars(values: Array<number>, color: string, setNumBarsFunction: Function) {
 		// Validity Checks
 		if (!values || !Array.isArray(values)) return ['ERROR', 'Invalid Values'];
 		if (!color || typeof color !== 'string') return ['ERROR', 'Invalid Color'];
 
-		this.setStateFunction((prevState) => {
-			let newArray = [];
+		this.setStateFunction((prevState: any) => {
+			let newArray: any = [];
 			if (color.includes('$')) color = this.BARSCOLORS[color.replace('$', '')]; // Color variables System
 
 			values.forEach((value) => {
@@ -260,7 +259,7 @@ class AnimateEngine {
 	}
 
 	// Resets Bars In Bar Visualiser
-	resetBars(numOfBars, setNumBarsFunction) {
+	resetBars(numOfBars: number, setNumBarsFunction: Function) {
 		if (typeof numOfBars !== 'number' || numOfBars <= 0)
 			return ['ERROR', 'Invalid Number of bars'];
 
@@ -273,13 +272,13 @@ class AnimateEngine {
 
 	// Resets Nodes in Grid Visauliser
 	resetGrid(
-		sizeOfNodes,
-		areaWidth,
-		areaHeight,
-		setGridFunction,
-		setPenTypeFunction,
-		setStartPosFunction,
-		setEndPosFunction
+		sizeOfNodes: number,
+		areaWidth: number,
+		areaHeight: number,
+		setGridFunction: Function,
+		setPenTypeFunction: Function,
+		setStartPosFunction: Function,
+		setEndPosFunction: Function
 	) {
 		const NUM_OF_BARS_Y = ((areaHeight / 100) * 86) / sizeOfNodes;
 		const NUM_OF_BARS_X = ((areaWidth / 100) * 98) / sizeOfNodes;
@@ -306,12 +305,12 @@ class AnimateEngine {
 		setEndPosFunction([0, 0, 'none']);
 	}
 
-	clearGridAnimationTiles(setGridFunction) {
-		setGridFunction((prevState) => {
+	clearGridAnimationTiles(setGridFunction: Function) {
+		setGridFunction((prevState: any) => {
 			let newGrid = prevState.slice();
 
-			newGrid.forEach((yAxis) => {
-				yAxis.forEach((node) => {
+			newGrid.forEach((yAxis: Array<Array<any>>) => {
+				yAxis.forEach((node: any) => {
 					if (this.ANIMATIONTILES.includes(node.type)) {
 						node.type = 'none';
 					}
@@ -323,23 +322,24 @@ class AnimateEngine {
 	}
 
 	// Sets a data display eg. Runtime
-	setDisplay(newData, setDataFunction) {
+	setDisplay(newData: string, setDataFunction: Function) {
 		if (!newData) return ['ERROR', 'Invalid Data'];
 		setDataFunction(newData);
 	}
 
 	// Sets Default Colors for Bar Visualiser
-	setDefaultBarColors(colorCode, color) {
+	setDefaultBarColors(colorCode: string, color: string) {
 		this.BARSCOLORS[colorCode] = color;
 	}
 
 	// Executes given commands in order with given interval between each exection
 	do(
-		commandsToRun,
-		intervalBetweenCommands,
-		defaultAnimationSpeed,
-		AnimateEngineFunction
+		commandsToRun: Array<any>,
+		intervalBetweenCommands: number | '$userSet',
+		defaultAnimationSpeed: number,
+		AnimateEngineFunction: Function
 	) {
+		let interval: number = 0
 		// Validity Checks
 		if (!commandsToRun || !Array.isArray(commandsToRun))
 			return ['ERROR', 'Invalid Sub Commands'];
@@ -350,7 +350,9 @@ class AnimateEngine {
 			intervalBetweenCommands < 0
 		)
 			if (intervalBetweenCommands == '$userSet') {
-				intervalBetweenCommands = defaultAnimationSpeed;
+				interval = defaultAnimationSpeed;
+			} else {
+				interval = intervalBetweenCommands
 			}
 
 		// 0 Interval = Simultaneous Command Execution
@@ -371,16 +373,16 @@ class AnimateEngine {
 
 			AnimateEngineFunction(commandsToRun[currentCommandIdx]);
 			currentCommandIdx++;
-		}, intervalBetweenCommands);
+		}, interval);
 	}
 
 	// Executes given commands over and over for given number of repeats with given interval between each exectuion
 	doFor(
-		commandsToRun,
-		intervalBetweenCommands,
-		repeats,
-		defaultAnimationSpeed,
-		AnimateEngineFunction
+		commandsToRun: Array<any>,
+		intervalBetweenCommands: number | '$userSet',
+		repeats: number,
+		defaultAnimationSpeed: any,
+		AnimateEngineFunction: Function
 	) {
 		// #region  Validity Checks
 		if (!commandsToRun || !Array.isArray(commandsToRun)) {
@@ -425,7 +427,7 @@ class AnimateEngine {
 	}
 
 	// Executes given command after given time frame
-	doIn(commandsToRun, timeUntilExectution, AnimateEngineFunction) {
+	doIn(commandsToRun:Array<any>, timeUntilExectution: number, AnimateEngineFunction: Function) {
 		if (!commandsToRun || !Array.isArray(commandsToRun))
 			return ['ERROR', 'Invalid Sub Commands'];
 		if (

@@ -20,7 +20,7 @@ function PathfindingVisualiser() {
 		.split('; ')
 		.find((row) => row.startsWith('grid='));
 	if (!sortingCookie || sortingCookie == '') {
-		sortingCookie = '100,astar';
+		sortingCookie = '100,astar,30';
 	} else {
 		sortingCookie = sortingCookie.split('=')[1];
 	}

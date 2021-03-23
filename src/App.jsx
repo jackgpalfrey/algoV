@@ -48,7 +48,7 @@ if (sortingCookie == 1 && !allowInDevPages) {
 
 function App() {
 	const [showNewVersion, setShowNewVersion] = useState(false);
-	const [isLoggedIn, setIsLoggedIn] = useState(false);
+	const [isLoggedIn, setIsLoggedIn] = useState(true);
 
 	useEffect(() => {
 		let version = document.cookie

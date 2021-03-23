@@ -1,5 +1,5 @@
 {
-    "devMode": false,
+    "devMode": true,
     "versionNumber": "1.20",
     "lastestChangeID": 14,
     "pages": ["home",

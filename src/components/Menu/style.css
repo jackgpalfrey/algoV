@@ -5,12 +5,18 @@
 	height: 100vh;
 	background-color: var(--background-overlay);
 }
+
+.menuCard * {
+	margin-bottom: .2em;
+}
+
 .menuCard {
 	box-sizing: content-box;
 	position: absolute;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	justify-content: space-around;
 	left: 0;
 	top: 0;
 	height: 100vh;
@@ -19,6 +25,7 @@
 	color: var(--text);
 	text-align: center;
 	overflow: scroll;
+	overflow-x: hidden;
 }
 
 .menuCard * {
@@ -26,23 +33,18 @@
 }
 
 .openMenuButton {
+	position:absolute;
+	top: 1em;
 	color: var(--text);
 	cursor: pointer;
-	position: relative;
-	top: 0;
-	margin-top: -25px;
 	background-color: transparent;
 	border: none;
 	pointer-events: all;
-	z-index: 2;
+	padding-bottom: 5em;
 }
 
 .openMenuButton:focus {
 	outline: none;
-}
-
-.menuCard * {
-	margin-bottom: 1em;
 }
 
 .closed {
@@ -67,10 +69,6 @@
 	filter: brightness(30%);
 }
 
-.item {
-	transform: scale(2);
-}
-
 .homeButton {
 	margin-top: 1em;
 }
@@ -89,4 +87,37 @@
 	filter: brightness(100%);
 	user-select: none;
 	cursor: default;
+}
+
+
+.menuItem {
+	display: flex;
+	flex-direction: column;
+	padding: 0;
+	margin-bottom: 0;
+	width: 100%;
+}
+
+.item {
+	transform: scale(1.5);
+	margin: 0;
+}
+
+
+.menuText {
+	margin: 0;
+	padding: 0;
+	margin: .2em;
+	font-size: .8em;
+}
+
+
+.menuLinkContainer {
+
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around;
+	align-items: center;
+	height: 90vh;
+	margin: 2em;
 }

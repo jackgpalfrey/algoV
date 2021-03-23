@@ -42,88 +42,97 @@ function Menu(props) {
 						{isOpen ? 'menu_open' : 'menu'}
 					</i>
 				</button>
-				{isOpen
-					? [
-							<NavLink
-								exact
-								className='link clickable homeButton'
-								activeClassName='current'
-								to='/'
-							>
-								<span title={text.home}>
-									<i className='material-icons item'>home</i>
-								</span>
-							</NavLink>,
-							<NavLink
-								className='link clickable'
-								activeClassName='current'
-								to='/bars'
-							>
-								<span title={text.bars}>
-									<i className='material-icons item'>bar_chart</i>
-								</span>
-							</NavLink>,
-							<NavLink
-								className='link clickable'
-								activeClassName='current'
-								to='/grid'
-							>
-								<span title={text.grid}>
-									<i className='material-icons item'>window</i>
-								</span>
-							</NavLink>,
-							<NavLink
-								className='link clickable unavailable'
-								activeClassName='current'
-								to='/logic'
-							>
-								<span title={text.logic}>
-									<i className='material-icons item'>device_hub</i>
-								</span>
-							</NavLink>,
-							<NavLink
-								className='link clickable unavailable'
-								activeClassName='current'
-								to='/learn'
-							>
-								<span title={text.learn}>
-									<i className='material-icons item'>class</i>
-								</span>
-							</NavLink>,
-							<NavLink
-								className='link clickable unavailable'
-								activeClassName='current'
-								to='/puzzles'
-							>
-								<span title={text.challenges}>
-									<i className='material-icons item'>extension</i>
-								</span>
-							</NavLink>,
-					  ]
-					: null}
+				<div className='menuLinkContainer'>
+					{isOpen
+						? [
+								<NavLink
+									exact
+									className='link clickable homeButton'
+									activeClassName='current'
+									to='/'
+								>
+									<span className='menuItem' title={text.home}>
+										<i className='material-icons item'>home</i>
+										<span className='menuText'>{text.home}</span>
+									</span>
+								</NavLink>,
+								<NavLink
+									className='link clickable'
+									activeClassName='current'
+									to='/bars'
+								>
+									<span className='menuItem' title={text.bars}>
+										<i className='material-icons item'>bar_chart</i>
+										<span className='menuText'>{text.bars}</span>
+									</span>
+								</NavLink>,
+								<NavLink
+									className='link clickable'
+									activeClassName='current'
+									to='/grid'
+								>
+									<span className='menuItem' title={text.grid}>
+										<i className='material-icons item'>window</i>
+										<span className='menuText'>{text.grid}</span>
+									</span>
+								</NavLink>,
+								<NavLink
+									className='link clickable unavailable'
+									activeClassName='current'
+									to='/logic'
+								>
+									<span className='menuItem' title={text.logic}>
+										<i className='material-icons item'>device_hub</i>
+										<span className='menuText'>{text.logic}</span>
+									</span>
+								</NavLink>,
+								<NavLink
+									className='link clickable unavailable'
+									activeClassName='current'
+									to='/learn'
+								>
+									<span className='menuItem' title={text.learn}>
+										<i className='material-icons item'>class</i>
+										<span className='menuText'>{text.learn}</span>
+									</span>
+								</NavLink>,
+								<NavLink
+									className='link clickable unavailable'
+									activeClassName='current'
+									to='/puzzles'
+								>
+									<span className='menuItem' title={text.challenges}>
+										<i className='material-icons item'>extension</i>
+										<span className='menuText'>{text.challenges}</span>
+									</span>
+								</NavLink>,
+						  ]
+						: null}
 
-				{isOpen && props.isLoggedIn ? (
-					<NavLink
-						className='link unavailable'
-						activeClassName='current'
-						to='/settings'
-					>
-						<span title={text.settings}>
-							<i className='material-icons item'>settings</i>
-						</span>
-					</NavLink>
-				) : null}
-				{isOpen && !props.isLoggedIn ? (
-					<NavLink
-						className='link unavailable'
-						activeClassName='current'
-						to='/login'
-					>
-						<span className='login' title={text.login}>
-							{text.login}
-						</span>
-					</NavLink>
-				) : null}
+					{isOpen && props.isLoggedIn ? (
+						<NavLink
+							className='link unavailable'
+							activeClassName='current'
+							to='/settings'
+						>
+							<span className='menuItem' title={text.settings}>
+								<i className='material-icons item'>settings</i>
+								<span className='menuText'>{text.settings}</span>
+							</span>
+						</NavLink>
+					) : null}
+					{isOpen && !props.isLoggedIn ? (
+						<NavLink
+							className='link unavailable'
+							activeClassName='current'
+							to='/login'
+						>
+							<span className='login' title={text.login}>
+								{text.login}
+							</span>
+						</NavLink>
+					) : null}
+				</div>
 			</div>
 		</div>
 	);

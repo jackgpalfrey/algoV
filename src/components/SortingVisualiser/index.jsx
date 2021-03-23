@@ -13,7 +13,7 @@ import InfoCard from '../InfoCard';
 import './style.css';
 
 import getLocaleText from '../../util/getLocaleText';
-import AnimateEngineCore from '../../util/AnimateEngine';
+import AnimateEngineCore from '../../util/AnimateEngine.ts';
 
 const consoleText = getLocaleText('general').console;
 const text = getLocaleText('general').bars;

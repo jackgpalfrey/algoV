@@ -1,6 +1,9 @@
+// General Imports
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
+
+// Algorithms Imports
 import bubbleSort from '../../algoithms/sorting/bubbleSort';
 import heapSort from '../../algoithms/sorting/heapSort';
 import insertionSort from '../../algoithms/sorting/insertionSort';
@@ -8,16 +11,21 @@ import mergeSort from '../../algoithms/sorting/mergeSort';
 import quickSort from '../../algoithms/sorting/quickSort';
 import reverseArray from '../../algoithms/sorting/reverseArray';
 import selectionSort from '../../algoithms/sorting/selectionSort';
+
+// Component Imports
 import Console from '../Console';
 import InfoCard from '../InfoCard';
+
 import './style.css';
 
-import getLocaleText from '../../util/getLocaleText';
-import AnimateEngineCore from '../../util/AnimateEngine.ts';
 
+// Locale Imports
+import getLocaleText from '../../util/getLocaleText';
+import AnimateEngineCore from '../../util/AnimateEngine';
 const consoleText = getLocaleText('general').console;
 const text = getLocaleText('general').bars;
 const algoData = getLocaleText('algorithmInfo');
+
 
 const AnimateEngineController = new AnimateEngineCore();
 
@@ -28,24 +36,39 @@ const COLORS = {
 	TEXT: 'white',
 };
 
-function SortingVisualiser(props) {
+interface Bar {
+	value: number
+	color: string
+}
+
+
+
+const SortingVisualiser: React.FC = () => {
 	//#region State Creation
-	let sortingCookie = document.cookie
+
+	// Gets Cookie Data
+	let sortingCookie: string = document.cookie
 		.split('; ')
-		.find((row) => row.startsWith('sort='));
+		.find((row) => row.startsWith('sort=')) || '100,bubbleSort';
 	if (!sortingCookie || sortingCookie == '') {
 		sortingCookie = '100,bubbleSort';
 	} else {
 		sortingCookie = sortingCookie.split('=')[1];
 	}
-	const cookieData = sortingCookie.replace(' ', '').split(',');
-	let animationtype = cookieData[0];
-	let urlAnimation = useLocation().search.replace('?', '');
+	const cookieData: Array<string> = sortingCookie.replace(' ', '').split(',');
+
+	let animationtype: string = cookieData[0];
+	let urlAnimation: string = useLocation().search.replace('?', '');
+
 	if (urlAnimation && Object.keys(algoData['sorting']).includes(urlAnimation))
 		animationtype = urlAnimation;
 	if (!Object.keys(algoData['sorting']).includes(urlAnimation))
 		animationtype = 'bubbleSort';
-	const [array, setArray] = useState([]);
+
+
+
+	
+	const [array, setArray]: any = useState([]);
 	const [animationSpeed, setAnimationSpeed] = useState(cookieData[0] || 100);
 	const [numBars, setNumBars] = useState(
 		Math.round(window.innerWidth / 12 / 2)
@@ -65,22 +88,25 @@ function SortingVisualiser(props) {
 	//#endregion
 
 	useEffect(
-		(effect) => {
+		() => {
 			document.cookie = `sort=${animationSpeed},${activeAlgorithm};`;
 		},
 		[animationSpeed, activeAlgorithm]
 	);
 
-	useEffect((effect) => {
+	useEffect(() => {
 		AnimateEngine(['resetArray', numBars]);
 	}, []);
 
-	function AnimateEngine(command) {
+	function AnimateEngine(command: Array<any> | string) {
 		try {
-			let commandCode = command;
-			if (Array.isArray(command)) commandCode = command[0];
+			let commandCode: string = ''
+			if (Array.isArray(command)) {
+				commandCode = command[0];
+			} else {
+				commandCode = command
+			}
 
-			let response = ['PENDING', 'In progress'];
 			switch (commandCode) {
 				case 'setState':
 					let indexArray = command[1];
@@ -96,14 +122,14 @@ function SortingVisualiser(props) {
 					let idxes = command[1];
 					let color = command[2];
 
-					AnimateEngineController.setBarsState(idxes, 'color', color, setArray);
+					AnimateEngineController.setBarsState(idxes, 'color', color);
 					break;
 
 				case 'swap':
 					let id1 = command[1];
 					let id2 = command[2];
 
-					AnimateEngineController.swapBars(id1, id2, setArray);
+					AnimateEngineController.swapBars(id1, id2);
 					break;
 
 				case 'setValue':
@@ -127,7 +153,7 @@ function SortingVisualiser(props) {
 					AnimateEngineController.do(
 						subCommands,
 						interval,
-						animationSpeed,
+						parseInt(animationSpeed as any),
 						AnimateEngine
 					);
 					break;
@@ -196,31 +222,31 @@ function SortingVisualiser(props) {
 					break;
 
 				case 'clearLoop': //FIXME: Dosen't work
-					let specificLoop = command[1];
-					let activeLoops = activeIntervals.slice();
-					if (specificLoop == undefined) {
-						let ALLen = activeLoops.length;
-						for (let i = 0; i < ALLen; i++) {
-							clearInterval(activeLoops.pop());
-						}
-					} else if (typeof specificLoop === 'number') {
-						let loop = activeLoops.splice(specificLoop, 1)[0];
-						clearInterval(loop);
-					} else if (typeof specificLoop === 'string') {
-						let loop = activeLoops.indexOf(parseInt(specificLoop))[0];
-						clearInterval(loop);
-					}
+					// let specificLoop = command[1];
+					// let activeLoops = activeIntervals.slice();
+					// if (specificLoop == undefined) {
+					// 	let ALLen = activeLoops.length;
+					// 	for (let i = 0; i < ALLen; i++) {
+					// 		clearInterval(activeLoops.pop());
+					// 	}
+					// } else if (typeof specificLoop === 'number') {
+					// 	let loop = activeLoops.splice(specificLoop, 1)[0];
+					// 	clearInterval(loop);
+					// } else if (typeof specificLoop === 'string') {
+					// 	let loop = activeLoops.indexOf(parseInt(specificLoop))[0];
+					// 	clearInterval(loop);
+					// }
 
-					setActiveIntervals(activeLoops);
+					// setActiveIntervals(activeLoops);
 
 					break;
 
 				case 'clearWait': //FIXME: Dosen't work
-					let activeWaits = activeTimeouts.slice();
-					let AWLen = activeWaits.length;
-					for (let i = 0; i < AWLen; i++) {
-						clearTimeout(activeWaits.pop());
-					}
+					// let activeWaits = activeTimeouts.slice();
+					// let AWLen = activeWaits.length;
+					// for (let i = 0; i < AWLen; i++) {
+					// 	clearTimeout(activeWaits.pop());
+					// }
 					break;
 
 				case 'ct':
@@ -288,9 +314,10 @@ function SortingVisualiser(props) {
 	}
 
 	function getNumbersFromArrayState() {
+		let bars: any = array 
 		let numbers = [];
 		for (let i = 0; i < array.length; i++) {
-			numbers.push(array[i].value);
+			numbers.push(bars[i].value);
 		}
 
 		return numbers;
@@ -304,8 +331,8 @@ function SortingVisualiser(props) {
 	function createBars() {
 		let barWidth = ((window.innerWidth / 100) * 90) / numBars;
 
-		let barsDivs = array.map((item, idx) => {
-			let style = {
+		let barsDivs = array.map((item: Bar, idx: number) => {
+			let style: any = {
 				height: `${item.value}%`,
 				backgroundColor: `${item.color}`,
 				width: barWidth,
@@ -316,7 +343,7 @@ function SortingVisualiser(props) {
 			};
 
 			return (
-				<div key={idx} title={item.value} className='bar' style={style}>
+				<div key={idx} title={item.value.toString()} className='bar' style={style}>
 					{item.value}
 				</div>
 			);

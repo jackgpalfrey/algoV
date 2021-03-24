@@ -340,20 +340,19 @@ class AnimateEngine {
 		AnimateEngineFunction: Function
 	) {
 		let interval: number = 0
+		console.log(`Given: ${intervalBetweenCommands}`)
+		console.log(`Default: ${defaultAnimationSpeed}`)
+		
 		// Validity Checks
 		if (!commandsToRun || !Array.isArray(commandsToRun))
 			return ['ERROR', 'Invalid Sub Commands'];
-		if (
-			(!intervalBetweenCommands && intervalBetweenCommands != 0) ||
-			(typeof intervalBetweenCommands !== 'number' &&
-				intervalBetweenCommands != '$userSet') ||
-			intervalBetweenCommands < 0
-		)
-			if (intervalBetweenCommands == '$userSet') {
-				interval = defaultAnimationSpeed;
-			} else {
-				interval = intervalBetweenCommands
-			}
+			
+		if (intervalBetweenCommands == '$userSet') {
+			console.log("TRIGGER")
+			interval = defaultAnimationSpeed;
+		} else {
+			interval = intervalBetweenCommands
+		}
 
 		// 0 Interval = Simultaneous Command Execution
 		if (intervalBetweenCommands == 0) {
@@ -363,6 +362,7 @@ class AnimateEngine {
 			return;
 		}
 
+		console.log(`Set: ${interval}`)
 		AnimateEngineFunction(commandsToRun[0]);
 		let currentCommandIdx = 1;
 

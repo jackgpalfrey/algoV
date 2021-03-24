@@ -1,20 +1,21 @@
 import React, { useEffect, useState } from 'react';
+
+// Component Imports
 import './style.css';
 import Console from '../Console';
 import InfoCard from '../InfoCard';
 
+// Locale Imports
 import getLocaleText from '../../util/getLocaleText';
-import AnimateEngineCore from '../../util/AnimateEngine.ts';
 
+import AnimateEngineCore from '../../util/AnimateEngine';
 const AnimateEngineController = new AnimateEngineCore();
 
 const consoleText = getLocaleText('general').console;
 const text = getLocaleText('general').grid;
 const algoData = getLocaleText('algorithmInfo');
 
-const TILES = ['wall', 'start', 'end', 'none'];
-
-function PathfindingVisualiser() {
+const PathfindingVisualiser = () => {
 	//#region state
 	let sortingCookie = document.cookie
 		.split('; ')
@@ -471,6 +472,6 @@ function PathfindingVisualiser() {
 			<InfoCard algorithmType='grid' algorithmID={activeAlgorithm} />
 		</div>
 	);
-}
+};
 
 export default PathfindingVisualiser;

@@ -23,3 +23,13 @@
 - [ ] Create version branch
 - [ ] Merge with master
 - [ ] Build and deploy
+
+
+
+### Clean Code Checklist
+- [ ] TypeScript (Minimal preferably no any types)
+- [ ] No Debugging Code
+- [ ] No Commented Code / Unnecessary Comments
+- [ ] Good, Easy To Understand, Consistent Variable Names
+- [ ] Abstracted Logic into variables
+- [ ] Minimise Nested Conditionals

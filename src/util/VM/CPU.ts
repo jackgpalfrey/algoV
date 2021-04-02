@@ -1,6 +1,6 @@
+import INS from './instructionSet'
 import { toBin, toHex, fromBin, fromHex } from './helpers'
 import Memory from './Memory'
-
 export interface Registers{
     A: number // Acumulator
     X: number // Index X Register
@@ -26,15 +26,16 @@ class CPU{
     public completedCycles: number
     public completedTicks: number
 
-    private PC: number
-    private SP: number
+    public PC: number
+    public SP: number
 
-    private registers: Registers
-    private flags: Flags
+    public registers: Registers
+    public flags: Flags
 
-    private RAM: Memory
+    private partitionMap: any
 
     constructor(){
+        console.log("Started")
         this.bitSize = 8
         this.addressSize = 16
 
@@ -60,15 +61,20 @@ class CPU{
             N: false, // Negative Flag
         }
 
-        this.RAM = new Memory(this.bitSize, 2**this.addressSize)
+
+        this.partitionMap = {}
+
+        
+        this.mount(new Memory(this.bitSize, 2**16))
         
         
         
         this.reset()
+        this.start()
     }
 
-    reset(){
-        this.PC = 65532
+    public reset(){
+        this.PC = 0
         this.SP = 255
 
         this.registers = {
@@ -87,7 +93,101 @@ class CPU{
             N: false // Negative Flag
         }
 
-        this.RAM = new Memory(this.bitSize, 2**this.addressSize)
+        // if (this.startupTest() === true) this.start()
+    }
+
+    private getPartitionOfAddress(address: number): [string, string]{
+        let partitionAddresses = Object.keys(this.partitionMap)
+        let lastAddress = -1
+        for (let i = 0; i < partitionAddresses.length; i++){
+            if (address <= parseInt(partitionAddresses[i]) && address > lastAddress ){
+                return [partitionAddresses[i - 1] || '0', partitionAddresses[i]]
+            }
+
+            lastAddress = parseInt(partitionAddresses[i])
+        }
+
+        throw new Error(`No Memory At Location ${address}`)
+
+    }
+
+    public readByte(address: number){
+        let [startAddress, endAddress] = this.getPartitionOfAddress(address)
+        let mem: Memory = this.partitionMap[endAddress]
+        return mem.readByte(address - parseInt(startAddress))
+        
+    }
+
+    public writeByte(address: number, newValue: number, errorOnIssue = false){
+        let [startAddress, endAddress] = this.getPartitionOfAddress(address)
+        let mem: Memory = this.partitionMap[endAddress]
+        try{
+            return mem.writeByte(address - parseInt(startAddress), 255)
+        } catch {
+            if (errorOnIssue) throw new Error("Couldn't Write")
+        }
+        
+    }
+    
+    public mount(memory: Memory): number{
+        let currentMap = this.partitionMap
+        let currentLocations = Object.keys(currentMap)
+        let startAddress = 0
+        if (currentLocations.length !== 0){
+            startAddress = parseInt(currentLocations[currentLocations.length - 1])
+        }
+        let endAddress = startAddress + memory.addressSpaceSize
+        if (endAddress > 2**this.addressSize){
+            let error = new Error("Address Too Large")
+            throw error
+        } 
+
+        this.partitionMap[endAddress] = memory
+
+        return endAddress
+
+
+
+    }
+
+
+    private fetchNextInstruction(){
+        let instruction = this.readByte(this.PC)
+        this.PC++
+        this.completedTicks++
+        return instruction
+    }
+
+    private executeInstruction(instruction: number){
+        switch(instruction){
+            default:
+                console.log(`Invalid Instruction ${instruction}`)
+                this.completeCycle()
+                break;
+        }
+    }
+
+    private completeCycle(){
+        // return
+        this.completedCycles++
+        setTimeout(() => {
+            this.FDE()
+        }, 5000)
+        
+    }
+
+    private FDE(){
+        let instruction = this.fetchNextInstruction()
+        this.executeInstruction(instruction)
+
+    }
+
+    private start(){
+        setTimeout(() => {
+            this.FDE()
+        }, 1000)
+        
+        return
     }
 }
 

@@ -19,6 +19,7 @@ import vars from './data/vars.json';
 import DocsPage from './pages/DocsPage';
 
 import getLocaleText from './util/getLocaleText';
+import ComputerVisualiser from './components/ComputerVisualiser';
 const changelogData = getLocaleText('changeLog');
 
 let allowInDevPages = vars.devMode;
@@ -91,6 +92,10 @@ function App() {
 
 					<Route path='/docs'>
 						<DocsPage />
+					</Route>
+
+					<Route path='/compute'>
+						<ComputerVisualiser />
 					</Route>
 
 					<Route exact path='/'>

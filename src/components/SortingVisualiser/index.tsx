@@ -99,6 +99,7 @@ const SortingVisualiser: React.FC = () => {
 	}, []);
 
 	function AnimateEngine(command: Array<any> | string) {
+
 		try {
 			let commandCode: string = ''
 			if (Array.isArray(command)) {

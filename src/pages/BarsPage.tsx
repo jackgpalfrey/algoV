@@ -4,7 +4,7 @@ import SortingVisualiser from '../components/SortingVisualiser'
 
 function SortingVisualiserPage(){
     return (
-        <SortingVisualiser bars={30} animations={[]}/>
+        <SortingVisualiser/>
     )
 }
 

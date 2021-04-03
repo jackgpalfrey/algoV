@@ -1,6 +1,8 @@
 import INS from './instructionSet'
 import { toBin, toHex, fromBin, fromHex } from './helpers'
 import Memory from './Memory'
+
+//#region Interfaces
 export interface Registers{
     A: number // Acumulator
     X: number // Index X Register
@@ -29,29 +31,35 @@ export interface CPUOptions{
     cycleSpeed?: number
 
 }
-
+//#endregion
 
 class CPU{
+
+    //#region Type Declarations
     public bitSize: number
     public addressSize: number
+    public maxDataValue: number
     private cycleSpeed: number
 
     public completedCycles: number
     public completedTicks: number
     public cycleLimit: number
 
-    public PC: number
-    public SP: number
+    private PC: number
+    private SP: number
 
-    public registers: Registers
-    public flags: Flags
+    private registers: Registers
+    private flags: Flags
 
     private partitionMap: any
+    //#endregion
 
+    //#region CPU Reset and Initialisation
     constructor(options: CPUOptions){
         console.log("Started")
         this.bitSize = 8
         this.addressSize = 16
+        this.maxDataValue = 2**this.bitSize
         this.cycleSpeed = options.cycleSpeed || 1000 //ms
 
         this.completedCycles = 0
@@ -113,6 +121,7 @@ class CPU{
 
         // if (this.startupTest() === true) this.start()
     }
+    //#endregion
 
     //#region Memory Managment
     private getPartitionOfAddress(address: number): [string, string]{
@@ -197,6 +206,51 @@ class CPU{
 
     }
 
+    private isValidData(data: number){
+        return (typeof data === 'number' && data <= this.maxDataValue && data > 0)
+    }
+
+    //#endregion
+
+    //#region Registry Management
+    public getPC(){
+        return this.PC
+    }
+
+    public setPC(newValue: number){
+        if (typeof newValue !== 'number' || newValue >= 2**this.addressSize || newValue < 0) throw new Error('Invalid Address')
+        this.PC = newValue
+    }
+
+
+    public getSP(){
+        return this.SP
+    }
+
+    public setSP(newValue: number){
+        if (typeof newValue !== 'number' || newValue >= 2**this.addressSize || newValue < 0) throw new Error('Invalid Address')
+        this.SP = newValue
+    }
+
+    public getRegister(register: keyof Registers){
+        return this.registers[register]
+    }  
+
+    public setRegister(register: keyof Registers, newValue: number){
+        if (!this.isValidData(newValue)) throw new Error('Invalid Data')
+        this.registers[register] = newValue
+    }
+
+    public getFlag(flag: keyof Flags){
+        return this.flags[flag]
+    }
+
+    public setFlag(flag: keyof Flags, newValue: boolean){
+        if (typeof newValue === 'boolean') throw new Error('Invalid Data')
+        this.flags[flag] = newValue
+    }
+
+
     //#endregion
 
     //#region FDE Cycle
@@ -244,6 +298,7 @@ class CPU{
         return
     }
     //#endregion
+
 }
 
 export default CPU

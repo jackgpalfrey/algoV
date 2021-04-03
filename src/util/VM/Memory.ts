@@ -45,11 +45,24 @@ class Memory{
         }
     }
 
+    /**
+     * Checks integrity of memory (Checks length and a random sample of address locations for invalid data)
+     */
+    public checkIntegrity(){
+        const sampleSize = 5
+        if (this.data.length > this.addressSpaceSize) throw new Error('Memory Damaged')
+        let randomSample;
+        for (let i = 0; i < sampleSize; i++){
+            randomSample = this.data[Math.round(Math.random() * this.addressSpaceSize)]
+            if ( typeof randomSample !== 'number' || randomSample > 2**this.dataSize || randomSample < 0) throw new Error('Memory Damaged');
+        }
+    }
+
 
 
     public writeByte(address: number, newIntValue: number):number{
         if (!this.writeable) throw new Error('Cannot write to ROM')
-        if (typeof address !== 'number' || address >= this.addressSpaceSize || address < 0){
+        if (typeof address !== 'number' || address >= this.addressSpaceSize|| address < 0){
             console.log("ERR")
             let error = new Error('Out Of Address Space')
             throw error
@@ -61,12 +74,14 @@ class Memory{
         }
 
         this.data[address] = newIntValue
+        this.checkIntegrity()
         return this.data[address]
 
     }
 
     public readByte(address: number){
-        if (typeof address !== 'number' || address >= this.addressSpaceSize || address < 0 ){
+        this.checkIntegrity()
+        if (typeof address !== 'number' || address >= this.addressSpaceSize|| address < 0 ){
             let error = new Error('Out Of Address Space')
             throw error
         }
@@ -76,7 +91,7 @@ class Memory{
     }
 
     public readRegion(startAddress: number, endAddress: number){
-        if (typeof startAddress !== 'number' || startAddress >= this.addressSpaceSize || startAddress < 0 ){
+        if (typeof startAddress !== 'number' || startAddress >= this.addressSpaceSize|| startAddress < 0 ){
             let error = new Error(`Out Of Address Space (${startAddress})`)
             throw error
         }

@@ -1,4 +1,4 @@
-import { toBin, toHex } from './helpers'
+import { fromBin, toBin, toHex } from './helpers'
 import Memory from './Memory'
 import INS from './instructionSet'
 import InstructionSet from './instructionSet'
@@ -155,7 +155,7 @@ class CPU{
      * @param errorOnInvalidAddress Should program crash with error if address does not exist
      * @returns Decimal value at memory address
      */
-    public readByte(address: number, errorOnInvalidAddress:boolean = false): number{
+    public readByte(address: number, errorOnInvalidAddress:boolean = true): number{
         let startAddress;
         let endAddress;
         try {
@@ -182,7 +182,7 @@ class CPU{
      * @param errorOnInvalidAddress Should program crash with error if address does not exist
      * @returns Value at given address (Used to check if write was succesful)
      */
-    public writeByte(address: number, newValue: number, errorOnUnwriteable:boolean = false, errorOnInvalidAddress:boolean = false):number | undefined{
+    public writeByte(address: number, newValue: number, errorOnUnwriteable:boolean = true, errorOnInvalidAddress:boolean = true):number | undefined{
         if (!this.isValidData(newValue)) throw new Error('Invalid Data')
         let startAddress;
         let endAddress;
@@ -268,7 +268,8 @@ class CPU{
      * @param incrementBy The amount to increment Program Counter by (Negative means decrementing)
      */
     public incrementPC(incrementBy: number){
-        this.PC += incrementBy
+        let newVal = this.PC + incrementBy
+        this.setPC(newVal)
     }
 
     /**
@@ -284,7 +285,7 @@ class CPU{
      * @param newValue Value to set Stack Pointer to 
      */
     public setSP(newValue: number){
-        if (typeof newValue !== 'number' || newValue >= 2**this.addressSize || newValue < 0) throw new Error('Invalid Address')
+        if (typeof newValue !== 'number' || newValue >= 256 || newValue < 0) throw new Error('Invalid Address')
         this.SP = newValue
     }
 
@@ -293,7 +294,8 @@ class CPU{
      * @param incrementBy The amount to increment Stack Pointer by (Negative means decrementing)
      */
      public incrementSP(incrementBy: number){
-        this.SP += incrementBy
+        let newVal = this.SP + incrementBy
+        this.setSP(newVal)
     }
 
     /**
@@ -342,7 +344,15 @@ class CPU{
         if (this.getRegister('A') === 0) this.setFlag('Z', true)
         if (toBin(this.getRegister('A'))[0] === '1') this.setFlag('N', true)
     }
+
+    private getLittleEndianWordAddress(address1:number, address2:number){
+        let address1Bin = toBin(address1)
+        let address2Bin = toBin(address2)
+        let finalAddressBin = address2Bin + address1Bin
+        return fromBin(finalAddressBin)
+    }
     //#endregion
+    
     //#region FDE Cycle
 
     /**
@@ -368,8 +378,8 @@ class CPU{
      * @param instruction The decimal opcode of instruction to execute
      */
     private executeInstruction(instruction: number){
-        let tmp1;
         switch(instruction){
+            //#region LDA
             case INS.LDA_IMD:
                 // Reads Next Byte
                 let LDA_IMD_value = this.readByte(this.PC) // Explicit Value
@@ -413,6 +423,97 @@ class CPU{
                 // Sets falgs
                 this.LDA_setFlags()
                 break;
+            
+            case INS.LDA_ABS:
+                // Reads Address at Next Byte
+                let LDA_ABS_address1 = this.fetchNextByte()
+                let LDA_ABS_address2 = this.fetchNextByte()
+
+                let LDA_ABS_finalAddress = this.getLittleEndianWordAddress(LDA_ABS_address1, LDA_ABS_address2) // Address Rolls over if bigger than 8 bit limit 
+                // Reads Value at Address
+                let LDA_ABS_value = this.readByte(LDA_ABS_finalAddress)
+                // Loads Next Bytes Value to A
+                this.setRegister('A', LDA_ABS_value)
+                
+                // Sets falgs
+                this.LDA_setFlags()
+                break;
+            
+            case INS.LDA_ABSX:
+                // Reads Address at Next Byte
+                let LDA_ABSX_address1 = this.fetchNextByte()
+                let LDA_ABSX_address2 = this.fetchNextByte()
+
+                let LDA_ABSX_finalAddress = this.getLittleEndianWordAddress(LDA_ABSX_address1, LDA_ABSX_address2) // Address Rolls over if bigger than 8 bit limit 
+                
+                // Add X Register and checks if page boundary is crossed
+                let LDA_ABSX_finalAddressX = LDA_ABSX_finalAddress + this.getRegister('X')
+                if (LDA_ABSX_finalAddressX - LDA_ABSX_finalAddress >= 255) this.completedTicks++
+
+                // Reads Value at Address
+                let LDA_ABSX_value = this.readByte(LDA_ABSX_finalAddressX)
+                // Loads Next Bytes Value to A
+                this.setRegister('A', LDA_ABSX_value)
+                
+                // Sets falgs
+                this.LDA_setFlags()
+                break;
+            
+            case INS.LDA_ABSY:
+                // Reads Address at Next Byte
+                let LDA_ABSY_address1 = this.fetchNextByte()
+                let LDA_ABSY_address2 = this.fetchNextByte()
+
+                let LDA_ABSY_finalAddress = this.getLittleEndianWordAddress(LDA_ABSY_address1, LDA_ABSY_address2) // Address Rolls over if bigger than 8 bit limit 
+                
+                // Add X Register and checks if page boundary is crossed
+                let LDA_ABSY_finalAddressY = LDA_ABSY_finalAddress + this.getRegister('Y')
+                if (LDA_ABSY_finalAddressY - LDA_ABSY_finalAddress >= 255) this.completedTicks++
+
+                // Reads Value at Address
+                let LDA_ABSY_value = this.readByte(LDA_ABSY_finalAddressY)
+                // Loads Next Bytes Value to A
+                this.setRegister('A', LDA_ABSY_value)
+                
+                // Sets falgs
+                this.LDA_setFlags()
+                break;
+            
+            case INS.LDA_INDX:
+                // Reads Next Byte
+                let LDA_INDX_ZPAddress = this.fetchNextByte() // Explicit Value
+                LDA_INDX_ZPAddress += this.getRegister('X')
+                this.completedTicks++
+                
+                if (LDA_INDX_ZPAddress > 255) LDA_INDX_ZPAddress -= 256 // ZP Address Wraps Around
+
+                let LDA_INDX_address1 = this.readByte(LDA_INDX_ZPAddress)
+                let LDA_INDX_address2 = this.readByte(LDA_INDX_ZPAddress + 1)
+
+                let LDA_INDX_finalAddress = this.getLittleEndianWordAddress(LDA_INDX_address1, LDA_INDX_address2)
+
+                let LDA_INDX_value = this.readByte(LDA_INDX_finalAddress)
+
+                this.setRegister('A', LDA_INDX_value)
+                // Sets Flags
+                this.LDA_setFlags()        
+                break;
+
+            case INS.LDA_INDY:
+                let LDA_INDY_ZPAddress = this.fetchNextByte()
+                let LDA_INDY_address1 = this.readByte(LDA_INDY_ZPAddress)
+                let LDA_INDY_address2 = this.readByte(LDA_INDY_ZPAddress + 1)
+                let LDA_INDY_finalAddress = this.getLittleEndianWordAddress(LDA_INDY_address1, LDA_INDY_address2)
+                let LDA_INDY_finalAddressY = LDA_INDY_finalAddress + this.getRegister('Y')
+
+                // Checks if page boundary is crosssed
+                if (LDA_INDY_finalAddressY - LDA_INDY_finalAddress >= 255) this.completedTicks++
+
+                let LDA_INDY_value = this.readByte(LDA_INDY_finalAddressY)
+                this.setRegister('A', LDA_INDY_value)
+                break;
+        
+            //#endregion
             
             
             default:

@@ -47,7 +47,7 @@ class Memory{
 
 
 
-    public writeByte(address: number, newIntValue: number){
+    public writeByte(address: number, newIntValue: number):number{
         if (!this.writeable) throw new Error('Cannot write to ROM')
         if (typeof address !== 'number' || address >= this.addressSpaceSize || address < 0){
             console.log("ERR")

@@ -89,8 +89,7 @@ class CPU{
         this.partitionMap = {}
 
         
-        this.mount(new Memory(this.bitSize, 2**4))
-        this.mount(new Memory(this.bitSize, 2**4))
+        this.mount(new Memory(this.bitSize, 2**16))
 
         
         
@@ -99,7 +98,7 @@ class CPU{
         this.start()
     }
 
-    public reset(){
+    public reset():void{
         this.PC = 0
         this.SP = 255
 
@@ -124,6 +123,12 @@ class CPU{
     //#endregion
 
     //#region Memory Managment
+
+    /**
+     * Gets the partition of requested address
+     * @param address Decimal address of requested memory location
+     * @returns [Starting address of partition, Final Address and reference of partition]
+     */
     private getPartitionOfAddress(address: number): [string, string]{
         let partitionAddresses = Object.keys(this.partitionMap)
         let lastAddress = -1
@@ -143,6 +148,12 @@ class CPU{
 
     }
 
+    /**
+     * Reads given memory address and returns value
+     * @param address The Address to read from
+     * @param errorOnInvalidAddress Should program crash with error if address does not exist
+     * @returns Decimal value at memory address
+     */
     public readByte(address: number, errorOnInvalidAddress:boolean = false): number{
         let startAddress;
         let endAddress;
@@ -161,7 +172,16 @@ class CPU{
         
     }
 
-    public writeByte(address: number, newValue: number, errorOnUnwriteable:boolean = false, errorOnInvalidAddress:boolean = false){
+    /**
+     * Writes Value to given memory address
+     * @param address The address to write to
+     * @param newValue The decimal value to write to given memory address
+     * @param errorOnUnwriteable Should program crash with error if partition is unwriteable
+     * @param errorOnInvalidAddress Should program crash with error if address does not exist
+     * @returns Value at given address (Used to check if write was succesful)
+     */
+    public writeByte(address: number, newValue: number, errorOnUnwriteable:boolean = false, errorOnInvalidAddress:boolean = false):number | undefined{
+        if (!this.isValidData(newValue)) throw new Error('Invalid Data')
         let startAddress;
         let endAddress;
         try {
@@ -185,6 +205,11 @@ class CPU{
         
     }
     
+    /**
+     * Mounts given memory to partition map.
+     * @param memory A instance of memory to mount to CPU
+     * @returns The upper address and reference of memory partition
+     */
     public mount(memory: Memory): number{
         let currentMap = this.partitionMap
         let currentLocations = Object.keys(currentMap)
@@ -206,45 +231,102 @@ class CPU{
 
     }
 
-    private isValidData(data: number){
-        return (typeof data === 'number' && data <= this.maxDataValue && data > 0)
+    /**
+     * Checks if given data is valid
+     * @param data Data to check is permissable data
+     * @returns true if value is permissable and false if not
+     */
+    private isValidData(data: number):boolean{
+        return (typeof data === 'number' && data < this.maxDataValue && data > 0)
     }
 
     //#endregion
 
     //#region Registry Management
+    
+    /**
+     * Gets value in program counter
+     * @returns Value of Program Counter
+     */
     public getPC(){
         return this.PC
     }
 
+    /**
+     * Sets Program Counter to given value
+     * @param newValue Value to set PC to
+     */
     public setPC(newValue: number){
         if (typeof newValue !== 'number' || newValue >= 2**this.addressSize || newValue < 0) throw new Error('Invalid Address')
         this.PC = newValue
     }
 
+    /**
+     * Increments (or decrements with negative value) the Program Counter by given amount
+     * @param incrementBy The amount to increment Program Counter by (Negative means decrementing)
+     */
+    public incrementPC(incrementBy: number){
+        this.PC += incrementBy
+    }
 
+    /**
+     * Returns value of Stack Pointer
+     * @returns Value of Stack Pointer
+     */
     public getSP(){
         return this.SP
     }
 
+    /**
+     * Sets Stack Pointer to given value
+     * @param newValue Value to set Stack Pointer to 
+     */
     public setSP(newValue: number){
         if (typeof newValue !== 'number' || newValue >= 2**this.addressSize || newValue < 0) throw new Error('Invalid Address')
         this.SP = newValue
     }
 
+    /**
+     * Increments (or decrements with negative value) the Stack Pointer by given amount
+     * @param incrementBy The amount to increment Stack Pointer by (Negative means decrementing)
+     */
+     public incrementSP(incrementBy: number){
+        this.SP += incrementBy
+    }
+
+    /**
+     * Returns the value of the given register
+     * @param register The Register to read from
+     * @returns The Value of given register
+     */
     public getRegister(register: keyof Registers){
         return this.registers[register]
     }  
 
+    /**
+     * Sets the value of given register to given value
+     * @param register The Register to write to
+     * @param newValue The Value to set given register to
+     */
     public setRegister(register: keyof Registers, newValue: number){
         if (!this.isValidData(newValue)) throw new Error('Invalid Data')
         this.registers[register] = newValue
     }
 
+    /**
+     * Returns the value of a given flag
+     * @param flag Flags to return value of
+     * @returns The Value of the given flag
+     */
     public getFlag(flag: keyof Flags){
         return this.flags[flag]
     }
 
+    /**
+     * Sets given flag to given value
+     * @param flag Flag to write to
+     * @param newValue The Value to set given flag to
+     */
     public setFlag(flag: keyof Flags, newValue: boolean){
         if (typeof newValue === 'boolean') throw new Error('Invalid Data')
         this.flags[flag] = newValue
@@ -254,6 +336,11 @@ class CPU{
     //#endregion
 
     //#region FDE Cycle
+
+    /**
+     * Gets the next instruction
+     * @returns The Next instruction pointed to by PC
+     */
     private fetchNextInstruction(){
         let instruction = this.readByte(this.PC)
         this.PC++
@@ -261,6 +348,10 @@ class CPU{
         return instruction
     }
 
+    /**
+     * Executes and handles instruction execution
+     * @param instruction The decimal opcode of instruction to execute
+     */
     private executeInstruction(instruction: number){
         switch(instruction){
             default:
@@ -270,6 +361,9 @@ class CPU{
         }
     }
 
+    /**
+     * Completes cycle and restarts FDE cycle
+     */
     private completeCycle(){
         // return
         this.completedCycles++
@@ -284,18 +378,23 @@ class CPU{
         
     }
 
+    /**
+     * Handles fetching and then executing instructions
+     */
     private FDE(){
         let instruction = this.fetchNextInstruction()
         this.executeInstruction(instruction)
 
     }
 
+    /**
+     * Starts clock
+     */
     private start(){
         setTimeout(() => {
             this.FDE()
         }, 1000)
         
-        return
     }
     //#endregion
 

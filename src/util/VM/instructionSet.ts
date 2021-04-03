@@ -1,14 +1,31 @@
 import { fromHex } from './helpers'
 
 const InstructionSet = {
-    LDA_IMD: fromHex('A9'), // Load Accumulator (Immediate)
-    LDA_ZP: fromHex('A5'), // Load Accumulator (Zero Page)
-    LDA_ZPX: fromHex('B5'), // Load Accumulator (Zero Page, X)
-    LDA_ABS: fromHex('AD'), // Load Accumulator (Absolute)
-    LDA_ABSX: fromHex('BD'), // Load Accumulator (Absolute,X)
-    LDA_ABSY: fromHex('B9'), // Load Accumulator (Absolute,Y)
-    LDA_INDX: fromHex('A1'), // Load Accumulator (Indirect, X)
-    LDA_INDY: fromHex('B1'), // Load Accumulator (Indirect, Y)
+    LDA: {
+        IMD: fromHex('A9'), // (Immediate)
+        ZP: fromHex('A5'), //  (Zero Page)
+        ZPX: fromHex('B5'), //  (Zero Page, X)
+        ABS: fromHex('AD'), //  (Absolute)
+        ABSX: fromHex('BD'), //  (Absolute,X)
+        ABSY: fromHex('B9'), //  (Absolute,Y)
+        INDX: fromHex('A1'), //  (Indirect, X)
+        INDY: fromHex('B1'), //  (Indirect, Y)
+    }, 
+    LDX: {
+        IMD: fromHex('A2'), // (Immediate)
+        ZP: fromHex('A6'), //  (Zero Page)
+        ZPY: fromHex('B6'), //  (Zero Page, Y)
+        ABS: fromHex('AE'), //  (Absolute)
+        ABSY: fromHex('BE'), //  (Absolute,Y)
+    }, 
+    LDY: {
+        IMD: fromHex('A0'), // (Immediate)
+        ZP: fromHex('A4'), //  (Zero Page)
+        ZPX: fromHex('B4'), //  (Zero Page, X)
+        ABS: fromHex('AC'), //  (Absolute)
+        ABSX: fromHex('BC'), //  (Absolute,X)
+    }, 
+
 }
 
 export default InstructionSet

@@ -1,21 +1,18 @@
 import React, { useEffect, useState } from 'react'
 
+import { toBin, toHex, fromBin, fromHex } from '../../util/VM/helpers'
 import CPU from '../../util/VM/CPU'
+import INS from '../../util/VM/instructionSet'
 
-const processor = new CPU()
+const processor = new CPU({cycleLimit: 5})
+
 
 const ComputerVisualiser: React.FC = () => {
-    // const [processor, setProcessor]: any = useState()
-    processor.writeByte(0, 255)
-    processor.writeByte(65536, 255)
+    // processor.writeByte(0, INS.LDA_ABS)
+    console.log(`0: ${toHex(processor.readByte(0))}`)
+    console.log()
     
-    useEffect(() => {
-        
-        // console.log(processor.readByte(0))
-        setInterval(() => {
-            
-        }, 10000)
-    }, [])
+    
     return (
         <div></div>
     )

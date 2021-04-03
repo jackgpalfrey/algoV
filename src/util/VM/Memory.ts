@@ -1,3 +1,5 @@
+import { toBin, toHex, fromBin, fromHex } from './helpers'
+
 class Memory{
     public writeable: boolean;
     public dataSize: number;
@@ -47,7 +49,8 @@ class Memory{
 
     public writeByte(address: number, newIntValue: number){
         if (!this.writeable) throw new Error('Cannot write to ROM')
-        if (typeof address !== 'number' || address > this.addressSpaceSize || address < 0){
+        if (typeof address !== 'number' || address >= this.addressSpaceSize || address < 0){
+            console.log("ERR")
             let error = new Error('Out Of Address Space')
             throw error
         }
@@ -63,7 +66,7 @@ class Memory{
     }
 
     public readByte(address: number){
-        if (typeof address !== 'number' || address > this.addressSpaceSize || address < 0 ){
+        if (typeof address !== 'number' || address >= this.addressSpaceSize || address < 0 ){
             let error = new Error('Out Of Address Space')
             throw error
         }

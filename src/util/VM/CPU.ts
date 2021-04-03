@@ -18,13 +18,27 @@ export interface Flags{
 
 }
 
+export interface CPUOptions{
+    /**
+     * The Number of Cycles that can execute before terminating
+     */
+    cycleLimit?: number
+    /**
+     * The time between between each FDE cycle
+     */
+    cycleSpeed?: number
+
+}
+
 
 class CPU{
     public bitSize: number
     public addressSize: number
+    private cycleSpeed: number
 
     public completedCycles: number
     public completedTicks: number
+    public cycleLimit: number
 
     public PC: number
     public SP: number
@@ -34,13 +48,15 @@ class CPU{
 
     private partitionMap: any
 
-    constructor(){
+    constructor(options: CPUOptions){
         console.log("Started")
         this.bitSize = 8
         this.addressSize = 16
+        this.cycleSpeed = options.cycleSpeed || 1000 //ms
 
         this.completedCycles = 0
         this.completedTicks = 0
+        this.cycleLimit = options.cycleLimit || Infinity
 
         this.PC = 0 // Program Counter
         this.SP = 0 // Stack Pointer
@@ -65,7 +81,9 @@ class CPU{
         this.partitionMap = {}
 
         
-        this.mount(new Memory(this.bitSize, 2**16))
+        this.mount(new Memory(this.bitSize, 2**4))
+        this.mount(new Memory(this.bitSize, 2**4))
+
         
         
         
@@ -96,11 +114,16 @@ class CPU{
         // if (this.startupTest() === true) this.start()
     }
 
+    //#region Memory Managment
     private getPartitionOfAddress(address: number): [string, string]{
         let partitionAddresses = Object.keys(this.partitionMap)
         let lastAddress = -1
         for (let i = 0; i < partitionAddresses.length; i++){
-            if (address <= parseInt(partitionAddresses[i]) && address > lastAddress ){
+            let partitionAddress = parseInt(partitionAddresses[i])
+            if (lastAddress !== -1) partitionAddress += 1
+
+
+            if (address <= partitionAddress && address > lastAddress ){
                 return [partitionAddresses[i - 1] || '0', partitionAddresses[i]]
             }
 
@@ -111,20 +134,44 @@ class CPU{
 
     }
 
-    public readByte(address: number){
-        let [startAddress, endAddress] = this.getPartitionOfAddress(address)
+    public readByte(address: number, errorOnInvalidAddress:boolean = false): number{
+        let startAddress;
+        let endAddress;
+        try {
+            [startAddress, endAddress] = this.getPartitionOfAddress(address)
+        } catch (err) {
+            if (errorOnInvalidAddress) throw err
+            return 0
+        }
         let mem: Memory = this.partitionMap[endAddress]
-        return mem.readByte(address - parseInt(startAddress))
+
+        let readAddress:number = address - parseInt(startAddress)
+        if (startAddress !== '0') readAddress -= 1
+        
+        return mem.readByte(readAddress)
         
     }
 
-    public writeByte(address: number, newValue: number, errorOnIssue = false){
-        let [startAddress, endAddress] = this.getPartitionOfAddress(address)
+    public writeByte(address: number, newValue: number, errorOnUnwriteable:boolean = false, errorOnInvalidAddress:boolean = false){
+        let startAddress;
+        let endAddress;
+        try {
+            [startAddress, endAddress] = this.getPartitionOfAddress(address)
+        } catch (err) {
+            if (errorOnInvalidAddress) throw err
+            return
+        }
+        
         let mem: Memory = this.partitionMap[endAddress]
+
+
+        let writeAddress:number = address - parseInt(startAddress)
+        if (startAddress !== '0') writeAddress -= 1
+
         try{
-            return mem.writeByte(address - parseInt(startAddress), 255)
+            return mem.writeByte(writeAddress, newValue)
         } catch {
-            if (errorOnIssue) throw new Error("Couldn't Write")
+            if (errorOnUnwriteable) throw new Error("Couldn't Write")
         }
         
     }
@@ -136,7 +183,7 @@ class CPU{
         if (currentLocations.length !== 0){
             startAddress = parseInt(currentLocations[currentLocations.length - 1])
         }
-        let endAddress = startAddress + memory.addressSpaceSize
+        let endAddress = startAddress + memory.addressSpaceSize - 1
         if (endAddress > 2**this.addressSize){
             let error = new Error("Address Too Large")
             throw error
@@ -150,7 +197,9 @@ class CPU{
 
     }
 
+    //#endregion
 
+    //#region FDE Cycle
     private fetchNextInstruction(){
         let instruction = this.readByte(this.PC)
         this.PC++
@@ -161,7 +210,7 @@ class CPU{
     private executeInstruction(instruction: number){
         switch(instruction){
             default:
-                console.log(`Invalid Instruction ${instruction}`)
+                console.log(`Invalid Instruction ${toHex(instruction)}`)
                 this.completeCycle()
                 break;
         }
@@ -171,8 +220,13 @@ class CPU{
         // return
         this.completedCycles++
         setTimeout(() => {
-            this.FDE()
-        }, 5000)
+            if (this.completedCycles <= this.cycleLimit){
+                this.FDE()
+            } else {
+                throw new Error('Cycle Limit Reached')
+            }
+            
+        }, this.cycleSpeed)
         
     }
 
@@ -189,6 +243,7 @@ class CPU{
         
         return
     }
+    //#endregion
 }
 
 export default CPU

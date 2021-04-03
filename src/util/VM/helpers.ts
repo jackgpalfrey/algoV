@@ -20,13 +20,14 @@ class Helpers{
      * Converts integer to hex value
      */
   export function toHex(intValue: number): string{
-    return intValue.toString(16)
+    return `0x${intValue.toString(16).toUpperCase()}`
 }
 
     /**
      * Converts Binary Value to integer
      */
  export function fromBin(binaryValue: string): number{
+    binaryValue = binaryValue.replace(' ','')
     return parseInt(binaryValue, 2)
 }
 
@@ -34,7 +35,10 @@ class Helpers{
      * Converts Hex Value to integer
     */
 export function fromHex(hexValue: string): number{
+    hexValue = hexValue.replace(' ','')
     return parseInt(hexValue, 16)
+
+
 }
 
 

@@ -340,6 +340,113 @@ class CPU{
     //#endregion
 
     //#region Instruction Helper Functions
+
+    //#region Addressing Modes
+    /**
+     * Gets next byte in PC and returns the value at that address
+     * @returns Value at Zero Page Address
+     */
+    private addrModeZP(){
+        let ZPaddress = this.fetchNextByte()  // Gets Zero Page Address at next location
+        console.log(ZPaddress)
+        if (ZPaddress > 255)  ZPaddress -= 256 // Rolls address over if bigger than Zero Page Size
+        return ZPaddress // Returns address
+    }
+
+    private addrModeZPX(){
+        // Reads Address At Next Byte
+        let address = this.fetchNextByte()
+        address += this.getRegister('X')
+        this.completedTicks++
+
+        if (address > 255) address -= 256 // Address Rolls over if bigger than 8 bit limit 
+
+        return address
+    }
+
+    private addrModeZPY(){
+        // Reads Address at Next Byte
+        let address = this.fetchNextByte()
+        address += this.getRegister('Y')
+        this.completedTicks++
+
+        if (address > 255) address -= 256 // Address Rolls over if bigger than 8 bit limit 
+        // Reads Value at Address
+        return address
+    }
+    
+    private addrModeABS(){
+        // Reads Address at Next Byte
+        let address1 = this.fetchNextByte()
+        let address2 = this.fetchNextByte()
+
+        let finalAddress = this.getLittleEndianWordAddress(address1, address2) // Address Rolls over if bigger than 8 bit limit 
+        // Reads Value at Address
+        return finalAddress
+    }
+
+    private addrModeABSX(){
+        // Reads Address at Next Byte
+        let address1 = this.fetchNextByte()
+        let address2 = this.fetchNextByte()
+
+        let finalAddress = this.getLittleEndianWordAddress(address1, address2) // Address Rolls over if bigger than 8 bit limit 
+        
+        // Add X Register and checks if page boundary is crossed
+        let finalAddressX = finalAddress + this.getRegister('X')
+        if (finalAddressX - finalAddress >= 255) this.completedTicks++
+
+        // Reads Value at Address
+        return finalAddressX
+    }
+
+    private addrModeABSY(){
+        // Reads Address at Next Byte
+        let address1 = this.fetchNextByte()
+        let address2 = this.fetchNextByte()
+
+        let finalAddress = this.getLittleEndianWordAddress(address1, address2) // Address Rolls over if bigger than 8 bit limit 
+        
+        // Add X Register and checks if page boundary is crossed
+        let finalAddressY = finalAddress + this.getRegister('Y')
+        if (finalAddressY - finalAddress >= 255) this.completedTicks++
+
+        // Reads Value at Address
+        return finalAddressY
+    }
+
+    private addrModeINDX(){
+        // Reads Next Byte
+        let ZPAddress = this.fetchNextByte() // Explicit Value
+        ZPAddress += this.getRegister('X')
+        this.completedTicks++
+        
+        if (ZPAddress > 255) ZPAddress -= 256 // ZP Address Wraps Around
+
+        let address1 = this.readByte(ZPAddress)
+        let address2 = this.readByte(ZPAddress + 1)
+
+        let finalAddress = this.getLittleEndianWordAddress(address1, address2)
+
+        return finalAddress
+    }
+
+
+    private addrModeINDY(){
+        let ZPAddress = this.fetchNextByte()
+        let address1 = this.readByte(ZPAddress)
+        let address2 = this.readByte(ZPAddress + 1)
+        let finalAddress = this.getLittleEndianWordAddress(address1, address2)
+        let finalAddressY = finalAddress + this.getRegister('Y')
+
+        // Checks if page boundary is crosssed
+        if (finalAddressY - finalAddress >= 255) this.completedTicks++
+
+        return finalAddressY
+    }
+    //#endregion
+
+    //#region Flag Setting
     private LDA_setFlags(){
         if (this.getRegister('A') === 0) this.setFlag('Z', true)
         if (toBin(this.getRegister('A'))[0] === '1') this.setFlag('N', true)
@@ -354,6 +461,7 @@ class CPU{
         if (this.getRegister('Y') === 0) this.setFlag('Z', true)
         if (toBin(this.getRegister('Y'))[0] === '1') this.setFlag('N', true)
     }
+    //#endregion
 
     private getLittleEndianWordAddress(address1:number, address2:number){
         let address1Bin = toBin(address1)
@@ -402,123 +510,64 @@ class CPU{
                 break;
             
             case INS.LDA.ZP:
-                // Reads Address at Next Byte
-                let LDA_ZP_address = this.fetchNextByte()
-                if (LDA_ZP_address > 255) LDA_ZP_address -= 256 // Address Rolls over if bigger than 8 bit limit (Shouldn't actually be possible but just to be safe)
-
-                // Reads Value at Address
-                let LDA_ZP_value = this.readByte(LDA_ZP_address)
-
+                let LDA_ZP_address = this.addrModeZP()
                 // Loads Next Bytes Value to A
-                this.setRegister('A', LDA_ZP_value)
+                this.setRegister('A', this.readByte(LDA_ZP_address))
                 
                 // Sets falgs
                 this.LDA_setFlags()
                 break;
             
             case INS.LDA.ZPX:
-                // Reads Address at Next Byte
-                let LDA_ZPX_address = this.fetchNextByte()
-                LDA_ZPX_address += this.getRegister('X')
-                this.completedTicks++
-
-                if (LDA_ZPX_address > 255) LDA_ZPX_address -= 256 // Address Rolls over if bigger than 8 bit limit 
-                // Reads Value at Address
-                let LDA_ZPX_value = this.readByte(LDA_ZPX_address)
+                let LDA_ZPX_address = this.addrModeZPX()
                 // Loads Next Bytes Value to A
-                this.setRegister('A', LDA_ZPX_value)
+                this.setRegister('A', this.readByte(LDA_ZPX_address))
                 
                 // Sets falgs
                 this.LDA_setFlags()
                 break;
             
-            case INS.LDA.ABS:
-                // Reads Address at Next Byte
-                let LDA_ABS_address1 = this.fetchNextByte()
-                let LDA_ABS_address2 = this.fetchNextByte()
-
-                let LDA_ABS_finalAddress = this.getLittleEndianWordAddress(LDA_ABS_address1, LDA_ABS_address2) // Address Rolls over if bigger than 8 bit limit 
-                // Reads Value at Address
-                let LDA_ABS_value = this.readByte(LDA_ABS_finalAddress)
+            case INS.LDA.ABS:                
+                let LDA_ABS_address = this.addrModeABS()
                 // Loads Next Bytes Value to A
-                this.setRegister('A', LDA_ABS_value)
+                this.setRegister('A', this.readByte(LDA_ABS_address))
                 
                 // Sets falgs
                 this.LDA_setFlags()
                 break;
         
             case INS.LDA.ABSX:
-                // Reads Address at Next Byte
-                let LDA_ABSX_address1 = this.fetchNextByte()
-                let LDA_ABSX_address2 = this.fetchNextByte()
-
-                let LDA_ABSX_finalAddress = this.getLittleEndianWordAddress(LDA_ABSX_address1, LDA_ABSX_address2) // Address Rolls over if bigger than 8 bit limit 
-                
-                // Add X Register and checks if page boundary is crossed
-                let LDA_ABSX_finalAddressX = LDA_ABSX_finalAddress + this.getRegister('X')
-                if (LDA_ABSX_finalAddressX - LDA_ABSX_finalAddress >= 255) this.completedTicks++
-
-                // Reads Value at Address
-                let LDA_ABSX_value = this.readByte(LDA_ABSX_finalAddressX)
+                let LDA_ABSX_address = this.addrModeABSX()
                 // Loads Next Bytes Value to A
-                this.setRegister('A', LDA_ABSX_value)
+                this.setRegister('A', this.readByte(LDA_ABSX_address))
                 
                 // Sets falgs
                 this.LDA_setFlags()
                 break;
-            
+        
             case INS.LDA.ABSY:
-                // Reads Address at Next Byte
-                let LDA_ABSY_address1 = this.fetchNextByte()
-                let LDA_ABSY_address2 = this.fetchNextByte()
-
-                let LDA_ABSY_finalAddress = this.getLittleEndianWordAddress(LDA_ABSY_address1, LDA_ABSY_address2) // Address Rolls over if bigger than 8 bit limit 
-                
-                // Add X Register and checks if page boundary is crossed
-                let LDA_ABSY_finalAddressY = LDA_ABSY_finalAddress + this.getRegister('Y')
-                if (LDA_ABSY_finalAddressY - LDA_ABSY_finalAddress >= 255) this.completedTicks++
-
-                // Reads Value at Address
-                let LDA_ABSY_value = this.readByte(LDA_ABSY_finalAddressY)
+                let LDA_ABSY_address = this.addrModeABSY()
                 // Loads Next Bytes Value to A
-                this.setRegister('A', LDA_ABSY_value)
+                this.setRegister('A', this.readByte(LDA_ABSY_address))
                 
                 // Sets falgs
                 this.LDA_setFlags()
                 break;
             
             case INS.LDA.INDX:
-                // Reads Next Byte
-                let LDA_INDX_ZPAddress = this.fetchNextByte() // Explicit Value
-                LDA_INDX_ZPAddress += this.getRegister('X')
-                this.completedTicks++
-                
-                if (LDA_INDX_ZPAddress > 255) LDA_INDX_ZPAddress -= 256 // ZP Address Wraps Around
-
-                let LDA_INDX_address1 = this.readByte(LDA_INDX_ZPAddress)
-                let LDA_INDX_address2 = this.readByte(LDA_INDX_ZPAddress + 1)
-
-                let LDA_INDX_finalAddress = this.getLittleEndianWordAddress(LDA_INDX_address1, LDA_INDX_address2)
-
-                let LDA_INDX_value = this.readByte(LDA_INDX_finalAddress)
-
-                this.setRegister('A', LDA_INDX_value)
+                let LDA_INDX_address = this.addrModeINDX()
+                // Loads Next Bytes Value to A
+                this.setRegister('A', this.readByte(LDA_INDX_address))
                 // Sets Flags
                 this.LDA_setFlags()        
                 break;
 
             case INS.LDA.INDY:
-                let LDA_INDY_ZPAddress = this.fetchNextByte()
-                let LDA_INDY_address1 = this.readByte(LDA_INDY_ZPAddress)
-                let LDA_INDY_address2 = this.readByte(LDA_INDY_ZPAddress + 1)
-                let LDA_INDY_finalAddress = this.getLittleEndianWordAddress(LDA_INDY_address1, LDA_INDY_address2)
-                let LDA_INDY_finalAddressY = LDA_INDY_finalAddress + this.getRegister('Y')
+                let LDA_INDY_address = this.addrModeINDY()
+                // Loads Next Bytes Value to A
+                this.setRegister('A', this.readByte(LDA_INDY_address))
 
-                // Checks if page boundary is crosssed
-                if (LDA_INDY_finalAddressY - LDA_INDY_finalAddress >= 255) this.completedTicks++
-
-                let LDA_INDY_value = this.readByte(LDA_INDY_finalAddressY)
-                this.setRegister('A', LDA_INDY_value)
+                this.LDA_setFlags()
                 break;
         
             //#endregion
@@ -536,64 +585,34 @@ class CPU{
                 break;
             
             case INS.LDX.ZP:
-                // Reads Address at Next Byte
-                let LDX_ZP_address = this.fetchNextByte()
-                if (LDX_ZP_address > 255) LDX_ZP_address -= 256 // Address Rolls over if bigger than 8 bit limit (Shouldn't actually be possible but just to be safe)
-
-                // Reads Value at Address
-                let LDX_ZP_value = this.readByte(LDX_ZP_address)
-
-                // Loads Next Bytes Value to A
-                this.setRegister('X', LDX_ZP_value)
+                // Loads Next Bytes Value to X
+                let LDX_ZP_address = this.addrModeZP()
+                this.setRegister('X', this.readByte(LDX_ZP_address))
                 
                 // Sets falgs
                 this.LDX_setFlags()
             break;
                 
             case INS.LDX.ZPY:
-                // Reads Address at Next Byte
-                let LDX_ZPY_address = this.fetchNextByte()
-                LDX_ZPY_address += this.getRegister('Y')
-                this.completedTicks++
-
-                if (LDX_ZPY_address > 255) LDX_ZPY_address -= 256 // Address Rolls over if bigger than 8 bit limit 
-                // Reads Value at Address
-                let LDX_ZPY_value = this.readByte(LDX_ZPY_address)
-                // Loads Next Bytes Value to A
-                this.setRegister('X', LDX_ZPY_value)
+                
+                let LDX_ZPY_address = this.addrModeZPY()
+                this.setRegister('X', this.readByte(LDX_ZPY_address))
                 
                 // Sets falgs
                 this.LDX_setFlags()
                 break;
             
             case INS.LDX.ABS:
-                // Reads Address at Next Byte
-                let LDX_ABS_address1 = this.fetchNextByte()
-                let LDX_ABS_address2 = this.fetchNextByte()
-
-                let LDX_ABS_finalAddress = this.getLittleEndianWordAddress(LDX_ABS_address1, LDX_ABS_address2) // Address Rolls over if bigger than 8 bit limit 
-                // Reads Value at Address
-                let LDX_ABS_value = this.readByte(LDX_ABS_finalAddress)
-                // Loads Next Bytes Value to A
-                this.setRegister('X', LDX_ABS_value)
+                let LDX_ABS_address = this.addrModeABS()
+                this.setRegister('X', this.readByte(LDX_ABS_address))
                 
                 // Sets flags
                 this.LDX_setFlags()
                 break;
         
             case INS.LDX.ABSY:
-                // Reads Address at Next Byte
-                let LDX_ABSY_address1 = this.fetchNextByte()
-                let LDX_ABSY_address2 = this.fetchNextByte()
-
-                let LDX_ABSY_finalAddress = this.getLittleEndianWordAddress(LDX_ABSY_address1, LDX_ABSY_address2) // Address Rolls over if bigger than 8 bit limit 
-                
-                // Add X Register and checks if page boundary is crossed
-                let LDX_ABSY_finalAddressY = LDX_ABSY_finalAddress + this.getRegister('Y')
-                if (LDX_ABSY_finalAddressY - LDX_ABSY_finalAddress >= 255) this.completedTicks++
-
                 // Reads Value at Address
-                let LDX_ABSY_value = this.readByte(LDX_ABSY_finalAddressY)
+                let LDX_ABSY_value = this.readByte(this.addrModeABSY())
                 // Loads Next Bytes Value to A
                 this.setRegister('X', LDX_ABSY_value)
                 
@@ -615,12 +634,8 @@ class CPU{
                 break;
             
             case INS.LDY.ZP:
-                // Reads Address at Next Byte
-                let LDY_ZP_address = this.fetchNextByte()
-                if (LDY_ZP_address > 255) LDY_ZP_address -= 256 // Address Rolls over if bigger than 8 bit limit (Shouldn't actually be possible but just to be safe)
-
                 // Reads Value at Address
-                let LDY_ZP_value = this.readByte(LDY_ZP_address)
+                let LDY_ZP_value = this.readByte(this.addrModeZP())
 
                 // Loads Next Bytes Value to A
                 this.setRegister('Y', LDY_ZP_value)
@@ -630,14 +645,8 @@ class CPU{
             break;
                 
             case INS.LDY.ZPX:
-                // Reads Address at Next Byte
-                let LDY_ZPX_address = this.fetchNextByte()
-                LDY_ZPX_address += this.getRegister('X')
-                this.completedTicks++
-
-                if (LDY_ZPX_address > 255) LDY_ZPX_address -= 256 // Address Rolls over if bigger than 8 bit limit 
                 // Reads Value at Address
-                let LDY_ZPX_value = this.readByte(LDY_ZPX_address)
+                let LDY_ZPX_value = this.readByte(this.addrModeZPX())
                 // Loads Next Bytes Value to A
                 this.setRegister('Y', LDY_ZPX_value)
                 
@@ -646,13 +655,8 @@ class CPU{
                 break;
             
             case INS.LDY.ABS:
-                // Reads Address at Next Byte
-                let LDY_ABS_address1 = this.fetchNextByte()
-                let LDY_ABS_address2 = this.fetchNextByte()
-
-                let LDY_ABS_finalAddress = this.getLittleEndianWordAddress(LDY_ABS_address1, LDY_ABS_address2) // Address Rolls over if bigger than 8 bit limit 
                 // Reads Value at Address
-                let LDY_ABS_value = this.readByte(LDY_ABS_finalAddress)
+                let LDY_ABS_value = this.readByte(this.addrModeABS())
                 // Loads Next Bytes Value to A
                 this.setRegister('Y', LDY_ABS_value)
                 
@@ -661,18 +665,8 @@ class CPU{
                 break;
         
             case INS.LDY.ABSX:
-                // Reads Address at Next Byte
-                let LDY_ABSX_address1 = this.fetchNextByte()
-                let LDY_ABSX_address2 = this.fetchNextByte()
-
-                let LDY_ABSX_finalAddress = this.getLittleEndianWordAddress(LDY_ABSX_address1, LDY_ABSX_address2) // Address Rolls over if bigger than 8 bit limit 
-                
-                // Add X Register and checks if page boundary is crossed
-                let LDY_ABSX_finalAddressY = LDY_ABSX_finalAddress + this.getRegister('X')
-                if (LDY_ABSX_finalAddressY - LDY_ABSX_finalAddress >= 255) this.completedTicks++
-
                 // Reads Value at Address
-                let LDY_ABSX_value = this.readByte(LDY_ABSX_finalAddressY)
+                let LDY_ABSX_value = this.readByte(this.addrModeABSX())
                 // Loads Next Bytes Value to A
                 this.setRegister('Y', LDY_ABSX_value)
                 

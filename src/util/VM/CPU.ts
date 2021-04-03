@@ -1,6 +1,7 @@
-import INS from './instructionSet'
-import { toBin, toHex, fromBin, fromHex } from './helpers'
+import { toBin, toHex } from './helpers'
 import Memory from './Memory'
+import INS from './instructionSet'
+import InstructionSet from './instructionSet'
 
 //#region Interfaces
 export interface Registers{
@@ -168,6 +169,7 @@ class CPU{
         let readAddress:number = address - parseInt(startAddress)
         if (startAddress !== '0') readAddress -= 1
         
+        this.completedTicks++
         return mem.readByte(readAddress)
         
     }
@@ -237,7 +239,7 @@ class CPU{
      * @returns true if value is permissable and false if not
      */
     private isValidData(data: number):boolean{
-        return (typeof data === 'number' && data < this.maxDataValue && data > 0)
+        return (typeof data === 'number' && data < this.maxDataValue && data >= 0)
     }
 
     //#endregion
@@ -328,13 +330,19 @@ class CPU{
      * @param newValue The Value to set given flag to
      */
     public setFlag(flag: keyof Flags, newValue: boolean){
-        if (typeof newValue === 'boolean') throw new Error('Invalid Data')
+        if (typeof newValue !== 'boolean') throw new Error('Invalid Data')
         this.flags[flag] = newValue
     }
 
 
     //#endregion
 
+    //#region Instruction Helper Functions
+    private LDA_setFlags(){
+        if (this.getRegister('A') === 0) this.setFlag('Z', true)
+        if (toBin(this.getRegister('A'))[0] === '1') this.setFlag('N', true)
+    }
+    //#endregion
     //#region FDE Cycle
 
     /**
@@ -342,10 +350,17 @@ class CPU{
      * @returns The Next instruction pointed to by PC
      */
     private fetchNextInstruction(){
-        let instruction = this.readByte(this.PC)
+        return this.fetchNextByte()
+    }
+
+    /**
+     * Gets byte currently at PC and increments it
+     * @returns Byte at PC
+     */
+    private fetchNextByte(){
+        let data = this.readByte(this.PC)
         this.PC++
-        this.completedTicks++
-        return instruction
+        return data
     }
 
     /**
@@ -353,12 +368,63 @@ class CPU{
      * @param instruction The decimal opcode of instruction to execute
      */
     private executeInstruction(instruction: number){
+        let tmp1;
         switch(instruction){
+            case INS.LDA_IMD:
+                // Reads Next Byte
+                let LDA_IMD_value = this.readByte(this.PC) // Explicit Value
+                this.completedTicks++
+
+                // Loads Next Bytes Value to A
+                this.setRegister('A', LDA_IMD_value)
+                this.incrementPC(1)
+
+                // Sets Flags
+                this.LDA_setFlags()        
+                break;
+            
+            case INS.LDA_ZP:
+                // Reads Address at Next Byte
+                let LDA_ZP_address = this.fetchNextByte()
+                if (LDA_ZP_address > 255) LDA_ZP_address -= 256 // Address Rolls over if bigger than 8 bit limit (Shouldn't actually be possible but just to be safe)
+
+                // Reads Value at Address
+                let LDA_ZP_value = this.readByte(LDA_ZP_address)
+
+                // Loads Next Bytes Value to A
+                this.setRegister('A', LDA_ZP_value)
+                
+                // Sets falgs
+                this.LDA_setFlags()
+                break;
+            
+            case INS.LDA_ZPX:
+                // Reads Address at Next Byte
+                let LDA_ZPX_address = this.fetchNextByte()
+                LDA_ZPX_address += this.getRegister('X')
+                this.completedTicks++
+
+                if (LDA_ZPX_address > 255) LDA_ZPX_address -= 256 // Address Rolls over if bigger than 8 bit limit 
+                // Reads Value at Address
+                let LDA_ZPX_value = this.readByte(LDA_ZPX_address)
+                // Loads Next Bytes Value to A
+                this.setRegister('A', LDA_ZPX_value)
+                
+                // Sets falgs
+                this.LDA_setFlags()
+                break;
+            
+            
             default:
                 console.log(`Invalid Instruction ${toHex(instruction)}`)
-                this.completeCycle()
                 break;
+
+
         }
+
+        console.log(this.registers)
+        console.log(this.flags)
+        this.completeCycle()
     }
 
     /**

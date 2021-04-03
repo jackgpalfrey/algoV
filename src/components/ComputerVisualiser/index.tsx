@@ -8,8 +8,9 @@ const CPU = new VM({cycleLimit: 10})
 
 
 const ComputerVisualiser: React.FC = () => {
-    CPU.writeByte(0,10)
-    CPU.writeByte(5, 255)
+    CPU.writeByte(0,INS.LDA_ZP)
+    CPU.writeByte(1, 255)
+    CPU.writeByte(255, 42)
     
     return (
         <div></div>

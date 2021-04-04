@@ -1,4 +1,4 @@
-import { fromBin, toBin, toHex } from './helpers'
+import { fromBin, toBin, toHex, getInstructionFromOpcode } from './helpers'
 import Memory from './Memory'
 import INS from './instructionSet'
 import InstructionSet from './instructionSet'
@@ -16,6 +16,7 @@ export interface Flags{
     I: boolean // Interupt Disable Flag
     D: boolean // Decimal Mode Flag
     B: boolean // Break Flag
+    Unused: boolean // Unused Flag
     V: boolean // Overflow Flag
     N: boolean // Negative Flag
 
@@ -82,6 +83,7 @@ class CPU{
             I: false, // Interupt Disable Flag
             D: false, // Decimal Mode Flag
             B: false, // Break Flag
+            Unused: true, // Unused Flag
             V: false, // Overflow Flag
             N: false, // Negative Flag
         }
@@ -100,8 +102,8 @@ class CPU{
     }
 
     public reset():void{
-        this.PC = 0
-        this.SP = 255
+        this.PC = 0 // Program Counter
+        this.SP = 255   // Stack Pointer (Stack between 256 - 511, inclusive, so actual value is 0x01[SP])
 
         this.registers = {
             A: 0, // Acumulator
@@ -115,6 +117,7 @@ class CPU{
             I: false, // Interupt Disable Flag
             D: false, // Decimal Mode Flag
             B: false, // Break Flag
+            Unused: true, // Unused Flag
             V: false, // Overflow Flag
             N: false // Negative Flag
         }
@@ -195,7 +198,7 @@ class CPU{
         
         let mem: Memory = this.partitionMap[endAddress]
 
-
+        this.completedTicks++
         let writeAddress:number = address - parseInt(startAddress)
         if (startAddress !== '0') writeAddress -= 1
 
@@ -205,6 +208,20 @@ class CPU{
             if (errorOnUnwriteable) throw new Error("Couldn't Write")
         }
         
+    }
+
+    public pushStack(newValue: number){
+        let address = this.getSPFullAddress()
+        this.writeByte(address, newValue)
+        this.incrementSP(-1)
+    }
+
+    public popStack(){
+        let address = this.getSPFullAddress()
+        this.completedTicks++
+        let value = this.readByte(address + 1)
+        this.incrementSP(1)
+        return value
     }
     
     /**
@@ -280,6 +297,10 @@ class CPU{
         return this.SP
     }
 
+    public getSPFullAddress(){
+        return this.SP + 256
+    }
+
     /**
      * Sets Stack Pointer to given value
      * @param newValue Value to set Stack Pointer to 
@@ -336,6 +357,15 @@ class CPU{
         this.flags[flag] = newValue
     }
 
+    public getFlagByte(){
+        let byte = ''
+        let values = Object.values(this.flags)
+        for (let i = values.length - 1; i >= 0; i-- ){
+            byte += values[i] ? '1' : '0'
+        }
+        return byte
+    }
+
 
     //#endregion
 
@@ -348,7 +378,6 @@ class CPU{
      */
     private addrModeZP(){
         let ZPaddress = this.fetchNextByte()  // Gets Zero Page Address at next location
-        console.log(ZPaddress)
         if (ZPaddress > 255)  ZPaddress -= 256 // Rolls address over if bigger than Zero Page Size
         return ZPaddress // Returns address
     }
@@ -385,7 +414,7 @@ class CPU{
         return finalAddress
     }
 
-    private addrModeABSX(){
+    private addrModeABSX(alwaysUseAdditionalTick:boolean = false){
         // Reads Address at Next Byte
         let address1 = this.fetchNextByte()
         let address2 = this.fetchNextByte()
@@ -394,13 +423,13 @@ class CPU{
         
         // Add X Register and checks if page boundary is crossed
         let finalAddressX = finalAddress + this.getRegister('X')
-        if (finalAddressX - finalAddress >= 255) this.completedTicks++
+        if (finalAddressX - finalAddress >= 255 || alwaysUseAdditionalTick) this.completedTicks++
 
         // Reads Value at Address
         return finalAddressX
     }
 
-    private addrModeABSY(){
+    private addrModeABSY(alwaysUseAdditionalTick: boolean = false){
         // Reads Address at Next Byte
         let address1 = this.fetchNextByte()
         let address2 = this.fetchNextByte()
@@ -409,7 +438,7 @@ class CPU{
         
         // Add X Register and checks if page boundary is crossed
         let finalAddressY = finalAddress + this.getRegister('Y')
-        if (finalAddressY - finalAddress >= 255) this.completedTicks++
+        if (finalAddressY - finalAddress >= 255 || alwaysUseAdditionalTick) this.completedTicks++
 
         // Reads Value at Address
         return finalAddressY
@@ -428,19 +457,22 @@ class CPU{
 
         let finalAddress = this.getLittleEndianWordAddress(address1, address2)
 
+        this.completedTicks++
+
         return finalAddress
     }
 
 
-    private addrModeINDY(){
+    private addrModeINDY(alwaysUseAdditionalTick:boolean = false){
         let ZPAddress = this.fetchNextByte()
         let address1 = this.readByte(ZPAddress)
         let address2 = this.readByte(ZPAddress + 1)
         let finalAddress = this.getLittleEndianWordAddress(address1, address2)
         let finalAddressY = finalAddress + this.getRegister('Y')
+        this.completedTicks++
 
         // Checks if page boundary is crosssed
-        if (finalAddressY - finalAddress >= 255) this.completedTicks++
+        if (finalAddressY - finalAddress >= 255 || alwaysUseAdditionalTick) this.completedTicks++
 
         return finalAddressY
     }
@@ -469,6 +501,13 @@ class CPU{
         let finalAddressBin = address2Bin + address1Bin
         return fromBin(finalAddressBin)
     }
+
+    private getAddressFromLittleEndian(LoByte:number, HiByte:number){
+        let fullAddress = `${toBin(HiByte)}${toBin(LoByte)}`
+        let address = fromBin(fullAddress)
+        return address
+    }
+
     //#endregion
     
     //#region FDE Cycle
@@ -496,6 +535,7 @@ class CPU{
      * @param instruction The decimal opcode of instruction to execute
      */
     private executeInstruction(instruction: number){
+        console.groupCollapsed(`Cycle: ${this.completedCycles}      Instruction: ${toHex(instruction)} (${getInstructionFromOpcode(instruction)})      PC: ${this.getPC()}`)
         switch(instruction){
             //#region LDA
             case INS.LDA.IMD:
@@ -677,7 +717,119 @@ class CPU{
 
 
 
+            //#region STA
+            case INS.STA.ZP:
+                let STA_ZP_address = this.addrModeZP()
+                this.writeByte(STA_ZP_address, this.getRegister('A'))
+                break;
+           
+            case INS.STA.ZPX:
+                let STA_ZPX_address = this.addrModeZPX()
+                this.writeByte(STA_ZPX_address, this.getRegister('A'))
+                break;
 
+            case INS.STA.ABS:
+                let STA_ABS_address = this.addrModeABS()
+                this.writeByte(STA_ABS_address, this.getRegister('A'))
+                break;
+
+            case INS.STA.ABSX:
+                let STA_ABSX_address = this.addrModeABSX(true)
+                this.writeByte(STA_ABSX_address, this.getRegister('A'))
+                break;
+
+            case INS.STA.ABSY:
+                let STA_ABSY_address = this.addrModeABSY(true)
+                this.writeByte(STA_ABSY_address, this.getRegister('A'))
+                break;
+
+            case INS.STA.INDX:
+                let STA_INDX_address = this.addrModeINDX()
+                this.writeByte(STA_INDX_address, this.getRegister('A'))
+                break;
+            
+            case INS.STA.INDY:
+                let STA_INDY_address = this.addrModeINDY(true)
+                this.writeByte(STA_INDY_address, this.getRegister('A'))
+                break;
+           
+            //#endregion
+
+            //#region STX
+            case INS.STX.ZP:
+                let STX_ZP_address = this.addrModeZP()
+                this.writeByte(STX_ZP_address, this.getRegister('X'))
+                break;
+
+            case INS.STX.ZPY:
+                let STX_ZPY_address = this.addrModeZPY()
+                this.writeByte(STX_ZPY_address, this.getRegister('X'))
+                break;
+
+            case INS.STX.ABS:
+                let STX_ABS_address = this.addrModeABS()
+                this.writeByte(STX_ABS_address, this.getRegister('X'))
+                break;
+            //#endregion
+
+            //#region STY
+            case INS.STY.ZP:
+                let STY_ZP_address = this.addrModeZP()
+                this.writeByte(STY_ZP_address, this.getRegister('Y'))
+                break;
+
+            case INS.STY.ZPX:
+                let STY_ZPX_address = this.addrModeZPX()
+                this.writeByte(STY_ZPX_address, this.getRegister('Y'))
+                break;
+
+            case INS.STY.ABS:
+                let STY_ABS_address = this.addrModeABS()
+                this.writeByte(STY_ABS_address, this.getRegister('Y'))
+                break;
+            //#endregion
+
+
+
+            //#region JMP:
+            case INS.JMP.ABS:
+                let JMP_ABS_address = this.addrModeABS()
+                this.setPC(JMP_ABS_address)
+                break;
+
+            case INS.JMP.IDR:
+                let JMP_IDR_firstAddress = this.addrModeABS()
+                let JMP_IDR_LoByte = this.readByte(JMP_IDR_firstAddress)
+                let JMP_IDR_HiByte = this.readByte(JMP_IDR_firstAddress + 1)
+                let finalAddress = this.getAddressFromLittleEndian(JMP_IDR_LoByte, JMP_IDR_HiByte)
+                this.setPC(finalAddress)
+                break;
+            //#endregion
+
+            //#region JSR
+            case INS.JSR.ABS:
+                let JSR_ABS_nextAdress = this.addrModeABS()
+                let JSR_ABS_curAddress = this.getPC()
+                let JSR_ABS_curAddress_bin = toBin(JSR_ABS_curAddress, true, 16)
+                let JSR_ABS_HiByte = JSR_ABS_curAddress_bin.slice(0,8)
+                let JSR_ABS_LoByte = JSR_ABS_curAddress_bin.slice(8)
+                this.pushStack(fromBin(JSR_ABS_HiByte))
+                this.pushStack(fromBin(JSR_ABS_LoByte))
+                this.setPC(JSR_ABS_nextAdress)
+                this.completedTicks++
+                break;
+            //#endregion
+
+            //#region RST
+            case INS.RTS:
+                let RTS_LoByte = this.popStack()
+                let RTS_HiByte = this.popStack()
+                let RTS_address = this.getAddressFromLittleEndian(RTS_LoByte, RTS_HiByte)
+                this.setPC(RTS_address)
+                this.completedTicks++
+                break;
+            //#endregion
+            
             default:
                 console.log(`Invalid Instruction ${toHex(instruction)}`)
                 break;
@@ -687,6 +839,7 @@ class CPU{
 
         console.log(this.registers)
         console.log(this.flags)
+        console.groupEnd()
         this.completeCycle()
     }
 

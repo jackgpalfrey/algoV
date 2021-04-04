@@ -611,6 +611,7 @@ class CPU{
      */
     private executeInstruction(instruction: number){
         console.groupCollapsed(`Cycle: ${this.completedCycles}      Instruction: ${toHex(instruction)} (${getInstructionFromOpcode(instruction)})      PC: ${this.getPC()}`)
+        console.group("―――――――――――――――――< Logs >―――――――――――――――――")
         switch(instruction){
             //#region LDA
             case INS.LDA.IMD:
@@ -1179,6 +1180,8 @@ class CPU{
 
     //#region DEBUG
     private logStatus(){
+        console.groupEnd()
+        console.group("―――――――――――――< System State >―――――――――――――")
         console.groupCollapsed("Registers:")
         console.log(`PC: ${this.PC}`)
         console.log(`SP: ${this.SP}`)
@@ -1206,6 +1209,7 @@ class CPU{
 
         console.groupCollapsed("RAM:")
         console.log(this.partitionMap['65535'].data)
+        console.groupEnd()
         console.groupEnd()
     }
     //#endregion

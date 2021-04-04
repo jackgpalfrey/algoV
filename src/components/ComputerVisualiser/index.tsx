@@ -8,6 +8,10 @@ const CPU = new VM({cycleLimit: 10})
 
 
 const ComputerVisualiser: React.FC = () => {
+    console.log(CPU.bitwiseAND(fromBin('1100 1110'), fromBin('1000 0100')))
+
+    // CPU.setRegister('A', 22)
+    // CPU.writeByte(0, INS.PHP)
     // CPU.writeByte(0,INS.JSR.ABS)
     // CPU.writeByte(1, fromBin('0000 1010'))
     // CPU.writeByte(2, fromBin('0000 0000'))

@@ -212,6 +212,7 @@ class CPU{
 
     public pushStack(newValue: number){
         let address = this.getSPFullAddress()
+        console.log(address)
         this.writeByte(address, newValue)
         this.incrementSP(-1)
     }
@@ -347,6 +348,13 @@ class CPU{
         return this.flags[flag]
     }
 
+    public getFlagByte(){
+        let values = Object.values(this.flags).reverse()
+        let stringifiedValues = values.join('')
+        return stringifiedValues.replaceAll('true', '1').replaceAll('false','0')
+
+    }
+
     /**
      * Sets given flag to given value
      * @param flag Flag to write to
@@ -357,14 +365,19 @@ class CPU{
         this.flags[flag] = newValue
     }
 
-    public getFlagByte(){
-        let byte = ''
-        let values = Object.values(this.flags)
-        for (let i = values.length - 1; i >= 0; i-- ){
-            byte += values[i] ? '1' : '0'
+    public setFlagByte(byte: number){
+        let byteBin = toBin(byte)
+        let byteArray = byteBin.split('').reverse()
+        let flags = Object.keys(this.flags)
+        for (let i = 0; i < byteArray.length; i++){
+            let flagObj = this.flags as any
+            let key = flags[i]
+            flagObj[key] =  byteArray[i] === '1' ? true : false
         }
-        return byte
+        this.completedCycles += 2
     }
+
+    
 
 
     //#endregion
@@ -374,7 +387,7 @@ class CPU{
     //#region Addressing Modes
     /**
      * Gets next byte in PC and returns the value at that address
-     * @returns Value at Zero Page Address
+     * @returns Zero Page Address
      */
     private addrModeZP(){
         let ZPaddress = this.fetchNextByte()  // Gets Zero Page Address at next location
@@ -495,6 +508,67 @@ class CPU{
     }
     //#endregion
 
+    //#region Bitwise Logic
+    public bitwiseAND(value1:number, value2:number){
+        let bin1 = toBin(value1)
+        let bin2 = toBin(value2)
+        let finalBin = ''
+
+        for (let i = 0; i < bin1.length; i++){
+            // console.log(`${bin1[]}`)
+            
+            if (bin1[i] === '1' && bin2[i] === '1'){
+                finalBin += '1'
+            } else {
+                finalBin += '0'
+            }
+
+        }
+
+        return fromBin(finalBin)
+    }
+
+    public bitwiseEOR(value1:number, value2:number){
+        let bin1 = toBin(value1)
+        let bin2 = toBin(value2)
+        let finalBin = ''
+
+        for (let i = 0; i < bin1.length; i++){
+            // console.log(`${bin1[]}`)
+            
+            if ((bin1[i] === '0' && bin2[i] === '1') || (bin1[i] === '1' && bin2[i] === '0')){
+                finalBin += '1'
+            } else {
+                finalBin += '0'
+            }
+
+        }
+
+        return fromBin(finalBin)
+    }
+
+    public bitwiseORA(value1:number, value2:number){
+        let bin1 = toBin(value1)
+        let bin2 = toBin(value2)
+        let finalBin = ''
+
+        for (let i = 0; i < bin1.length; i++){
+            // console.log(`${bin1[]}`)
+            
+            if (bin1[i] === '1' || bin2[i] === '1'){
+                finalBin += '1'
+            } else {
+                finalBin += '0'
+            }
+
+        }
+
+        return fromBin(finalBin)
+    }
+    //#endregion
+
+
+    //#region LittleEndian Calclulations
     private getLittleEndianWordAddress(address1:number, address2:number){
         let address1Bin = toBin(address1)
         let address2Bin = toBin(address2)
@@ -507,6 +581,7 @@ class CPU{
         let address = fromBin(fullAddress)
         return address
     }
+    //#endregion
 
     //#endregion
     
@@ -830,6 +905,229 @@ class CPU{
                 break;
             //#endregion
             
+
+
+            //#region TSX
+            case INS.TSX:
+                this.setRegister('X', this.getSP())
+                this.completedTicks++
+                this.LDX_setFlags()
+                break;
+            //#endregion
+
+            //#region TXS
+            case INS.TXS:
+                this.setSP(this.getRegister('X'))
+                this.completedTicks++
+                break;
+            //#endregion
+            
+            //#region PHA
+            case INS.PHA:
+                this.pushStack(this.getRegister('A'))
+                this.completedTicks++
+                break;
+            //#endregion
+            
+            //#region PHA
+            case INS.PHP:
+                let PHP_flagByte = this.getFlagByte()
+                this.pushStack(fromBin(PHP_flagByte))
+                this.completedTicks++
+                break;
+            //#endregion
+
+            //#region PLA:
+            case INS.PLA:
+                this.setRegister('A',this.popStack())
+                this.completedTicks += 2
+                this.LDA_setFlags()
+                break;
+            //#endregion
+
+            //#region PLP
+            case INS.PLP:
+                this.setFlagByte(this.popStack())
+                break;
+            //#endregion
+
+
+
+            //#region AND
+            case INS.AND.IMD:
+                let AND_IMD_newVal = this.bitwiseAND(this.getRegister('A'), this.fetchNextByte())
+                this.setRegister('A', AND_IMD_newVal)
+                this.LDA_setFlags()
+                break;
+
+            case INS.AND.ZP:
+                let AND_ZP_address = this.addrModeZP()
+                let AND_ZP_newVal = this.bitwiseAND(this.getRegister('A'), this.readByte(AND_ZP_address))
+                this.setRegister('A', AND_ZP_newVal)
+                this.LDA_setFlags()
+                break;
+
+            case INS.AND.ZPX:
+                let AND_ZPX_address = this.addrModeZPX()
+                let AND_ZPX_newVal = this.bitwiseAND(this.getRegister('A'), this.readByte(AND_ZPX_address))
+                this.setRegister('A', AND_ZPX_newVal)
+                this.LDA_setFlags()
+                break;
+
+            case INS.AND.ABS:
+                let AND_ABS_address = this.addrModeABS()
+                let AND_ABS_newVal = this.bitwiseAND(this.getRegister('A'), this.readByte(AND_ABS_address))
+                this.setRegister('A', AND_ABS_newVal)
+                this.LDA_setFlags()
+                break;
+
+            case INS.AND.ABSX:
+                let AND_ABSX_address = this.addrModeABSX()
+                let AND_ABSX_newVal = this.bitwiseAND(this.getRegister('A'), this.readByte(AND_ABSX_address))
+                this.setRegister('A', AND_ABSX_newVal)
+                this.LDA_setFlags()
+                break;
+
+            case INS.AND.ABSY:
+                let AND_ABSY_address = this.addrModeABSY()
+                let AND_ABSY_newVal = this.bitwiseAND(this.getRegister('A'), this.readByte(AND_ABSY_address))
+                this.setRegister('A', AND_ABSY_newVal)
+                this.LDA_setFlags()
+                break;
+
+            case INS.AND.INDX:
+                let AND_INDX_address = this.addrModeINDX()
+                let AND_INDX_newVal = this.bitwiseAND(this.getRegister('A'), this.readByte(AND_INDX_address))
+                this.setRegister('A', AND_INDX_newVal)
+                this.LDA_setFlags()
+                break;
+
+            case INS.AND.INDY:
+                let AND_INDY_address = this.addrModeINDY()
+                let AND_INDY_newVal = this.bitwiseAND(this.getRegister('A'), this.readByte(AND_INDY_address))
+                this.setRegister('A', AND_INDY_newVal)
+                this.LDA_setFlags()
+                break;
+
+            
+            //#endregion
+
+            //#region EOR
+            case INS.EOR.IMD:
+                let EOR_IMD_newVal = this.bitwiseEOR(this.getRegister('A'), this.fetchNextByte())
+                this.setRegister('A', EOR_IMD_newVal)
+                this.LDA_setFlags()
+                break;
+
+            case INS.EOR.ZP:
+                let EOR_ZP_address = this.addrModeZP()
+                let EOR_ZP_newVal = this.bitwiseEOR(this.getRegister('A'), this.readByte(EOR_ZP_address))
+                this.setRegister('A', EOR_ZP_newVal)
+                this.LDA_setFlags()
+                break;
+
+            case INS.EOR.ZPX:
+                let EOR_ZPX_address = this.addrModeZPX()
+                let EOR_ZPX_newVal = this.bitwiseEOR(this.getRegister('A'), this.readByte(EOR_ZPX_address))
+                this.setRegister('A', EOR_ZPX_newVal)
+                this.LDA_setFlags()
+                break;
+
+            case INS.EOR.ABS:
+                let EOR_ABS_address = this.addrModeABS()
+                let EOR_ABS_newVal = this.bitwiseEOR(this.getRegister('A'), this.readByte(EOR_ABS_address))
+                this.setRegister('A', EOR_ABS_newVal)
+                this.LDA_setFlags()
+                break;
+
+            case INS.EOR.ABSX:
+                let EOR_ABSX_address = this.addrModeABSX()
+                let EOR_ABSX_newVal = this.bitwiseEOR(this.getRegister('A'), this.readByte(EOR_ABSX_address))
+                this.setRegister('A', EOR_ABSX_newVal)
+                this.LDA_setFlags()
+                break;
+
+            case INS.EOR.ABSY:
+                let EOR_ABSY_address = this.addrModeABSY()
+                let EOR_ABSY_newVal = this.bitwiseEOR(this.getRegister('A'), this.readByte(EOR_ABSY_address))
+                this.setRegister('A', EOR_ABSY_newVal)
+                this.LDA_setFlags()
+                break;
+
+            case INS.EOR.INDX:
+                let EOR_INDX_address = this.addrModeINDX()
+                let EOR_INDX_newVal = this.bitwiseEOR(this.getRegister('A'), this.readByte(EOR_INDX_address))
+                this.setRegister('A', EOR_INDX_newVal)
+                this.LDA_setFlags()
+                break;
+
+            case INS.EOR.INDY:
+                let EOR_INDY_address = this.addrModeINDY()
+                let EOR_INDY_newVal = this.bitwiseEOR(this.getRegister('A'), this.readByte(EOR_INDY_address))
+                this.setRegister('A', EOR_INDY_newVal)
+                this.LDA_setFlags()
+                break;
+
+            
+            //#endregion
+
+            //#region ORA
+            case INS.ORA.IMD:
+                let ORA_IMD_newVal = this.bitwiseORA(this.getRegister('A'), this.fetchNextByte())
+                this.setRegister('A', ORA_IMD_newVal)
+                this.LDA_setFlags()
+                break;
+
+            case INS.ORA.ZP:
+                let ORA_ZP_address = this.addrModeZP()
+                let ORA_ZP_newVal = this.bitwiseORA(this.getRegister('A'), this.readByte(ORA_ZP_address))
+                this.setRegister('A', ORA_ZP_newVal)
+                this.LDA_setFlags()
+                break;
+
+            case INS.ORA.ZPX:
+                let ORA_ZPX_address = this.addrModeZPX()
+                let ORA_ZPX_newVal = this.bitwiseORA(this.getRegister('A'), this.readByte(ORA_ZPX_address))
+                this.setRegister('A', ORA_ZPX_newVal)
+                this.LDA_setFlags()
+                break;
+
+            case INS.ORA.ABS:
+                let ORA_ABS_address = this.addrModeABS()
+                let ORA_ABS_newVal = this.bitwiseORA(this.getRegister('A'), this.readByte(ORA_ABS_address))
+                this.setRegister('A', ORA_ABS_newVal)
+                this.LDA_setFlags()
+                break;
+
+            case INS.ORA.ABSX:
+                let ORA_ABSX_address = this.addrModeABSX()
+                let ORA_ABSX_newVal = this.bitwiseORA(this.getRegister('A'), this.readByte(ORA_ABSX_address))
+                this.setRegister('A', ORA_ABSX_newVal)
+                this.LDA_setFlags()
+                break;
+
+            case INS.ORA.ABSY:
+                let ORA_ABSY_address = this.addrModeABSY()
+                let ORA_ABSY_newVal = this.bitwiseORA(this.getRegister('A'), this.readByte(ORA_ABSY_address))
+                this.setRegister('A', ORA_ABSY_newVal)
+                this.LDA_setFlags()
+                break;
+
+            case INS.ORA.INDX:
+                let ORA_INDX_address = this.addrModeINDX()
+                let ORA_INDX_newVal = this.bitwiseORA(this.getRegister('A'), this.readByte(ORA_INDX_address))
+                this.setRegister('A', ORA_INDX_newVal)
+                this.LDA_setFlags()
+                break;
+
+            case INS.ORA.INDY:
+                let ORA_INDY_address = this.addrModeINDY()
+                let ORA_INDY_newVal = this.bitwiseORA(this.getRegister('A'), this.readByte(ORA_INDY_address))
+                this.setRegister('A', ORA_INDY_newVal)
+                this.LDA_setFlags()
+                break;
+            //#endregion
+            
             default:
                 console.log(`Invalid Instruction ${toHex(instruction)}`)
                 break;
@@ -837,8 +1135,7 @@ class CPU{
 
         }
 
-        console.log(this.registers)
-        console.log(this.flags)
+        this.logStatus()
         console.groupEnd()
         this.completeCycle()
     }
@@ -877,6 +1174,39 @@ class CPU{
             this.FDE()
         }, 1000)
         
+    }
+    //#endregion
+
+    //#region DEBUG
+    private logStatus(){
+        console.groupCollapsed("Registers:")
+        console.log(`PC: ${this.PC}`)
+        console.log(`SP: ${this.SP}`)
+        let registers = Object.keys(this.registers)
+        let regObj = this.registers as any
+        for (let i = 0; i < registers.length; i++){
+            let reg = registers[i] as any
+            console.log(`${reg}: ${regObj[reg]}`)
+        }
+        console.groupEnd()
+
+        console.groupCollapsed(`Flags: (${this.getFlagByte()})`)
+        let flags = Object.keys(this.flags)
+        let flagObj = this.flags as any
+        for (let i = 0; i < flags.length; i++){
+            let flag = flags[i] as any
+            if (flag === 'Unused') continue
+            console.log(`%c ${flag}: ${flagObj[flag]}`, `color:${flagObj[flag] ? 'green' : 'red'}`)
+        }
+        console.groupEnd()
+
+        console.groupCollapsed("Stack:")
+        console.log(this.partitionMap['65535'].readRegion(256,512))
+        console.groupEnd()
+
+        console.groupCollapsed("RAM:")
+        console.log(this.partitionMap['65535'].data)
+        console.groupEnd()
     }
     //#endregion
 

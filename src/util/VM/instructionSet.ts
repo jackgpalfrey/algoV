@@ -55,8 +55,52 @@ const InstructionSet = {
     JSR:{   // Jump To Subroutine
         ABS: fromHex('20')
     },
-    RTS: fromHex('60')  // Return from Subroutine
+    RTS: fromHex('60'),  // Return from Subroutine
 
+
+
+
+    TSX: fromHex('BA'), // Transfer Stack Pointer To X 
+    TXS: fromHex('9A'), // Transfer X To Stack Pointer
+    PHA: fromHex('48'), // Push Accumulator To Stack
+    PHP: fromHex('08'), // Push Flags Byte To Stack
+    PLA: fromHex('68'), // Pull Accumulator From Stack
+    PLP: fromHex('28'), // Pull Flags From Stack
+
+
+
+    AND: {
+        IMD: fromHex('29'), // (Immediate)
+        ZP: fromHex('25'), //  (Zero Page)
+        ZPX: fromHex('35'), //  (Zero Page, X)
+        ABS: fromHex('2D'), //  (Absolute)
+        ABSX: fromHex('3D'), //  (Absolute,X)
+        ABSY: fromHex('39'), //  (Absolute,Y)
+        INDX: fromHex('21'), //  (Indirect, X)
+        INDY: fromHex('31'), //  (Indirect, Y)
+    },
+
+    EOR: {
+        IMD: fromHex('49'), // (Immediate)
+        ZP: fromHex('45'), //  (Zero Page)
+        ZPX: fromHex('55'), //  (Zero Page, X)
+        ABS: fromHex('4D'), //  (Absolute)
+        ABSX: fromHex('5D'), //  (Absolute,X)
+        ABSY: fromHex('59'), //  (Absolute,Y)
+        INDX: fromHex('41'), //  (Indirect, X)
+        INDY: fromHex('51'), //  (Indirect, Y)
+    },
+
+    ORA: {
+        IMD: fromHex('09'), // (Immediate)
+        ZP: fromHex('05'), //  (Zero Page)
+        ZPX: fromHex('15'), //  (Zero Page, X)
+        ABS: fromHex('0D'), //  (Absolute)
+        ABSX: fromHex('1D'), //  (Absolute,X)
+        ABSY: fromHex('19'), //  (Absolute,Y)
+        INDX: fromHex('01'), //  (Indirect, X)
+        INDY: fromHex('11'), //  (Indirect, Y)
+    },
 }
 
 export default InstructionSet

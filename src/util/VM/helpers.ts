@@ -43,17 +43,40 @@ export function fromHex(hexValue: string): number{
 
 }
 
-
+/**
+ * Gets the instruction name of the given opocode
+ * @param opcode The decimal opcode of the instruction
+ * @returns The name of the related insruction
+ */
 export function getInstructionFromOpcode(opcode: number){
     let instructionSet = INS as any
     let keys = Object.keys(instructionSet)
     for (let i = 0; i < keys.length; i++){
         if (typeof instructionSet[keys[i]]=== 'object'){
             let values = Object.values(instructionSet[keys[i]])
-            if (values.includes(opcode)) return keys[i]
+            if (values.includes(opcode)) return `${keys[i]}`
         } else {
-            if (instructionSet[keys[i]] === opcode) return keys[i]
+            if (instructionSet[keys[i]] === opcode) return `${keys[i]}`
         }
+    }
+
+    return 'UNK'
+}
+
+/**
+ * Gets the addressing mode of a given opcode with the base instruction
+ * @param opcode Decimal Opcode of instruction
+ * @param instruction Name of instruction
+ * @returns Name of addressing mode
+ */
+export function getAddressingModeFromOpcode(opcode: number, instruction: string){
+    let instructionSet = INS as any
+    let addressModes = instructionSet[instruction]
+    if (typeof addressModes === 'number') return 'IMP'
+    let keys = Object.keys(addressModes)
+    for (let i = 0; i < keys.length; i++){
+        let key = keys[i]
+        if (addressModes[key] === opcode) return key
     }
 
     return 'UNK'

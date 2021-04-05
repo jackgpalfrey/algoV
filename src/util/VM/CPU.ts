@@ -1,7 +1,6 @@
-import { fromBin, toBin, toHex, getInstructionFromOpcode } from './helpers'
+import { fromBin, toBin, toHex, getInstructionFromOpcode, fromHex, getAddressingModeFromOpcode } from './helpers'
 import Memory from './Memory'
 import INS from './instructionSet'
-import InstructionSet from './instructionSet'
 
 //#region Interfaces
 export interface Registers{
@@ -58,7 +57,11 @@ class CPU{
 
     //#region CPU Reset and Initialisation
     constructor(options: CPUOptions){
+        // DEBUG STUFF
+        console.log('\n\n\n\n\n\n')
         console.log("Started")
+
+
         this.bitSize = 8
         this.addressSize = 16
         this.maxDataValue = 2**this.bitSize
@@ -509,7 +512,7 @@ class CPU{
     //#endregion
 
     //#region Bitwise Logic
-    public bitwiseAND(value1:number, value2:number){
+    private bitwiseAND(value1:number, value2:number){
         let bin1 = toBin(value1)
         let bin2 = toBin(value2)
         let finalBin = ''
@@ -528,7 +531,7 @@ class CPU{
         return fromBin(finalBin)
     }
 
-    public bitwiseEOR(value1:number, value2:number){
+    private bitwiseEOR(value1:number, value2:number){
         let bin1 = toBin(value1)
         let bin2 = toBin(value2)
         let finalBin = ''
@@ -547,7 +550,7 @@ class CPU{
         return fromBin(finalBin)
     }
 
-    public bitwiseORA(value1:number, value2:number){
+    private bitwiseORA(value1:number, value2:number){
         let bin1 = toBin(value1)
         let bin2 = toBin(value2)
         let finalBin = ''
@@ -564,6 +567,15 @@ class CPU{
         }
 
         return fromBin(finalBin)
+    }
+
+    private bitwiseBIT(address: number){
+        let memoryValue = this.readByte(address)
+        let ANDed = this.bitwiseAND(this.getRegister('A'), memoryValue)
+        if (ANDed === 0) this.setFlag('Z', true)
+        this.setFlag('N', toBin(memoryValue)[0] === '1' ? true : false)
+        this.setFlag('V', toBin(memoryValue)[1] === '1' ? true : false)
+    
     }
     //#endregion
 
@@ -610,7 +622,9 @@ class CPU{
      * @param instruction The decimal opcode of instruction to execute
      */
     private executeInstruction(instruction: number){
-        console.groupCollapsed(`Cycle: ${this.completedCycles}      Instruction: ${toHex(instruction)} (${getInstructionFromOpcode(instruction)})      PC: ${this.getPC()}`)
+        let instructionName = getInstructionFromOpcode(instruction)
+        console.groupCollapsed(`Cycle: ${this.completedCycles} \nInstruction: ${toHex(instruction)} (${instructionName}  -  ${getAddressingModeFromOpcode(instruction, instructionName)}) \nPC: ${this.getPC()}`)
+        console.log(`Addressing Mode: `)
         console.group("―――――――――――――――――< Logs >―――――――――――――――――")
         switch(instruction){
             //#region LDA
@@ -1129,6 +1143,18 @@ class CPU{
                 break;
             //#endregion
             
+            //#region BIT
+            case INS.BIT.ZP:
+                let BIT_ZP_address = this.addrModeZP()
+                this.bitwiseBIT(BIT_ZP_address)
+                break;
+
+            case INS.BIT.ABS:
+                let BIT_ABS_address = this.addrModeABS()
+                this.bitwiseBIT(BIT_ABS_address)
+                break;
+            //#endregion
+
             default:
                 console.log(`Invalid Instruction ${toHex(instruction)}`)
                 break;
@@ -1211,6 +1237,22 @@ class CPU{
         console.log(this.partitionMap['65535'].data)
         console.groupEnd()
         console.groupEnd()
+    }
+
+    public loadProgram(instructionArray: string[] | number[], format: 'BIN' | 'HEX' | 'DEC'){
+        instructionArray.forEach((value: any, index: number) => {
+            switch (format){
+                case 'DEC':
+                    this.writeByte(index, value)
+                    break;
+                case 'HEX':
+                    this.writeByte(index, fromHex(value))
+                    break;
+                case 'BIN':
+                    this.writeByte(index, fromBin(value))
+                    break;
+            }
+        })
     }
     //#endregion
 

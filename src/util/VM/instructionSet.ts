@@ -58,8 +58,6 @@ const InstructionSet = {
     RTS: fromHex('60'),  // Return from Subroutine
 
 
-
-
     TSX: fromHex('BA'), // Transfer Stack Pointer To X 
     TXS: fromHex('9A'), // Transfer X To Stack Pointer
     PHA: fromHex('48'), // Push Accumulator To Stack
@@ -68,8 +66,7 @@ const InstructionSet = {
     PLP: fromHex('28'), // Pull Flags From Stack
 
 
-
-    AND: {
+    AND: { // Bitwise AND
         IMD: fromHex('29'), // (Immediate)
         ZP: fromHex('25'), //  (Zero Page)
         ZPX: fromHex('35'), //  (Zero Page, X)
@@ -80,7 +77,7 @@ const InstructionSet = {
         INDY: fromHex('31'), //  (Indirect, Y)
     },
 
-    EOR: {
+    EOR: {  // Bitwise Exclusive OR
         IMD: fromHex('49'), // (Immediate)
         ZP: fromHex('45'), //  (Zero Page)
         ZPX: fromHex('55'), //  (Zero Page, X)
@@ -91,7 +88,7 @@ const InstructionSet = {
         INDY: fromHex('51'), //  (Indirect, Y)
     },
 
-    ORA: {
+    ORA: {  // Bitwise Inclusive OR
         IMD: fromHex('09'), // (Immediate)
         ZP: fromHex('05'), //  (Zero Page)
         ZPX: fromHex('15'), //  (Zero Page, X)
@@ -101,6 +98,11 @@ const InstructionSet = {
         INDX: fromHex('01'), //  (Indirect, X)
         INDY: fromHex('11'), //  (Indirect, Y)
     },
+
+    BIT: {  // Bitwise BIT
+        ZP: fromHex('24'),
+        ABS: fromHex('2C')
+    }
 }
 
 export default InstructionSet

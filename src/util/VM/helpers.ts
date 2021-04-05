@@ -84,3 +84,11 @@ export function getAddressingModeFromOpcode(opcode: number, instruction: string)
 }
 
 
+export function calculateSigned8BitBinaryValue(value: number){
+    let bin = toBin(value)
+    let subBin =  bin.slice(1)
+    if (bin[0] === '0') return fromBin(subBin)
+    return -128 + fromBin(subBin)
+}
+
+

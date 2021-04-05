@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
-import { toBin, toHex, fromBin, fromHex, getInstructionFromOpcode} from '../../util/VM/helpers'
+import { toBin, toHex, fromBin, fromHex, calculateSigned8BitBinaryValue} from '../../util/VM/helpers'
 import VM from '../../util/VM/CPU'
 import INS from '../../util/VM/instructionSet'
 
@@ -17,13 +17,19 @@ const ComputerVisualiser: React.FC = () => {
     //                 ], 'HEX')
 
 
+    // CPU.loadProgram([   
+    //                     'A9','00', // LDA IMD
+    //                     '85','42',
+    //                     'E6','42',
+    //                     'A6','42',
+    //                     'E8'
+
+    //                 ], 'HEX')
+
+
     CPU.loadProgram([   
                         'A9','00', // LDA IMD
-                        '85','42',
-                        'E6','42',
-                        'A6','42',
-                        'E8'
-
+                        'F0','FC',
                     ], 'HEX')
 
 

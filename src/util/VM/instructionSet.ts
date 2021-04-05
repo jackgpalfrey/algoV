@@ -124,7 +124,34 @@ const InstructionSet = {
     },
     DEX: fromHex('CA'),  // Decrement X Register
     DEY: fromHex('88'),  // Decrement Y Register
+
+
+    BCC: {  // Branch if carry flag clear
+        REL: fromHex('90')
+    },
+    BCS: {  // Branch if carry flag set
+        REL: fromHex('B0')
+    },
+    BEQ: {  // Branch if zero flag set
+        REL: fromHex('F0')
+    },
+    BMI: {  // Branch if negative flag set
+        REL: fromHex('30')
+    },
+    BNE: {  // Branch if zero flag clear
+        REL: fromHex('D0')
+    },
+    BPL: {  // Branch if negative flag clear
+        REL: fromHex('10')
+    },
+    BVC: {  // Branch if overflow flag clear
+        REL: fromHex('50')
+    },
+    BVS: {  // Branch if overflow flag set
+        REL: fromHex('70')
+    },
 }
+
 
 export default InstructionSet
 

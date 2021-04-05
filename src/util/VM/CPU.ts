@@ -1,4 +1,4 @@
-import { fromBin, toBin, toHex, getInstructionFromOpcode, fromHex, getAddressingModeFromOpcode } from './helpers'
+import { fromBin, toBin, toHex, getInstructionFromOpcode, fromHex, getAddressingModeFromOpcode, calculateSigned8BitBinaryValue } from './helpers'
 import Memory from './Memory'
 import INS from './instructionSet'
 
@@ -81,6 +81,7 @@ class CPU{
         }
 
         this.flags = {
+            /**Carry Flag */
             C: false, // Carry Flag
             Z: false, // Zero Flag
             I: false, // Interupt Disable Flag
@@ -280,7 +281,7 @@ class CPU{
      * @param newValue Value to set PC to
      */
     public setPC(newValue: number){
-        if (typeof newValue !== 'number' || newValue >= 2**this.addressSize || newValue < 0) throw new Error('Invalid Address')
+        if (typeof newValue !== 'number' || newValue >= 2**this.addressSize || newValue < 0) throw new Error(`Invalid Address ${newValue}`)
         this.PC = newValue
     }
 
@@ -492,6 +493,14 @@ class CPU{
 
         return finalAddressY
     }
+
+
+    private addrModeREL(){
+        let signedOffset = this.fetchNextByte()
+        let offsetValue = calculateSigned8BitBinaryValue(signedOffset)
+        console.log(offsetValue)
+        return this.PC + offsetValue
+    }
     //#endregion
 
     //#region Flag Setting
@@ -600,6 +609,15 @@ class CPU{
     }
     //#endregion
 
+
+    private branchInstruction(condition: boolean){
+        let BEQ_address = this.addrModeREL()
+        if (this.getFlag('Z')){
+            this.setPC(BEQ_address)
+            this.completedTicks++
+            // TODO: Should consume aditional tick if in different page
+        }
+    }
     //#endregion
     
     //#region FDE Cycle
@@ -1304,6 +1322,54 @@ class CPU{
                 break;
             //#endregion
 
+
+            //#region BCC
+            case INS.BCC.REL:
+                this.branchInstruction(!this.getFlag('C'))                
+                break;
+            //#endregion
+
+            //#region BCS
+            case INS.BCS.REL:
+                this.branchInstruction(this.getFlag('C'))                
+                break;
+            //#endregion
+
+            //#region BEQ
+            case INS.BEQ.REL:
+                this.branchInstruction(this.getFlag('Z'))                
+                break;
+            //#endregion
+
+            //#region BMI
+            case INS.BMI.REL:
+                this.branchInstruction(this.getFlag('N'))                
+                break;
+            //#endregion
+
+            //#region BNE
+            case INS.BNE.REL:
+                this.branchInstruction(!this.getFlag('Z'))                
+                break;
+            //#endregion
+
+            //#region BPL
+            case INS.BPL.REL:
+                this.branchInstruction(!this.getFlag('N'))                
+                break;
+            //#endregion
+
+            //#region BVC
+            case INS.BVC.REL:
+                this.branchInstruction(!this.getFlag('V'))                
+                break;
+            //#endregion
+
+            //#region BVS
+            case INS.BMI.REL:
+                this.branchInstruction(this.getFlag('V'))                
+                break;
+            //#endregion
             default:
                 console.log(`Invalid Instruction ${toHex(instruction)}`)
                 break;

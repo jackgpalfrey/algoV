@@ -73,6 +73,7 @@ export function getAddressingModeFromOpcode(opcode: number, instruction: string)
     let instructionSet = INS as any
     let addressModes = instructionSet[instruction]
     if (typeof addressModes === 'number') return 'IMP'
+    if (typeof addressModes === 'undefined') return 'UNK'
     let keys = Object.keys(addressModes)
     for (let i = 0; i < keys.length; i++){
         let key = keys[i]

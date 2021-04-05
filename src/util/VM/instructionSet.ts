@@ -76,7 +76,6 @@ const InstructionSet = {
         INDX: fromHex('21'), //  (Indirect, X)
         INDY: fromHex('31'), //  (Indirect, Y)
     },
-
     EOR: {  // Bitwise Exclusive OR
         IMD: fromHex('49'), // (Immediate)
         ZP: fromHex('45'), //  (Zero Page)
@@ -87,7 +86,6 @@ const InstructionSet = {
         INDX: fromHex('41'), //  (Indirect, X)
         INDY: fromHex('51'), //  (Indirect, Y)
     },
-
     ORA: {  // Bitwise Inclusive OR
         IMD: fromHex('09'), // (Immediate)
         ZP: fromHex('05'), //  (Zero Page)
@@ -98,11 +96,34 @@ const InstructionSet = {
         INDX: fromHex('01'), //  (Indirect, X)
         INDY: fromHex('11'), //  (Indirect, Y)
     },
-
     BIT: {  // Bitwise BIT
         ZP: fromHex('24'),
         ABS: fromHex('2C')
-    }
+    },
+
+
+    TAX: fromHex('AA'), // Transfer Accmulator to X
+    TAY: fromHex('A8'), // Transfer Accumulator to Y
+    TXA: fromHex('8A'), // Transfer X to Accumulator
+    TYA: fromHex('98'),  // Transfer Y to Accumulator
+
+
+    INC: {  // Increment Memory
+        ZP: fromHex('E6'), //  (Zero Page)
+        ZPX: fromHex('F6'), //  (Zero Page, X)
+        ABS: fromHex('EE'), //  (Absolute)
+        ABSX: fromHex('FE'), //  (Absolute,X)
+    },
+    INX: fromHex('E8'),  // Increment X Register
+    INY: fromHex('C8'),  // Increment Y Register
+    DEC: {  // Decrement Memory
+        ZP: fromHex('C6'), //  (Zero Page)
+        ZPX: fromHex('D6'), //  (Zero Page, X)
+        ABS: fromHex('CE'), //  (Absolute)
+        ABSX: fromHex('DE'), //  (Absolute,X)
+    },
+    DEX: fromHex('CA'),  // Decrement X Register
+    DEY: fromHex('88'),  // Decrement Y Register
 }
 
 export default InstructionSet

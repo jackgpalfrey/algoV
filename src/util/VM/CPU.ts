@@ -495,6 +495,11 @@ class CPU{
     //#endregion
 
     //#region Flag Setting
+    private setFlagsForValue(value: number){
+        if (value === 0) this.setFlag('Z', true)
+        if (toBin(value)[0] === '1') this.setFlag('N', true)
+    }
+
     private LDA_setFlags(){
         if (this.getRegister('A') === 0) this.setFlag('Z', true)
         if (toBin(this.getRegister('A'))[0] === '1') this.setFlag('N', true)
@@ -1155,6 +1160,150 @@ class CPU{
                 break;
             //#endregion
 
+
+
+            //#region TAX
+            case INS.TAX:
+                this.setRegister('X', this.getRegister('A'))
+                this.completedTicks++
+                this.LDX_setFlags()
+                break;
+            //#endregion
+
+            //#region TAY
+            case INS.TAY:
+                this.setRegister('Y', this.getRegister('A'))
+                this.completedTicks++
+                this.LDY_setFlags()
+                break;
+            //#endregion
+
+            //#region TXA
+            case INS.TXA:
+                this.setRegister('A', this.getRegister('X'))
+                this.completedTicks++
+                this.LDA_setFlags()
+                break;
+            //#endregion
+
+            //#region TYA
+            case INS.TYA:
+                this.setRegister('A', this.getRegister('Y'))
+                this.completedTicks++
+                this.LDA_setFlags()
+                break;
+            //#endregion
+
+
+
+            //#region INC
+            case INS.INC.ZP:
+                let INC_ZP_address = this.addrModeZP()
+                let INC_ZP_value = this.readByte(INC_ZP_address)
+                let INC_ZP_newVal = INC_ZP_value + 1
+                this.completedTicks++
+                this.writeByte(INC_ZP_address, INC_ZP_newVal)
+                this.setFlagsForValue(INC_ZP_newVal)
+                break;
+
+            case INS.INC.ZPX:
+                let INC_ZPX_address = this.addrModeZPX()
+                let INC_ZPX_value = this.readByte(INC_ZPX_address)
+                let INC_ZPX_newVal = INC_ZPX_value + 1
+                this.completedTicks++
+                this.writeByte(INC_ZPX_address, INC_ZPX_newVal)
+                this.setFlagsForValue(INC_ZPX_newVal)
+                break;
+
+            case INS.INC.ABS:
+                let INC_ABS_address = this.addrModeABS()
+                let INC_ABS_value = this.readByte(INC_ABS_address)
+                let INC_ABS_newVal = INC_ABS_value + 1
+                this.completedTicks++
+                this.writeByte(INC_ABS_address, INC_ABS_newVal)
+                this.setFlagsForValue(INC_ABS_newVal)
+                break;
+
+            case INS.INC.ABSX:
+                let INC_ABSX_address = this.addrModeABSX(true)
+                let INC_ABSX_value = this.readByte(INC_ABSX_address)
+                let INC_ABSX_newVal = INC_ABSX_value + 1
+                this.completedTicks++
+                this.writeByte(INC_ABSX_address, INC_ABSX_newVal)
+                this.setFlagsForValue(INC_ABSX_newVal)
+                break;
+            //#endregion
+
+            //#region INX
+            case INS.INX:
+                this.setRegister('X', this.getRegister('X') + 1)
+                this.completedTicks++
+                this.LDX_setFlags()
+                break;
+            //#endregion
+
+            //#region INY
+            case INS.INY:
+                this.setRegister('Y', this.getRegister('Y') + 1)
+                this.completedTicks++
+                this.LDY_setFlags()
+                break;
+            //#endregion
+
+            //#region DEC
+            case INS.DEC.ZP:
+                let DEC_ZP_address = this.addrModeZP()
+                let DEC_ZP_value = this.readByte(DEC_ZP_address)
+                let DEC_ZP_newVal = DEC_ZP_value - 1
+                this.completedTicks++
+                this.writeByte(DEC_ZP_address, DEC_ZP_newVal)
+                this.setFlagsForValue(DEC_ZP_newVal)
+                break;
+
+            case INS.DEC.ZPX:
+                let DEC_ZPX_address = this.addrModeZPX()
+                let DEC_ZPX_value = this.readByte(DEC_ZPX_address)
+                let DEC_ZPX_newVal = DEC_ZPX_value - 1
+                this.completedTicks++
+                this.writeByte(DEC_ZPX_address, DEC_ZPX_newVal)
+                this.setFlagsForValue(DEC_ZPX_newVal)
+                break;
+
+            case INS.DEC.ABS:
+                let DEC_ABS_address = this.addrModeABS()
+                let DEC_ABS_value = this.readByte(DEC_ABS_address)
+                let DEC_ABS_newVal = DEC_ABS_value - 1
+                this.completedTicks++
+                this.writeByte(DEC_ABS_address, DEC_ABS_newVal)
+                this.setFlagsForValue(DEC_ABS_newVal)
+                break;
+
+            case INS.DEC.ABSX:
+                let DEC_ABSX_address = this.addrModeABSX(true)
+                let DEC_ABSX_value = this.readByte(DEC_ABSX_address)
+                let DEC_ABSX_newVal = DEC_ABSX_value - 1
+                this.completedTicks++
+                this.writeByte(DEC_ABSX_address, DEC_ABSX_newVal)
+                this.setFlagsForValue(DEC_ABSX_newVal)
+                break;
+            //#endregion
+
+            //#region DEX
+            case INS.DEX:
+                this.setRegister('X', this.getRegister('X') - 1)
+                this.completedTicks++
+                this.LDX_setFlags()
+                break;
+            //#endregion
+
+            //#region DEY
+            case INS.DEY:
+                this.setRegister('Y', this.getRegister('Y') - 1)
+                this.completedTicks++
+                this.LDY_setFlags()
+                break;
+            //#endregion
+
             default:
                 console.log(`Invalid Instruction ${toHex(instruction)}`)
                 break;
@@ -1163,6 +1312,7 @@ class CPU{
         }
 
         this.logStatus()
+        console.groupEnd()
         console.groupEnd()
         this.completeCycle()
     }
@@ -1173,6 +1323,7 @@ class CPU{
     private completeCycle(){
         // return
         this.completedCycles++
+
         setTimeout(() => {
             if (this.completedCycles <= this.cycleLimit){
                 this.FDE()
@@ -1235,7 +1386,6 @@ class CPU{
 
         console.groupCollapsed("RAM:")
         console.log(this.partitionMap['65535'].data)
-        console.groupEnd()
         console.groupEnd()
     }
 

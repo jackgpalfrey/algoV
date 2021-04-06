@@ -1,4 +1,4 @@
-import { fromHex } from './helpers'
+import { calculateSigned8BitBinaryValue, fromHex, toBin } from './helpers'
 
 const InstructionSet = {
     LDA: {  // Load Accumulator
@@ -150,9 +150,23 @@ const InstructionSet = {
     BVS: {  // Branch if overflow flag set
         REL: fromHex('70')
     },
+
+    CLC: fromHex('18'), // Clear Carry Flag
+    CLD: fromHex('D8'), // Clear Decimal Mode Flag
+    CLI: fromHex('58'), // Clear Interupt Disable Flag
+    CLV: fromHex('B8'), // Clear Overflow Flag
+    SEC: fromHex('38'), // Set Carry Flag
+    SED: fromHex('F8'), // Set Decimal Mode Flag
+    SEI: fromHex('78'), // Set Interupt Disable Flag
+
+
+    NOP: fromHex('EA') // No Operation
 }
 
 
 export default InstructionSet
 
 //TODO: JSR - 1st Video
+
+
+

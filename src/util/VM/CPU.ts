@@ -650,6 +650,7 @@ class CPU{
         console.log(`Addressing Mode: `)
         console.group("―――――――――――――――――< Logs >―――――――――――――――――")
         switch(instruction){
+
             //#region LDA
             case INS.LDA.IMD:
                 // Reads Next Byte
@@ -828,7 +829,7 @@ class CPU{
                 break;    
             //#endregion
 
-
+            
 
             //#region STA
             case INS.STA.ZP:
@@ -1323,6 +1324,7 @@ class CPU{
             //#endregion
 
 
+
             //#region BCC
             case INS.BCC.REL:
                 this.branchInstruction(!this.getFlag('C'))                
@@ -1370,8 +1372,69 @@ class CPU{
                 this.branchInstruction(this.getFlag('V'))                
                 break;
             //#endregion
+            
+
+
+            //#region CLC
+            case INS.CLC:
+                this.setFlag('C', false)
+                this.completedTicks++
+                break;
+            //#endregion
+
+            //#region CLD
+            case INS.CLD:
+                this.setFlag('D', false)
+                this.completedTicks++
+                break;
+            //#endregion
+
+            //#region CLI
+            case INS.CLC:
+                this.setFlag('I', false)
+                this.completedTicks++
+                break;
+            //#endregion
+
+            //#region CLV
+            case INS.CLV:
+                this.setFlag('V', false)
+                this.completedTicks++
+                break;
+            //#endregion
+
+            //#region SEC
+            case INS.SEC:
+                this.setFlag('C', true)
+                this.completedTicks++
+                break;
+            //#endregion
+
+            //#region SED
+            case INS.SED:
+                this.setFlag('D', true)
+                this.completedTicks++
+                break;
+            //#endregion
+
+            //#region SEI
+            case INS.SEI:
+                this.setFlag('I', true)
+                this.completedTicks++
+                break;
+            //#endregion
+            
+            
+
+            //#region NOP
+            case INS.NOP:
+                this.completedTicks++
+                break;
+            //#endregion
+           
             default:
-                console.log(`Invalid Instruction ${toHex(instruction)}`)
+                console.log(`Invalid Instruction: 0x${toHex(instruction)}`)
+                throw new Error(`Invalid Instruction: 0x${toHex(instruction)}`)
                 break;
 
 

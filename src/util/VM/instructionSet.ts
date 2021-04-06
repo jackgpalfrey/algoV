@@ -1,5 +1,6 @@
 import { calculateSigned8BitBinaryValue, fromHex, toBin } from './helpers'
 
+
 const InstructionSet = {
     LDA: {  // Load Accumulator
         IMD: fromHex('A9'), // (Immediate)
@@ -170,6 +171,16 @@ const InstructionSet = {
         INDX: fromHex('61'), //  (Indirect, X)
         INDY: fromHex('71'), //  (Indirect, Y)
     },
+    SBC: {
+        IMD: fromHex('E9'), // (Immediate)
+        ZP: fromHex('E5'), //  (Zero Page)
+        ZPX: fromHex('F5'), //  (Zero Page, X)
+        ABS: fromHex('ED'), //  (Absolute)
+        ABSX: fromHex('FD'), //  (Absolute,X)
+        ABSY: fromHex('F9'), //  (Absolute,Y)
+        INDX: fromHex('E1'), //  (Indirect, X)
+        INDY: fromHex('F1'), //  (Indirect, Y)
+    },
     CMP: {
         IMD: fromHex('C9'), // (Immediate)
         ZP: fromHex('C5'), //  (Zero Page)
@@ -179,6 +190,25 @@ const InstructionSet = {
         ABSY: fromHex('D9'), //  (Absolute,Y)
         INDX: fromHex('C1'), //  (Indirect, X)
         INDY: fromHex('D1'), //  (Indirect, Y)
+    },
+    CPX:{
+        IMD: fromHex('E0'),
+        ZP: fromHex('E4'),
+        ABS: fromHex('EC')
+    },
+    CPY:{
+        IMD: fromHex('C0'),
+        ZP: fromHex('C4'),
+        ABS: fromHex('CC')
+    },
+
+
+    ASL: {
+        ACC: fromHex('0A'),  // (Accumulator)
+        ZP: fromHex('06'),   // (Zero Page)
+        ZPX: fromHex('16'),  // (Zero Page, X)
+        ABS: fromHex('0E'),  // (Absolute)
+        ABSX: fromHex('1E'), // (Absolute, X)
     },
 
 

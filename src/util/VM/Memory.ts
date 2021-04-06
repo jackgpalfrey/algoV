@@ -95,10 +95,17 @@ class Memory{
             let error = new Error(`Out Of Address Space (${startAddress})`)
             throw error
         }
-        if (typeof endAddress !== 'number' || endAddress >= this.addressSpaceSize || endAddress < 0){
+
+        if (endAddress === 0){
+            endAddress = this.data.length - 1
+        }
+
+        if (typeof endAddress !== 'number' || endAddress >= this.addressSpaceSize || endAddress < startAddress){
             let error = new Error(`Out Of Address Space ${endAddress}`)
             throw error
         }
+
+        
 
         return this.data.slice(startAddress, endAddress)
     }

@@ -1,4 +1,4 @@
-import { fromBin, toBin, toHex, getInstructionFromOpcode, fromHex, getAddressingModeFromOpcode, calculateSigned8BitBinaryValue, byteAdd } from './helpers'
+import { fromBin, toBin, toHex, getInstructionFromOpcode, fromHex, getAddressingModeFromOpcode, calculateSigned8BitBinaryValue, byteAdd, bitwiseNegate } from './helpers'
 import Memory from './Memory'
 import INS from './instructionSet'
 
@@ -502,6 +502,8 @@ class CPU{
     //#endregion
 
     //#region Flag Setting
+
+
     private setFlagsForValue(value: number){
         if (value === 0) this.setFlag('Z', true)
         if (toBin(value)[0] === '1') this.setFlag('N', true)
@@ -607,6 +609,7 @@ class CPU{
     }
     //#endregion
 
+    //#region Arithmetic Operations
     private addWithCarry(value: number){
         // Testing Flags
         let C = this.getFlag('C') ? 1 : 0 
@@ -626,7 +629,46 @@ class CPU{
     
         // Sets Zero and Negative flags
         if (result === 0) this.setFlag('Z', true)
+        else this.setFlag('Z', false)
         if (toBin(result)[0] === '1') this.setFlag('N', true)
+        else this.setFlag('N', false)
+    
+        // Gets signed values
+        let signed1 = calculateSigned8BitBinaryValue(value)
+        let signed2 = calculateSigned8BitBinaryValue(this.getRegister('A'))
+        let signedResult = calculateSigned8BitBinaryValue(result)
+    
+        // Checks result plausibility
+        if (signed1 < 0 && signed2 < 0 && signedResult >= 0) this.setFlag('V', true)
+        else if (signed1 > 0 && signed2 > 0 && signedResult <= 0) this.setFlag('V', true)
+        else if (signed1 === 0 && signed2 === 0 && signedResult !== 0) this.setFlag('V', true)
+    
+        this.setRegister('A', result)        
+    }
+
+    private subtractWithCarry(value: number){
+        // Testing Flags
+        let C = this.getFlag('C') ? 0 : 1 
+        value = bitwiseNegate(value)
+    
+        // Converts to Binary
+        let binA = toBin(this.getRegister('A'))
+        let binVal = toBin(value)
+    
+        // Adds The Bytes
+        let {byte, carry} = byteAdd(binA, binVal, C as 0 | 1)
+    
+        // Sets Carry Flag to Carry bit given by byteAdd
+        this.setFlag('C', carry === 1 ? false : true)
+    
+        // Gets decimal value of returned byte
+        let result = fromBin(byte)
+    
+        // Sets Zero and Negative flags
+        if (result === 0) this.setFlag('Z', true)
+        else this.setFlag('Z', false)
+        if (toBin(result)[0] === '1') this.setFlag('N', true)
+        else this.setFlag('N', false)
     
         // Gets signed values
         let signed1 = calculateSigned8BitBinaryValue(value)
@@ -645,6 +687,7 @@ class CPU{
         let regValue = this.getRegister(register)
 
         let result = regValue - value
+        console.log(regValue === value)
         if (result < 0) result += 256
 
         if (regValue >= value) this.setFlag('C', true)
@@ -653,10 +696,20 @@ class CPU{
         
     }
 
+    private shiftLeft(value: number){
+        let bin = toBin(value)
+        let binArr = bin.split('')
+        binArr.push('0')
+        this.setFlag('C',binArr.shift() === '1' ? true : false)
+        let result = fromBin(binArr.join(''))
+        this.setFlagsForValue(result)
+        return result
+    }
+    //#endregion
 
     private branchInstruction(condition: boolean){
         let BEQ_address = this.addrModeREL()
-        if (this.getFlag('Z')){
+        if (condition){
             this.setPC(BEQ_address)
             this.completedTicks++
             // TODO: Should consume aditional tick if in different page
@@ -1519,6 +1572,55 @@ class CPU{
                 break;
             //#endregion
 
+            //#region SBC
+            case INS.SBC.IMD:
+                let SBC_IMD_value = this.fetchNextByte()
+                this.subtractWithCarry(SBC_IMD_value)
+                break;
+
+            case INS.SBC.ZP:
+                let SBC_ZP_address = this.addrModeZP()
+                let SBC_ZP_value = this.readByte(SBC_ZP_address)
+                this.subtractWithCarry(SBC_ZP_value)
+                break;
+
+            case INS.SBC.ZPX:
+                let SBC_ZPX_address = this.addrModeZPX()
+                let SBC_ZPX_value = this.readByte(SBC_ZPX_address)
+                this.subtractWithCarry(SBC_ZPX_value)
+                break;
+
+            case INS.SBC.ABS:
+                let SBC_ABS_address = this.addrModeABS()
+                let SBC_ABS_value = this.readByte(SBC_ABS_address)
+                this.subtractWithCarry(SBC_ABS_value)
+                break;
+
+            case INS.SBC.ABSX:
+                let SBC_ABSX_address = this.addrModeABSX()
+                let SBC_ABSX_value = this.readByte(SBC_ABSX_address)
+                this.subtractWithCarry(SBC_ABSX_value)
+                break;
+
+            case INS.SBC.ABSY:
+                let SBC_ABSY_address = this.addrModeABSY()
+                let SBC_ABSY_value = this.readByte(SBC_ABSY_address)
+                this.subtractWithCarry(SBC_ABSY_value)
+                break;
+
+            case INS.SBC.INDX:
+                let SBC_INDX_address = this.addrModeINDX()
+                let SBC_INDX_value = this.readByte(SBC_INDX_address)
+                this.subtractWithCarry(SBC_INDX_value)
+                break;
+
+            case INS.SBC.INDY:
+                let SBC_INDY_address = this.addrModeINDY()
+                let SBC_INDY_value = this.readByte(SBC_INDY_address)
+                this.subtractWithCarry(SBC_INDY_value)
+                break;
+            //#endregion
+
             //#region CMP
             case INS.CMP.IMD:
                 this.compare('A', this.fetchNextByte())
@@ -1561,6 +1663,71 @@ class CPU{
 
 
             
+            //#endregion
+
+            //#region CPX
+            case INS.CPX.IMD:
+                this.compare('X', this.fetchNextByte())
+                break;
+
+            case INS.CPX.ZP:
+                let CPX_ZP_address = this.addrModeZP()
+                this.compare('X', this.readByte(CPX_ZP_address))
+                break;
+
+            case INS.CPX.ABS:
+                let CPX_ABS_address = this.addrModeABS()
+                this.compare('X', this.readByte(CPX_ABS_address))
+                break;
+            //#endregion
+            
+            //#region CPY
+            case INS.CPY.IMD:
+                this.compare('Y', this.fetchNextByte())
+                break;
+
+            case INS.CPY.ZP:
+                let CPY_ZP_address = this.addrModeZP()
+                this.compare('Y', this.readByte(CPY_ZP_address))
+                break;
+
+            case INS.CPY.ABS:
+                let CPY_ABS_address = this.addrModeABS()
+                this.compare('Y', this.readByte(CPY_ABS_address))
+                break;
+            //#endregion
+
+
+
+            //#region ASL
+            case INS.ASL.ACC:
+                let ASL_ACC_value = this.getRegister('A')
+                this.setRegister('A',this.shiftLeft(ASL_ACC_value))
+                break;
+
+            case INS.ASL.ZP:
+                let ASL_ZP_address = this.addrModeZP()
+                let ASL_ZP_value = this.readByte(ASL_ZP_address)
+                this.writeByte(ASL_ZP_address,this.shiftLeft(ASL_ZP_value))
+                break;
+
+            case INS.ASL.ZPX:
+                let ASL_ZPX_address = this.addrModeZPX()
+                let ASL_ZPX_value = this.readByte(ASL_ZPX_address)
+                this.writeByte(ASL_ZPX_address,this.shiftLeft(ASL_ZPX_value))
+                break;
+
+            case INS.ASL.ABS:
+                let ASL_ABS_address = this.addrModeABS()
+                let ASL_ABS_value = this.readByte(ASL_ABS_address)
+                this.writeByte(ASL_ABS_address,this.shiftLeft(ASL_ABS_value))
+                break;
+
+            case INS.ASL.ABSX:
+                let ASL_ABSX_address = this.addrModeABSX()
+                let ASL_ABSX_value = this.readByte(ASL_ABSX_address)
+                this.writeByte(ASL_ABSX_address,this.shiftLeft(ASL_ABSX_value))
+                break;
             //#endregion
 
 
@@ -1647,11 +1814,15 @@ class CPU{
         }
         console.groupEnd()
 
+        console.groupCollapsed("Zero Page:")
+        console.log(this.partitionMap['65535'].readRegion(0,256))
+        console.groupEnd()
+
         console.groupCollapsed("Stack:")
         console.log(this.partitionMap['65535'].readRegion(256,512))
         console.groupEnd()
 
-        console.groupCollapsed("RAM:")
+        console.groupCollapsed("Rest of RAM:")
         console.log(this.partitionMap['65535'].data)
         console.groupEnd()
     }

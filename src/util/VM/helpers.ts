@@ -149,42 +149,14 @@ export function byteAdd(byte1: string, byte2: string, startingCarry: 0 | 1){
 }
 
 
-export function addWithCarry(A: number, value: number){
-    // Testing Flags
-    let Z = 0
-    let V = 0
-    let N = 0
-    let C = 0
+export function bitwiseNegate(value: number){
+    let binary = toBin(value)
+    let result = ''
+    for (let i = 0; i < binary.length; i++){
+        if (binary[i] === '1') result += '0'
+        else if (binary[i] === '0') result += '1'
+        else throw new Error('Non Binary Value')
+    }
 
-    // Converts to Binary
-    let binA = toBin(A)
-    let binVal = toBin(value)
-
-    // Adds The Bytes
-    let {byte, carry} = byteAdd(binA, binVal, C as 0 | 1)
-
-    // Sets Carry Flag to Carry bit given by byteAdd
-    C = carry
-
-    // Gets decimal value of returned byte
-    let result = fromBin(byte)
-
-    // Sets Zero and Negative flags
-    if (result === 0) Z = 1
-    if (toBin(result)[0] === '1') N = 1
-
-    // Gets signed values
-    let signed1 = calculateSigned8BitBinaryValue(value)
-    let signed2 = calculateSigned8BitBinaryValue(A)
-    let signedResult = calculateSigned8BitBinaryValue(result)
-
-    // Checks result plausibility
-    if (signed1 < 0 && signed2 < 0 && signedResult >= 0) V = 1
-    if (signed1 > 0 && signed2 > 0 && signedResult <= 0) V = 1
-    if (signed1 === 0 && signed2 === 0 && signedResult !== 0) V = 1
-
-    A = result
-
-    console.log(`A: ${A} \nV: ${V}\nZ: ${Z}\nN: ${N}\nC: ${C} `)
-    
+    return fromBin(result)
 }

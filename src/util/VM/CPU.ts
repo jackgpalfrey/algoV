@@ -1,4 +1,4 @@
-import { fromBin, toBin, toHex, getInstructionFromOpcode, fromHex, getAddressingModeFromOpcode, calculateSigned8BitBinaryValue } from './helpers'
+import { fromBin, toBin, toHex, getInstructionFromOpcode, fromHex, getAddressingModeFromOpcode, calculateSigned8BitBinaryValue, byteAdd } from './helpers'
 import Memory from './Memory'
 import INS from './instructionSet'
 
@@ -52,7 +52,7 @@ class CPU{
     private registers: Registers
     private flags: Flags
 
-    private partitionMap: any
+    public partitionMap: any
     //#endregion
 
     //#region CPU Reset and Initialisation
@@ -162,7 +162,7 @@ class CPU{
      * @param errorOnInvalidAddress Should program crash with error if address does not exist
      * @returns Decimal value at memory address
      */
-    public readByte(address: number, errorOnInvalidAddress:boolean = true): number{
+    public readByte(address: number, errorOnInvalidAddress:boolean = true, dontUseTick: boolean = false): number{
         let startAddress;
         let endAddress;
         try {
@@ -176,7 +176,7 @@ class CPU{
         let readAddress:number = address - parseInt(startAddress)
         if (startAddress !== '0') readAddress -= 1
         
-        this.completedTicks++
+        if (!dontUseTick) this.completedTicks++
         return mem.readByte(readAddress)
         
     }
@@ -189,7 +189,7 @@ class CPU{
      * @param errorOnInvalidAddress Should program crash with error if address does not exist
      * @returns Value at given address (Used to check if write was succesful)
      */
-    public writeByte(address: number, newValue: number, errorOnUnwriteable:boolean = true, errorOnInvalidAddress:boolean = true):number | undefined{
+    public writeByte(address: number, newValue: number, errorOnUnwriteable:boolean = true, errorOnInvalidAddress:boolean = true, dontUseTick: boolean = false):number | undefined{
         if (!this.isValidData(newValue)) throw new Error('Invalid Data')
         let startAddress;
         let endAddress;
@@ -202,7 +202,7 @@ class CPU{
         
         let mem: Memory = this.partitionMap[endAddress]
 
-        this.completedTicks++
+        if (!dontUseTick) this.completedTicks++
         let writeAddress:number = address - parseInt(startAddress)
         if (startAddress !== '0') writeAddress -= 1
 
@@ -474,8 +474,6 @@ class CPU{
 
         let finalAddress = this.getLittleEndianWordAddress(address1, address2)
 
-        this.completedTicks++
-
         return finalAddress
     }
 
@@ -608,6 +606,52 @@ class CPU{
         return address
     }
     //#endregion
+
+    private addWithCarry(value: number){
+        // Testing Flags
+        let C = this.getFlag('C') ? 1 : 0 
+    
+        // Converts to Binary
+        let binA = toBin(this.getRegister('A'))
+        let binVal = toBin(value)
+    
+        // Adds The Bytes
+        let {byte, carry} = byteAdd(binA, binVal, C as 0 | 1)
+    
+        // Sets Carry Flag to Carry bit given by byteAdd
+        this.setFlag('C', carry === 1 ? true : false)
+    
+        // Gets decimal value of returned byte
+        let result = fromBin(byte)
+    
+        // Sets Zero and Negative flags
+        if (result === 0) this.setFlag('Z', true)
+        if (toBin(result)[0] === '1') this.setFlag('N', true)
+    
+        // Gets signed values
+        let signed1 = calculateSigned8BitBinaryValue(value)
+        let signed2 = calculateSigned8BitBinaryValue(this.getRegister('A'))
+        let signedResult = calculateSigned8BitBinaryValue(result)
+    
+        // Checks result plausibility
+        if (signed1 < 0 && signed2 < 0 && signedResult >= 0) this.setFlag('V', true)
+        else if (signed1 > 0 && signed2 > 0 && signedResult <= 0) this.setFlag('V', true)
+        else if (signed1 === 0 && signed2 === 0 && signedResult !== 0) this.setFlag('V', true)
+    
+        this.setRegister('A', result)        
+    }
+
+    private compare(register: keyof Registers, value:number){
+        let regValue = this.getRegister(register)
+
+        let result = regValue - value
+        if (result < 0) result += 256
+
+        if (regValue >= value) this.setFlag('C', true)
+        if (regValue === value) this.setFlag('Z', true)
+        if (toBin(result)[0] === '1') this.setFlag('N', true)
+        
+    }
 
 
     private branchInstruction(condition: boolean){
@@ -829,7 +873,7 @@ class CPU{
                 break;    
             //#endregion
 
-            
+
 
             //#region STA
             case INS.STA.ZP:
@@ -1425,6 +1469,100 @@ class CPU{
             //#endregion
             
             
+
+            //#region ADC
+            case INS.ADC.IMD:
+                let ADC_IMD_value = this.fetchNextByte()
+                this.addWithCarry(ADC_IMD_value)
+                break;
+
+            case INS.ADC.ZP:
+                let ADC_ZP_address = this.addrModeZP()
+                let ADC_ZP_value = this.readByte(ADC_ZP_address)
+                this.addWithCarry(ADC_ZP_value)
+                break;
+
+            case INS.ADC.ZPX:
+                let ADC_ZPX_address = this.addrModeZPX()
+                let ADC_ZPX_value = this.readByte(ADC_ZPX_address)
+                this.addWithCarry(ADC_ZPX_value)
+                break;
+
+            case INS.ADC.ABS:
+                let ADC_ABS_address = this.addrModeABS()
+                let ADC_ABS_value = this.readByte(ADC_ABS_address)
+                this.addWithCarry(ADC_ABS_value)
+                break;
+
+            case INS.ADC.ABSX:
+                let ADC_ABSX_address = this.addrModeABSX()
+                let ADC_ABSX_value = this.readByte(ADC_ABSX_address)
+                this.addWithCarry(ADC_ABSX_value)
+                break;
+
+            case INS.ADC.ABSY:
+                let ADC_ABSY_address = this.addrModeABSY()
+                let ADC_ABSY_value = this.readByte(ADC_ABSY_address)
+                this.addWithCarry(ADC_ABSY_value)
+                break;
+
+            case INS.ADC.INDX:
+                let ADC_INDX_address = this.addrModeINDX()
+                let ADC_INDX_value = this.readByte(ADC_INDX_address)
+                this.addWithCarry(ADC_INDX_value)
+                break;
+
+            case INS.ADC.INDY:
+                let ADC_INDY_address = this.addrModeINDY()
+                let ADC_INDY_value = this.readByte(ADC_INDY_address)
+                this.addWithCarry(ADC_INDY_value)
+                break;
+            //#endregion
+
+            //#region CMP
+            case INS.CMP.IMD:
+                this.compare('A', this.fetchNextByte())
+                break;
+
+            case INS.CMP.ZP:
+                let CMP_ZP_address = this.addrModeZP()
+                this.compare('A', this.readByte(CMP_ZP_address))
+                break;
+
+            case INS.CMP.ZPX:
+                let CMP_ZPX_address = this.addrModeZPX()
+                this.compare('A', this.readByte(CMP_ZPX_address))
+                break;
+
+            case INS.CMP.ABS:
+                let CMP_ABS_address = this.addrModeABS()
+                this.compare('A', this.readByte(CMP_ABS_address))
+                break;
+
+            case INS.CMP.ABSX:
+                let CMP_ABSX_address = this.addrModeABSX()
+                this.compare('A', this.readByte(CMP_ABSX_address))
+                break;
+
+            case INS.CMP.ABSY:
+                let CMP_ABSY_address = this.addrModeABSY()
+                this.compare('A', this.readByte(CMP_ABSY_address))
+                break;
+
+            case INS.CMP.INDX:
+                let CMP_INDX_address = this.addrModeINDX()
+                this.compare('A', this.readByte(CMP_INDX_address))
+                break;
+
+            case INS.CMP.INDY:
+                let CMP_INDY_address = this.addrModeINDY()
+                this.compare('A', this.readByte(CMP_INDY_address))
+                break;
+
+
+            
+            //#endregion
+
 
             //#region NOP
             case INS.NOP:

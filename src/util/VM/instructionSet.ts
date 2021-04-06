@@ -160,6 +160,28 @@ const InstructionSet = {
     SEI: fromHex('78'), // Set Interupt Disable Flag
 
 
+    ADC: {
+        IMD: fromHex('69'), // (Immediate)
+        ZP: fromHex('65'), //  (Zero Page)
+        ZPX: fromHex('75'), //  (Zero Page, X)
+        ABS: fromHex('6D'), //  (Absolute)
+        ABSX: fromHex('7D'), //  (Absolute,X)
+        ABSY: fromHex('79'), //  (Absolute,Y)
+        INDX: fromHex('61'), //  (Indirect, X)
+        INDY: fromHex('71'), //  (Indirect, Y)
+    },
+    CMP: {
+        IMD: fromHex('C9'), // (Immediate)
+        ZP: fromHex('C5'), //  (Zero Page)
+        ZPX: fromHex('D5'), //  (Zero Page, X)
+        ABS: fromHex('CD'), //  (Absolute)
+        ABSX: fromHex('DD'), //  (Absolute,X)
+        ABSY: fromHex('D9'), //  (Absolute,Y)
+        INDX: fromHex('C1'), //  (Indirect, X)
+        INDY: fromHex('D1'), //  (Indirect, Y)
+    },
+
+
     NOP: fromHex('EA') // No Operation
 }
 

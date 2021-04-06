@@ -210,6 +210,27 @@ const InstructionSet = {
         ABS: fromHex('0E'),  // (Absolute)
         ABSX: fromHex('1E'), // (Absolute, X)
     },
+    LSR: {
+        ACC: fromHex('4A'),  // (Accumulator)
+        ZP: fromHex('46'),   // (Zero Page)
+        ZPX: fromHex('56'),  // (Zero Page, X)
+        ABS: fromHex('4E'),  // (Absolute)
+        ABSX: fromHex('5E'), // (Absolute, X)
+    },
+    ROL: {
+        ACC: fromHex('2A'),  // (Accumulator)
+        ZP: fromHex('26'),   // (Zero Page)
+        ZPX: fromHex('36'),  // (Zero Page, X)
+        ABS: fromHex('2E'),  // (Absolute)
+        ABSX: fromHex('3E'), // (Absolute, X)
+    },
+    ROR: {
+        ACC: fromHex('6A'),  // (Accumulator)
+        ZP: fromHex('66'),   // (Zero Page)
+        ZPX: fromHex('76'),  // (Zero Page, X)
+        ABS: fromHex('6E'),  // (Absolute)
+        ABSX: fromHex('7E'), // (Absolute, X)
+    },
 
 
     NOP: fromHex('EA') // No Operation

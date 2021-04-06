@@ -705,6 +705,40 @@ class CPU{
         this.setFlagsForValue(result)
         return result
     }
+
+
+    private shiftRight(value: number){
+        let bin = toBin(value)
+        let binArr = bin.split('')
+        binArr.unshift('0')
+        this.setFlag('C',binArr.pop() === '1' ? true : false)
+        let result = fromBin(binArr.join(''))
+        this.setFlagsForValue(result)
+        return result
+    }
+
+    private rotateLeft(value: number){
+        let bin = toBin(value)
+        let binArr = bin.split('')
+        binArr.push(this.getFlag('C') ? '1' : '0')
+        this.setFlag('C',binArr.shift() === '1' ? true : false)
+        let result = fromBin(binArr.join(''))
+        this.setFlagsForValue(result)
+        return result
+    }
+
+
+    private rotateRight(value: number){
+        let bin = toBin(value)
+        let binArr = bin.split('')
+        binArr.unshift(this.getFlag('C') ? '1' : '0')
+        this.setFlag('C',binArr.pop() === '1' ? true : false)
+        let result = fromBin(binArr.join(''))
+        this.setFlagsForValue(result)
+        return result
+    }
+
+
     //#endregion
 
     private branchInstruction(condition: boolean){
@@ -1727,6 +1761,99 @@ class CPU{
                 let ASL_ABSX_address = this.addrModeABSX()
                 let ASL_ABSX_value = this.readByte(ASL_ABSX_address)
                 this.writeByte(ASL_ABSX_address,this.shiftLeft(ASL_ABSX_value))
+                break;
+            //#endregion
+
+            //#region LSR
+            case INS.LSR.ACC:
+                let LSR_ACC_value = this.getRegister('A')
+                this.setRegister('A',this.shiftRight(LSR_ACC_value))
+                break;
+
+            case INS.LSR.ZP:
+                let LSR_ZP_address = this.addrModeZP()
+                let LSR_ZP_value = this.readByte(LSR_ZP_address)
+                this.writeByte(LSR_ZP_address,this.shiftRight(LSR_ZP_value))
+                break;
+
+            case INS.LSR.ZPX:
+                let LSR_ZPX_address = this.addrModeZPX()
+                let LSR_ZPX_value = this.readByte(LSR_ZPX_address)
+                this.writeByte(LSR_ZPX_address,this.shiftRight(LSR_ZPX_value))
+                break;
+
+            case INS.LSR.ABS:
+                let LSR_ABS_address = this.addrModeABS()
+                let LSR_ABS_value = this.readByte(LSR_ABS_address)
+                this.writeByte(LSR_ABS_address,this.shiftRight(LSR_ABS_value))
+                break;
+
+            case INS.LSR.ABSX:
+                let LSR_ABSX_address = this.addrModeABSX()
+                let LSR_ABSX_value = this.readByte(LSR_ABSX_address)
+                this.writeByte(LSR_ABSX_address,this.shiftRight(LSR_ABSX_value))
+                break;
+            //#endregion
+
+            //#region ROL
+            case INS.ROL.ACC:
+                let ROL_ACC_value = this.getRegister('A')
+                this.setRegister('A',this.rotateLeft(ROL_ACC_value))
+                break;
+
+            case INS.ROL.ZP:
+                let ROL_ZP_address = this.addrModeZP()
+                let ROL_ZP_value = this.readByte(ROL_ZP_address)
+                this.writeByte(ROL_ZP_address,this.rotateLeft(ROL_ZP_value))
+                break;
+
+            case INS.ROL.ZPX:
+                let ROL_ZPX_address = this.addrModeZPX()
+                let ROL_ZPX_value = this.readByte(ROL_ZPX_address)
+                this.writeByte(ROL_ZPX_address,this.rotateLeft(ROL_ZPX_value))
+                break;
+
+            case INS.ROL.ABS:
+                let ROL_ABS_address = this.addrModeABS()
+                let ROL_ABS_value = this.readByte(ROL_ABS_address)
+                this.writeByte(ROL_ABS_address,this.rotateLeft(ROL_ABS_value))
+                break;
+
+            case INS.ROL.ABSX:
+                let ROL_ABSX_address = this.addrModeABSX()
+                let ROL_ABSX_value = this.readByte(ROL_ABSX_address)
+                this.writeByte(ROL_ABSX_address,this.rotateLeft(ROL_ABSX_value))
+                break;
+            //#endregion
+
+            //#region ROR
+            case INS.ROR.ACC:
+                let ROR_ACC_value = this.getRegister('A')
+                this.setRegister('A',this.rotateRight(ROR_ACC_value))
+                break;
+
+            case INS.ROR.ZP:
+                let ROR_ZP_address = this.addrModeZP()
+                let ROR_ZP_value = this.readByte(ROR_ZP_address)
+                this.writeByte(ROR_ZP_address,this.rotateRight(ROR_ZP_value))
+                break;
+
+            case INS.ROR.ZPX:
+                let ROR_ZPX_address = this.addrModeZPX()
+                let ROR_ZPX_value = this.readByte(ROR_ZPX_address)
+                this.writeByte(ROR_ZPX_address,this.rotateRight(ROR_ZPX_value))
+                break;
+
+            case INS.ROR.ABS:
+                let ROR_ABS_address = this.addrModeABS()
+                let ROR_ABS_value = this.readByte(ROR_ABS_address)
+                this.writeByte(ROR_ABS_address,this.rotateRight(ROR_ABS_value))
+                break;
+
+            case INS.ROR.ABSX:
+                let ROR_ABSX_address = this.addrModeABSX()
+                let ROR_ABSX_value = this.readByte(ROR_ABSX_address)
+                this.writeByte(ROR_ABSX_address,this.rotateRight(ROR_ABSX_value))
                 break;
             //#endregion
 

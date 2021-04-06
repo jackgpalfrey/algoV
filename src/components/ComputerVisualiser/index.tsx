@@ -17,8 +17,8 @@ const ComputerVisualiser: React.FC = () => {
     // CPU.writeByte(0, INS.SBC.IMD)
     // CPU.writeByte(1,1)
 
-    CPU.setRegister('A', 255)
-    CPU.writeByte(0, INS.ASL.ACC)
+    CPU.setRegister('A', 1)
+    CPU.writeByte(0, INS.LSR.ACC)
 
     // FOR LOOP
     // CPU.loadProgram([

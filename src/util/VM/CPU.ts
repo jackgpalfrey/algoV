@@ -1,6 +1,9 @@
 import { fromBin, toBin, toHex, getInstructionFromOpcode, fromHex, getAddressingModeFromOpcode, calculateSigned8BitBinaryValue, byteAdd, bitwiseNegate } from './helpers'
 import Memory from './Memory'
 import INS from './instructionSet'
+import MemoryMapper from './MemoryMapper'
+import EventEmitter from './EventEmitter'
+import VM from './VM'
 
 //#region Interfaces
 export interface Registers{
@@ -34,33 +37,44 @@ export interface CPUOptions{
 }
 //#endregion
 
-class CPU{
+class CPU extends EventEmitter{
 
     //#region Type Declarations
+    // Used in checking for infinite Loops
+    private VM: VM
+
+    private lastAddress: number
+    private addressLoops: number
+
+    // Memory limits
     public bitSize: number
     public addressSize: number
     public maxDataValue: number
-    private cycleSpeed: number
 
+    // Clock Controls
+    private cycleSpeed: number
     public completedCycles: number
     public completedTicks: number
     public cycleLimit: number
 
+    // Program Counter and Stack Pointer
     private PC: number
     private SP: number
 
     private registers: Registers
     private flags: Flags
 
-    public partitionMap: any
+    public memory: MemoryMapper
     //#endregion
 
     //#region CPU Reset and Initialisation
-    constructor(options: CPUOptions){
-        // DEBUG STUFF
-        console.log('\n\n\n\n\n\n')
-        console.log("Started")
+    constructor(computer: VM, options: CPUOptions){
+        super()
 
+        this.VM = computer
+
+        this.lastAddress = 0
+        this.addressLoops = 0
 
         this.bitSize = 8
         this.addressSize = 16
@@ -93,16 +107,10 @@ class CPU{
         }
 
 
-        this.partitionMap = {}
-
-        
-        this.mount(new Memory(this.bitSize, 2**16))
-
-        
-        
+        this.memory = this.VM.memoryMap
         
         this.reset()
-        this.start()
+        // this.start()
     }
 
     public reset():void{
@@ -125,36 +133,10 @@ class CPU{
             V: false, // Overflow Flag
             N: false // Negative Flag
         }
-
-        // if (this.startupTest() === true) this.start()
     }
     //#endregion
 
     //#region Memory Managment
-
-    /**
-     * Gets the partition of requested address
-     * @param address Decimal address of requested memory location
-     * @returns [Starting address of partition, Final Address and reference of partition]
-     */
-    private getPartitionOfAddress(address: number): [string, string]{
-        let partitionAddresses = Object.keys(this.partitionMap)
-        let lastAddress = -1
-        for (let i = 0; i < partitionAddresses.length; i++){
-            let partitionAddress = parseInt(partitionAddresses[i])
-            if (lastAddress !== -1) partitionAddress += 1
-
-
-            if (address <= partitionAddress && address > lastAddress ){
-                return [partitionAddresses[i - 1] || '0', partitionAddresses[i]]
-            }
-
-            lastAddress = parseInt(partitionAddresses[i])
-        }
-
-        throw new Error(`No Memory At Location ${address}`)
-
-    }
 
     /**
      * Reads given memory address and returns value
@@ -163,21 +145,9 @@ class CPU{
      * @returns Decimal value at memory address
      */
     public readByte(address: number, errorOnInvalidAddress:boolean = true, dontUseTick: boolean = false): number{
-        let startAddress;
-        let endAddress;
-        try {
-            [startAddress, endAddress] = this.getPartitionOfAddress(address)
-        } catch (err) {
-            if (errorOnInvalidAddress) throw err
-            return 0
-        }
-        let mem: Memory = this.partitionMap[endAddress]
-
-        let readAddress:number = address - parseInt(startAddress)
-        if (startAddress !== '0') readAddress -= 1
         
         if (!dontUseTick) this.completedTicks++
-        return mem.readByte(readAddress)
+        return this.memory.readByte(address, errorOnInvalidAddress)
         
     }
 
@@ -191,26 +161,8 @@ class CPU{
      */
     public writeByte(address: number, newValue: number, errorOnUnwriteable:boolean = true, errorOnInvalidAddress:boolean = true, dontUseTick: boolean = false):number | undefined{
         if (!this.isValidData(newValue)) throw new Error('Invalid Data')
-        let startAddress;
-        let endAddress;
-        try {
-            [startAddress, endAddress] = this.getPartitionOfAddress(address)
-        } catch (err) {
-            if (errorOnInvalidAddress) throw err
-            return
-        }
         
-        let mem: Memory = this.partitionMap[endAddress]
-
-        if (!dontUseTick) this.completedTicks++
-        let writeAddress:number = address - parseInt(startAddress)
-        if (startAddress !== '0') writeAddress -= 1
-
-        try{
-            return mem.writeByte(writeAddress, newValue)
-        } catch {
-            if (errorOnUnwriteable) throw new Error("Couldn't Write")
-        }
+        return this.memory.writeByte(address, newValue, errorOnUnwriteable, errorOnInvalidAddress)
         
     }
 
@@ -228,32 +180,6 @@ class CPU{
         this.incrementSP(1)
         return value
     }
-    
-    /**
-     * Mounts given memory to partition map.
-     * @param memory A instance of memory to mount to CPU
-     * @returns The upper address and reference of memory partition
-     */
-    public mount(memory: Memory): number{
-        let currentMap = this.partitionMap
-        let currentLocations = Object.keys(currentMap)
-        let startAddress = 0
-        if (currentLocations.length !== 0){
-            startAddress = parseInt(currentLocations[currentLocations.length - 1])
-        }
-        let endAddress = startAddress + memory.addressSpaceSize - 1
-        if (endAddress > 2**this.addressSize){
-            let error = new Error("Address Too Large")
-            throw error
-        } 
-
-        this.partitionMap[endAddress] = memory
-
-        return endAddress
-
-
-
-    }
 
     /**
      * Checks if given data is valid
@@ -261,8 +187,10 @@ class CPU{
      * @returns true if value is permissable and false if not
      */
     private isValidData(data: number):boolean{
-        return (typeof data === 'number' && data < this.maxDataValue && data >= 0)
+        return this.memory.isValidData(data)
     }
+
+    
 
     //#endregion
 
@@ -283,6 +211,7 @@ class CPU{
     public setPC(newValue: number){
         if (typeof newValue !== 'number' || newValue >= 2**this.addressSize || newValue < 0) throw new Error(`Invalid Address ${newValue}`)
         this.PC = newValue
+        this.emitEvent('setPC', {PC: this.PC})
     }
 
     /**
@@ -313,6 +242,7 @@ class CPU{
     public setSP(newValue: number){
         if (typeof newValue !== 'number' || newValue >= 256 || newValue < 0) throw new Error('Invalid Address')
         this.SP = newValue
+        this.emitEvent('setSP', {SP: this.SP})
     }
 
     /**
@@ -341,6 +271,7 @@ class CPU{
     public setRegister(register: keyof Registers, newValue: number){
         if (!this.isValidData(newValue)) throw new Error('Invalid Data')
         this.registers[register] = newValue
+        this.emitEvent('setReg', {register, value: newValue})
     }
 
     /**
@@ -367,6 +298,7 @@ class CPU{
     public setFlag(flag: keyof Flags, newValue: boolean){
         if (typeof newValue !== 'boolean') throw new Error('Invalid Data')
         this.flags[flag] = newValue
+        this.emitEvent('setFlag', {flags: this.flags})
     }
 
     public setFlagByte(byte: number){
@@ -506,22 +438,25 @@ class CPU{
 
     private setFlagsForValue(value: number){
         if (value === 0) this.setFlag('Z', true)
+        else this.setFlag('Z', false)
+
         if (toBin(value)[0] === '1') this.setFlag('N', true)
+        else this.setFlag('N', false)
     }
 
     private LDA_setFlags(){
-        if (this.getRegister('A') === 0) this.setFlag('Z', true)
-        if (toBin(this.getRegister('A'))[0] === '1') this.setFlag('N', true)
+        this.getRegister('A') === 0 ? this.setFlag('Z', true) : this.setFlag('Z', false)
+        toBin(this.getRegister('A'))[0] === '1' ? this.setFlag('N', true) : this.setFlag('N', false)
     }
 
     private LDX_setFlags(){
-        if (this.getRegister('X') === 0) this.setFlag('Z', true)
-        if (toBin(this.getRegister('X'))[0] === '1') this.setFlag('N', true)
+        this.getRegister('X') === 0 ? this.setFlag('Z', true) : this.setFlag('Z', false)
+        toBin(this.getRegister('X'))[0] === '1' ? this.setFlag('N', true) : this.setFlag('N', false)
     }
 
     private LDY_setFlags(){
-        if (this.getRegister('Y') === 0) this.setFlag('Z', true)
-        if (toBin(this.getRegister('Y'))[0] === '1') this.setFlag('N', true)
+        this.getRegister('Y') === 0 ? this.setFlag('Z', true) : this.setFlag('Z', false)
+        toBin(this.getRegister('Y'))[0] === '1' ? this.setFlag('N', true) : this.setFlag('N', false)
     }
     //#endregion
 
@@ -593,7 +528,6 @@ class CPU{
     }
     //#endregion
 
-
     //#region LittleEndian Calclulations
     private getLittleEndianWordAddress(address1:number, address2:number){
         let address1Bin = toBin(address1)
@@ -606,6 +540,18 @@ class CPU{
         let fullAddress = `${toBin(HiByte)}${toBin(LoByte)}`
         let address = fromBin(fullAddress)
         return address
+    }
+
+    /**
+     * Get little endian word from decimal address
+     * @param address Deicmal Address
+     * @returns Araray of [LoByte, HiByte]
+     */
+    public getLittleEndianArray(address: number){
+        let binary = toBin(address, true, 16)
+        let LoByte = binary.slice(8)
+        let HiByte = binary.slice(0, 8)
+        return [fromBin(LoByte), fromBin(HiByte)]
     }
     //#endregion
 
@@ -630,6 +576,7 @@ class CPU{
         // Sets Zero and Negative flags
         if (result === 0) this.setFlag('Z', true)
         else this.setFlag('Z', false)
+
         if (toBin(result)[0] === '1') this.setFlag('N', true)
         else this.setFlag('N', false)
     
@@ -642,6 +589,7 @@ class CPU{
         if (signed1 < 0 && signed2 < 0 && signedResult >= 0) this.setFlag('V', true)
         else if (signed1 > 0 && signed2 > 0 && signedResult <= 0) this.setFlag('V', true)
         else if (signed1 === 0 && signed2 === 0 && signedResult !== 0) this.setFlag('V', true)
+        else this.setFlag('V', false)
     
         this.setRegister('A', result)        
     }
@@ -667,6 +615,7 @@ class CPU{
         // Sets Zero and Negative flags
         if (result === 0) this.setFlag('Z', true)
         else this.setFlag('Z', false)
+
         if (toBin(result)[0] === '1') this.setFlag('N', true)
         else this.setFlag('N', false)
     
@@ -679,6 +628,7 @@ class CPU{
         if (signed1 < 0 && signed2 < 0 && signedResult >= 0) this.setFlag('V', true)
         else if (signed1 > 0 && signed2 > 0 && signedResult <= 0) this.setFlag('V', true)
         else if (signed1 === 0 && signed2 === 0 && signedResult !== 0) this.setFlag('V', true)
+        else this.setFlag('V', false)
     
         this.setRegister('A', result)        
     }
@@ -691,8 +641,13 @@ class CPU{
         if (result < 0) result += 256
 
         if (regValue >= value) this.setFlag('C', true)
+        else this.setFlag('C', false)
+
         if (regValue === value) this.setFlag('Z', true)
+        else this.setFlag('Z', false)
+
         if (toBin(result)[0] === '1') this.setFlag('N', true)
+        this.setFlag('N', false)
         
     }
 
@@ -767,7 +722,7 @@ class CPU{
      */
     private fetchNextByte(){
         let data = this.readByte(this.PC)
-        this.PC++
+        this.incrementPC(1)
         return data
     }
 
@@ -777,7 +732,7 @@ class CPU{
      */
     private executeInstruction(instruction: number){
         let instructionName = getInstructionFromOpcode(instruction)
-        console.groupCollapsed(`Cycle: ${this.completedCycles} \nInstruction: ${toHex(instruction)} (${instructionName}  -  ${getAddressingModeFromOpcode(instruction, instructionName)}) \nPC: ${this.getPC()}`)
+        console.groupCollapsed(`Cycle: ${this.completedCycles} \nInstruction: ${toHex(instruction)} (${instructionName}  -  ${getAddressingModeFromOpcode(instruction, instructionName)}) \nPC: ${this.getPC()} (${toHex(this.getPC(), true)})`)
         console.log(`Addressing Mode: `)
         console.group("―――――――――――――――――< Logs >―――――――――――――――――")
         switch(instruction){
@@ -1470,6 +1425,7 @@ class CPU{
 
             //#region BEQ
             case INS.BEQ.REL:
+                console.log(this.getFlag('Z'))
                 this.branchInstruction(this.getFlag('Z'))                
                 break;
             //#endregion
@@ -1858,12 +1814,45 @@ class CPU{
             //#endregion
 
 
+
+            //#region BRK
+            case INS.BRK:
+                // Gets Current State
+                let BRK_cur_PC = this.getPC()
+                let [ BRK_cur_LoByte, BRK_cur_HiByte ] = this.getLittleEndianArray(BRK_cur_PC)
+                let BRK_cur_PS = fromBin(this.getFlagByte())
+
+                // Pushes Current State to stack
+                this.pushStack(BRK_cur_LoByte)
+                this.pushStack(BRK_cur_HiByte)
+                this.pushStack(BRK_cur_PS)
+                
+                // Sets to Interupt Vector
+                let BRK_interuptVector = fromHex('FFFE')
+                let BRK_handlerAddress1 = this.readByte(BRK_interuptVector) 
+                let BRK_handlerAddress2 = this.readByte(BRK_interuptVector + 1)
+                let BRK_handlerAddress = this.getLittleEndianWordAddress(BRK_handlerAddress1, BRK_handlerAddress2)
+                this.setPC(BRK_handlerAddress)
+                this.setFlag('B', true)
+                break;
+            //#endregion
+
             //#region NOP
             case INS.NOP:
                 this.completedTicks++
                 break;
             //#endregion
            
+            //#region RTI
+            case INS.RTI:
+                this.setFlagByte(this.popStack())
+                let RTI_HiByte = this.popStack()
+                let RTI_LoByte = this.popStack()
+                this.setPC(this.getLittleEndianWordAddress(RTI_LoByte, RTI_HiByte))
+                this.setFlag('B', false)
+                break;
+            //#endregion
+
             default:
                 console.log(`Invalid Instruction: 0x${toHex(instruction)}`)
                 throw new Error(`Invalid Instruction: 0x${toHex(instruction)}`)
@@ -1872,7 +1861,7 @@ class CPU{
 
         }
 
-        this.logStatus()
+        // this.logStatus()
         console.groupEnd()
         console.groupEnd()
         this.completeCycle()
@@ -1884,22 +1873,22 @@ class CPU{
     private completeCycle(){
         // return
         this.completedCycles++
+        if (this.PC === this.lastAddress){
+            this.addressLoops++
+            if (this.addressLoops >= 5) throw new Error(`Loop Detected at ${this.PC}`)
+        }
+        else {
+            this.lastAddress = this.PC
+            this.addressLoops = 0
+        }
 
-        setTimeout(() => {
-            if (this.completedCycles <= this.cycleLimit){
-                this.FDE()
-            } else {
-                throw new Error('Cycle Limit Reached')
-            }
-            
-        }, this.cycleSpeed)
-        
+        return this.VM.clock.completeCycle()
     }
 
     /**
      * Handles fetching and then executing instructions
      */
-    private FDE(){
+    public FDE(){
         let instruction = this.fetchNextInstruction()
         this.executeInstruction(instruction)
 
@@ -1908,7 +1897,8 @@ class CPU{
     /**
      * Starts clock
      */
-    private start(){
+    public start(){
+        this.emitEvent('START')
         setTimeout(() => {
             this.FDE()
         }, 1000)
@@ -1942,15 +1932,15 @@ class CPU{
         console.groupEnd()
 
         console.groupCollapsed("Zero Page:")
-        console.log(this.partitionMap['65535'].readRegion(0,256))
+        console.log(this.memory.memory['65535'].readRegion(0,256))
         console.groupEnd()
 
-        console.groupCollapsed("Stack:")
-        console.log(this.partitionMap['65535'].readRegion(256,512))
+        console.groupCollapsed("Stack: (Reversed)")
+        console.log(this.memory.memory['65535'].readRegion(256,512).reverse())
         console.groupEnd()
 
         console.groupCollapsed("Rest of RAM:")
-        console.log(this.partitionMap['65535'].data)
+        console.log(this.memory.memory['65535'].data)
         console.groupEnd()
     }
 

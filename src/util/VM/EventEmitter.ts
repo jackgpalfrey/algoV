@@ -11,7 +11,7 @@ class EventEmitter{
         this.status = {}
     }
 
-    private emitEvent(name: string, data: any){
+    protected emitEvent(name: string, data?: any){
         let triggers = this.events[name]
         if (!triggers || !Array.isArray(triggers)) return false
         triggers.forEach((func) => {
@@ -19,7 +19,7 @@ class EventEmitter{
         })
     }
 
-    private setStatus(name: string, value: any){
+    protected setStatus(name: string, value: any){
         this.status[name] = value
     }
 

@@ -232,8 +232,9 @@ const InstructionSet = {
         ABSX: fromHex('7E'), // (Absolute, X)
     },
 
-
-    NOP: fromHex('EA') // No Operation
+    BRK: fromHex('00'), // Force Interupt
+    NOP: fromHex('EA'), // No Operation
+    RTI: fromHex('40') // Return from interupt
 }
 
 

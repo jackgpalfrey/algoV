@@ -48,13 +48,20 @@ class Memory{
     /**
      * Checks integrity of memory (Checks length and a random sample of address locations for invalid data)
      */
-    public checkIntegrity(){
+    public checkIntegrity(specificAddress?:number){
         const sampleSize = 5
-        if (this.data.length > this.addressSpaceSize) throw new Error('Memory Damaged')
+        if (this.data.length > this.addressSpaceSize) throw new Error('Memory Damaged (Memory Address Overflow)')
         let randomSample;
         for (let i = 0; i < sampleSize; i++){
-            randomSample = this.data[Math.round(Math.random() * this.addressSpaceSize)]
-            if ( typeof randomSample !== 'number' || randomSample > 2**this.dataSize || randomSample < 0) throw new Error('Memory Damaged');
+            let address;
+            if (!specificAddress) address = Math.round(Math.random() * (this.addressSpaceSize - 1))
+            else {
+                address = specificAddress
+                specificAddress = undefined
+            }
+            randomSample = this.data[address]
+           
+            if ( typeof randomSample !== 'number' || randomSample > 2**this.dataSize || randomSample < 0) throw new Error(`Memory Damaged (Invalid Data: ${randomSample} at ${address})`);
         }
     }
 
@@ -72,8 +79,8 @@ class Memory{
             let error = new Error('Invalid Value')
             throw error
         }
-
         this.data[address] = newIntValue
+
         this.checkIntegrity()
         return this.data[address]
 
@@ -108,6 +115,14 @@ class Memory{
         
 
         return this.data.slice(startAddress, endAddress)
+    }
+
+    public loadMemory(memoryArray: number[], startAddress: number = 0){
+        for (let i = 0; i < memoryArray.length - 1; i++){
+            let byte = memoryArray[i]
+            if (typeof byte !== 'number' || byte > this.maxIntValue || byte < 0) throw new Error('Cringe')
+            this.data[i + startAddress] = byte
+        }
     }
 
 }

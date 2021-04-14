@@ -1,20 +1,49 @@
+import Clock from './Clock'
 import CPU from './CPU'
+import EventEmitter from './EventEmitter'
 import Memory from './Memory'
+import MemoryMapper from './MemoryMapper'
 
-class VM{
-    processor: CPU | undefined
-    RAM: Memory | undefined
+class VM extends EventEmitter{
+    public Processor: CPU
+    public RAM: Memory
+    public memoryMap: MemoryMapper
+    public clock: Clock
+
     constructor(){
-        this.reset()
+        super()
+        this.memoryMap = new MemoryMapper(8, 16)
+        this.Processor = new CPU(this,{cycleSpeed: 1000})
+        this.RAM = new Memory(8, 65536)
+        this.memoryMap.mount(this.RAM)
+
+        this.clock = new Clock()
+
+        this.createRequiredEventListeners()
+        this.createDebugEventListeners()
+
     }
 
 
-    public reset(){
-        this.processor = new CPU({})
-
-        this.RAM = new Memory(8, 2**16)
-        this.processor.mount(this.RAM)
+    public start(){
+        this.clock.startLoop()
     }
+
+    private createDebugEventListeners(){
+        this.Processor.on('START', () => {
+            console.log('\n\n\n\n\n\n')
+            console.log("CPU Started")
+        })
+        
+    }
+
+    private createRequiredEventListeners(){
+        this.clock.on('step', ({ completeCycle }) => {
+            this.Processor.FDE()
+        })
+    }
+
 }
+
 
 export default VM

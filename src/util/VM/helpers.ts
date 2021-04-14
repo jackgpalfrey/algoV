@@ -1,4 +1,5 @@
 import INS from './instructionSet'
+import Memory from './Memory'
 
 
 export type Bit = 1 | 0
@@ -25,7 +26,7 @@ export type Bit = 1 | 0
      */
   export function toHex(intValue: number, allowBiggerThan8Bit:boolean = false): string{
     if (intValue > 255 && !allowBiggerThan8Bit) throw new Error('8 Bit Overflow')
-    return `0x${Math.abs(intValue).toString(16).toUpperCase()}`
+    return `${Math.abs(intValue).toString(16).toUpperCase()}`
 }
 
     /**
@@ -159,4 +160,11 @@ export function bitwiseNegate(value: number){
     }
 
     return fromBin(result)
+}
+
+
+
+
+export function loadRAMFromFile(file: File, memory: Memory){
+    
 }

@@ -1,0 +1,14 @@
+.computer-infoSection {
+	display: flex;
+	flex-direction: column;
+	color: white;
+	text-align: center;
+}
+
+.computer-infoSection-title {
+	color: #1b9be2;
+}
+
+.computer-infoSection-data {
+	font-weight: bold;
+}

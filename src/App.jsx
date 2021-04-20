@@ -19,7 +19,7 @@ import vars from './data/vars.json';
 import DocsPage from './pages/DocsPage';
 
 import getLocaleText from './util/getLocaleText';
-import ComputerVisualiser from './components/ComputerVisualiser';
+import ComputePage from './pages/ComputePage/index.tsx';
 const changelogData = getLocaleText('changeLog');
 
 let allowInDevPages = vars.devMode;
@@ -95,7 +95,7 @@ function App() {
 					</Route>
 
 					<Route path='/compute'>
-						<ComputerVisualiser />
+						<ComputePage />
 					</Route>
 
 					<Route exact path='/'>
@@ -115,8 +115,7 @@ function App() {
 						changes={changelogData[versionID].modifications}
 						date={changelogData[versionID].date}
 						version={changelogData[versionID].version}
-						title={changelogData[versionID].title}
-					>
+						title={changelogData[versionID].title}>
 						{' '}
 						<p>{changelogData[versionID].info}</p>{' '}
 					</LatestChangesCard>

@@ -1,0 +1,35 @@
+.button-container {
+	height: 100%;
+	display: flex;
+	width: fit-content;
+	align-items: center;
+}
+
+.button-container button {
+	padding: 0 1em;
+	height: 70%;
+	max-width: 100%;
+	min-height: fit-content;
+	border-radius: 0.7em;
+	border: none;
+	font-weight: bold;
+	font-size: 1.2rem;
+	cursor: pointer;
+	margin: 0 0.5em;
+}
+
+.button-lightTheme {
+	color: black;
+}
+
+.button-darkTheme {
+	color: white;
+}
+
+.button-lightTheme:hover {
+	filter: brightness(60%);
+}
+
+.button-darkTheme:hover {
+	filter: brightness(130%);
+}

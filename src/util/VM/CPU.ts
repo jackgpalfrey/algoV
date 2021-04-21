@@ -232,7 +232,7 @@ class CPU extends EventEmitter {
 		)
 			throw new Error(`Invalid Address ${newValue}`);
 		this.PC = newValue;
-		this.emitEvent('setPC', { PC: this.PC });
+		this.emitEvent('setPC', { PC: newValue });
 	}
 
 	/**

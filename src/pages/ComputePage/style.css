@@ -43,6 +43,6 @@
 }
 
 .compute-editor {
-	background-color: yellow;
+	background-color: #2d2d2d;
 	grid-area: editor;
 }

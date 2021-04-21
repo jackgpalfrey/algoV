@@ -2,6 +2,10 @@ import React, { useEffect, useRef, useState } from 'react';
 import Button from '../../components/Button/Button';
 import ComputerInfoSection from '../../components/ComputerInfoSection/ComputerInfoSection';
 import Input from '../../components/Input/Input';
+import MemoryVisualiser, {
+	dataFormats,
+} from '../../components/MemoryVisualiser/MemoryVisualiser';
+import RegisterVisualiser from '../../components/RegisterVisualiser/RegisterVisualiser';
 import {
 	getAddressingModeFromOpcode,
 	getInstructionFromOpcode,
@@ -16,7 +20,7 @@ const ComputePage: React.FC = () => {
 	const [Computer, setComputer] = useState(new VM(true));
 	const [memPage, setMemPage] = useState(0);
 	const [memArray, setMemArray] = useState([1]);
-	const [memFormat, setMemFormat] = useState('DEC');
+	const [memFormat, setMemFormat]: [dataFormats, Function] = useState('DEC');
 
 	const [PC, setPC] = useState(0);
 	const [SP, setSP] = useState(255);
@@ -116,6 +120,8 @@ const ComputePage: React.FC = () => {
 		Computer.processor.catch('loopDetected', () => {
 			setIsClockRunning(false);
 		});
+
+		openPage(memPage);
 	}, []);
 
 	function startClock() {
@@ -132,6 +138,17 @@ const ComputePage: React.FC = () => {
 
 	function setClock(val: number) {
 		Computer.clock.delay = val;
+	}
+
+	function openPage(page = memPage) {
+		let startAddress = 256 * page;
+		let endAddress = 256 * page + 256;
+		setMemArray(Computer.memoryMap.readRegion(startAddress, endAddress));
+	}
+
+	function setMemAddress(idx: number, newValue: number) {
+		Computer.memoryMap.writeByte(idx, newValue, true, true, false);
+		openPage();
 	}
 
 	return (
@@ -210,8 +227,41 @@ const ComputePage: React.FC = () => {
 						/>
 					</div>
 				</div>
-				<div className='compute-memoryVisualiser'></div>
-				<div className='compute-registerVisualiser'></div>
+				<div className='compute-memoryVisualiser'>
+					<MemoryVisualiser
+						PC={PC}
+						memory={memArray}
+						page={memPage}
+						format={memFormat}
+						onChangePage={(newVal) => {
+							if (newVal >= 0 && newVal < 255) {
+								setMemPage(newVal);
+								openPage(newVal);
+							}
+						}}
+						onPageDown={() => {
+							let newVal = memPage - 1;
+							if (newVal >= 0 && newVal < 255) {
+								setMemPage(newVal);
+								openPage(newVal);
+							}
+						}}
+						onPageUp={() => {
+							let newVal = memPage + 1;
+							if (newVal >= 0 && newVal < 255) {
+								setMemPage(newVal);
+								openPage(newVal);
+							}
+						}}
+						onSelectFormat={(format) => {
+							setMemFormat(format);
+						}}
+						onChangeMemory={(idx, val) => setMemAddress(idx, val)}
+					/>
+				</div>
+				<div className='compute-registerVisualiser'>
+					<RegisterVisualiser PC={PC} SP={SP} A={A} X={X} Y={Y} Flags={flags} />
+				</div>
 				<div className='compute-editor'></div>
 			</div>
 		</div>

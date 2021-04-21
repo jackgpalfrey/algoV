@@ -128,7 +128,8 @@ class MemoryMapper extends EventEmitter {
 		address: number,
 		newValue: number,
 		errorOnUnwriteable: boolean = true,
-		errorOnInvalidAddress: boolean = true
+		errorOnInvalidAddress: boolean = true,
+		useWrite: boolean = true
 	): number | undefined {
 		// Checks if given new value is valid ie represenatble in 8 bits and numberic
 		if (!this.isValidData(newValue)) throw new Error('Invalid Data');
@@ -155,7 +156,7 @@ class MemoryMapper extends EventEmitter {
 		} catch {
 			if (errorOnUnwriteable) throw new Error("Couldn't Write");
 		} finally {
-			this.emitEvent('WRITE', { address });
+			if (useWrite) this.emitEvent('WRITE', { address });
 		}
 	}
 

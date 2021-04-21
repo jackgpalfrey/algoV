@@ -98,8 +98,12 @@ function App() {
 						<ComputePage />
 					</Route>
 
-					<Route exact path='/'>
+					<Route exact path='/changelog'>
 						<HomePage />
+					</Route>
+
+					<Route exact path='/'>
+						<Redirect to='/bars' />
 					</Route>
 
 					<Route>

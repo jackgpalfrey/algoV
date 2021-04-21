@@ -1,0 +1,36 @@
+.compute-registerVisualiser-menu {
+	padding: 0 1em;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	height: 13%;
+	border-bottom: solid white 1px;
+	padding: 0 1em;
+	/* text-align: center; */
+	color: #4d8cd6;
+	overflow-y: hidden;
+}
+
+.compute-registerVisualiser-body-container {
+	display: grid;
+	width: 100%;
+	height: 95%;
+	grid-template-columns: 1fr 1fr;
+	padding: 0 1em;
+}
+
+.compute-registerVisualiser-body-registers {
+	display: grid;
+	grid-template-columns: 80% 20%;
+	grid-template-rows: repeat(5, 1.8em);
+}
+
+.compute-registerVisualiser-body-flags {
+	display: grid;
+	grid-template-columns: 80% 20%;
+	grid-template-rows: repeat(7, 1.8em);
+}
+
+.compute-registerVisualiser-body-section p {
+	color: white;
+	font-size: 1.1em;
+}

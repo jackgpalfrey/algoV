@@ -31,8 +31,7 @@ function Menu(props) {
 					}}
 					onClick={() => {
 						setIsOpen(false);
-					}}
-				></div>
+					}}></div>
 			) : null}
 			<div className={isOpen ? 'menuCard' : 'menuCard closed'}>
 				<br />
@@ -45,32 +44,29 @@ function Menu(props) {
 				<div className='menuLinkContainer'>
 					{isOpen
 						? [
-								<NavLink
-									exact
-									className='link clickable homeButton'
-									activeClassName='current'
-									to='/'
-								>
-									<span className='menuItem' title={text.home}>
-										<i className='material-icons item'>home</i>
-										<span className='menuText'>{text.home}</span>
-									</span>
-								</NavLink>,
+								// <NavLink
+								// 	exact
+								// 	className='link clickable homeButton'
+								// 	activeClassName='current'
+								// 	to='/'>
+								// 	<span className='menuItem' title={text.home}>
+								// 		<i className='material-icons item'>home</i>
+								// 		<span className='menuText'>{text.home}</span>
+								// 	</span>
+								// </NavLink>,
 								<NavLink
 									className='link clickable'
 									activeClassName='current'
-									to='/bars'
-								>
+									to='/bars'>
 									<span className='menuItem' title={text.bars}>
 										<i className='material-icons item'>bar_chart</i>
 										<span className='menuText'>{text.bars}</span>
 									</span>
 								</NavLink>,
 								<NavLink
-									className='link clickable'
+									className='link clickable unavailable'
 									activeClassName='current'
-									to='/grid'
-								>
+									to='/grid'>
 									<span className='menuItem' title={text.grid}>
 										<i className='material-icons item'>window</i>
 										<span className='menuText'>{text.grid}</span>
@@ -79,8 +75,7 @@ function Menu(props) {
 								<NavLink
 									className='link clickable unavailable'
 									activeClassName='current'
-									to='/logic'
-								>
+									to='/logic'>
 									<span className='menuItem' title={text.logic}>
 										<i className='material-icons item'>device_hub</i>
 										<span className='menuText'>{text.logic}</span>
@@ -89,8 +84,16 @@ function Menu(props) {
 								<NavLink
 									className='link clickable unavailable'
 									activeClassName='current'
-									to='/learn'
-								>
+									to='/compute'>
+									<span className='menuItem' title={text.compute}>
+										<i className='material-icons item'>memory</i>
+										<span className='menuText'>{text.compute}</span>
+									</span>
+								</NavLink>,
+								<NavLink
+									className='link clickable unavailable'
+									activeClassName='current'
+									to='/learn'>
 									<span className='menuItem' title={text.learn}>
 										<i className='material-icons item'>class</i>
 										<span className='menuText'>{text.learn}</span>
@@ -99,8 +102,7 @@ function Menu(props) {
 								<NavLink
 									className='link clickable unavailable'
 									activeClassName='current'
-									to='/puzzles'
-								>
+									to='/puzzles'>
 									<span className='menuItem' title={text.challenges}>
 										<i className='material-icons item'>extension</i>
 										<span className='menuText'>{text.challenges}</span>
@@ -113,8 +115,7 @@ function Menu(props) {
 						<NavLink
 							className='link unavailable'
 							activeClassName='current'
-							to='/settings'
-						>
+							to='/settings'>
 							<span className='menuItem' title={text.settings}>
 								<i className='material-icons item'>settings</i>
 								<span className='menuText'>{text.settings}</span>
@@ -125,8 +126,7 @@ function Menu(props) {
 						<NavLink
 							className='link unavailable'
 							activeClassName='current'
-							to='/login'
-						>
+							to='/login'>
 							<span className='login' title={text.login}>
 								{text.login}
 							</span>

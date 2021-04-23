@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
-
 // Algorithms Imports
 import bubbleSort from '../../algoithms/sorting/bubbleSort';
 import heapSort from '../../algoithms/sorting/heapSort';
@@ -18,14 +17,12 @@ import InfoCard from '../InfoCard';
 
 import './style.css';
 
-
 // Locale Imports
 import getLocaleText from '../../util/getLocaleText';
 import AnimateEngineCore from '../../util/AnimateEngine';
 const consoleText = getLocaleText('general').console;
 const text = getLocaleText('general').bars;
 const algoData = getLocaleText('algorithmInfo');
-
 
 const AnimateEngineController = new AnimateEngineCore();
 
@@ -37,24 +34,19 @@ const COLORS = {
 };
 
 interface Bar {
-	value: number
-	color: string
+	value: number;
+	color: string;
 }
-
-
 
 const SortingVisualiser: React.FC = () => {
 	//#region State Creation
 
 	// Gets Cookie Data
-	let sortingCookie: string = document.cookie
-		.split('; ')
-		.find((row) => row.startsWith('sort=')) || '100,bubbleSort';
-	if (!sortingCookie || sortingCookie == '') {
-		sortingCookie = '100,bubbleSort';
-	} else {
-		sortingCookie = sortingCookie.split('=')[1];
-	}
+	let sortingCookie: string =
+		document.cookie.split('; ').find((row) => row.startsWith('sort=')) ||
+		'sort=100,bubbleSort';
+
+	sortingCookie = sortingCookie.split('=')[1];
 	const cookieData: Array<string> = sortingCookie.replace(' ', '').split(',');
 
 	let animationtype: string = cookieData[0];
@@ -65,9 +57,6 @@ const SortingVisualiser: React.FC = () => {
 	if (!Object.keys(algoData['sorting']).includes(urlAnimation))
 		animationtype = 'bubbleSort';
 
-
-
-	
 	const [array, setArray]: any = useState([]);
 	const [animationSpeed, setAnimationSpeed] = useState(cookieData[0] || 100);
 	const [numBars, setNumBars] = useState(
@@ -87,25 +76,21 @@ const SortingVisualiser: React.FC = () => {
 	AnimateEngineController.__setMainDataFunction__(setArray);
 	//#endregion
 
-	useEffect(
-		() => {
-			document.cookie = `sort=${animationSpeed},${activeAlgorithm};`;
-		},
-		[animationSpeed, activeAlgorithm]
-	);
+	useEffect(() => {
+		document.cookie = `sort=${animationSpeed},${activeAlgorithm};`;
+	}, [animationSpeed, activeAlgorithm]);
 
 	useEffect(() => {
 		AnimateEngine(['resetArray', numBars]);
 	}, []);
 
 	function AnimateEngine(command: Array<any> | string) {
-
 		try {
-			let commandCode: string = ''
+			let commandCode: string = '';
 			if (Array.isArray(command)) {
 				commandCode = command[0];
 			} else {
-				commandCode = command
+				commandCode = command;
 			}
 
 			switch (commandCode) {
@@ -315,7 +300,7 @@ const SortingVisualiser: React.FC = () => {
 	}
 
 	function getNumbersFromArrayState() {
-		let bars: any = array 
+		let bars: any = array;
 		let numbers = [];
 		for (let i = 0; i < array.length; i++) {
 			numbers.push(bars[i].value);
@@ -344,7 +329,11 @@ const SortingVisualiser: React.FC = () => {
 			};
 
 			return (
-				<div key={idx} title={item.value.toString()} className='bar' style={style}>
+				<div
+					key={idx}
+					title={item.value.toString()}
+					className='bar'
+					style={style}>
 					{item.value}
 				</div>
 			);
@@ -364,14 +353,14 @@ const SortingVisualiser: React.FC = () => {
 					title={
 						isTerminalOpen ? consoleText.closeConsole : consoleText.openConsole
 					}
-					onClick={() => setIsTerminalOpen(!isTerminalOpen)}
-				>
+					onClick={() => setIsTerminalOpen(!isTerminalOpen)}>
 					{isTerminalOpen ? 'code_off' : 'code'}
 				</i>
 				<div className='sliderBox'>
 					<p
-						className={animationActive ? 'disabled' : ''}
-					>{`${text.animationTimeSlider} (${animationSpeed}ms) `}</p>
+						className={
+							animationActive ? 'disabled' : ''
+						}>{`${text.animationTimeSlider} (${animationSpeed}ms) `}</p>
 					<input
 						className='clickable'
 						disabled={animationActive}
@@ -381,8 +370,7 @@ const SortingVisualiser: React.FC = () => {
 						value={animationSpeed}
 						onChange={(e) => {
 							setAnimationSpeed(parseInt(e.target.value));
-						}}
-					></input>
+						}}></input>
 				</div>
 				<button
 					disabled={animationActive}
@@ -393,8 +381,7 @@ const SortingVisualiser: React.FC = () => {
 					}}
 					className={`${
 						!animationActive ? 'button reset' : 'button-disabled reset'
-					} clickable`}
-				>
+					} clickable`}>
 					{text.resetButton}
 				</button>
 				<button
@@ -402,8 +389,7 @@ const SortingVisualiser: React.FC = () => {
 					onClick={handleSortClick}
 					className={`${
 						!animationActive ? 'button sort' : 'button-disabled sort'
-					} clickable`}
-				>
+					} clickable`}>
 					{text.runButton}
 				</button>
 				<select
@@ -413,13 +399,11 @@ const SortingVisualiser: React.FC = () => {
 					name={activeAlgorithm}
 					onChange={(e) => {
 						setActiveAlgorithm(e.target.value);
-					}}
-				>
+					}}>
 					<option
 						disabled
 						className='algorithmsTitle clickable'
-						value='otherTitle'
-					>
+						value='otherTitle'>
 						{text.sortingAlgorithmsTitle}
 					</option>
 					<option value='bubbleSort'>
@@ -448,8 +432,9 @@ const SortingVisualiser: React.FC = () => {
 
 				<div className='sliderBox'>
 					<p
-						className={animationActive ? 'disabled' : ''}
-					>{`${text.numberOfBarsSlider} (${numBars})`}</p>
+						className={
+							animationActive ? 'disabled' : ''
+						}>{`${text.numberOfBarsSlider} (${numBars})`}</p>
 					<input
 						className='clickable'
 						disabled={animationActive}
@@ -459,14 +444,12 @@ const SortingVisualiser: React.FC = () => {
 						value={numBars}
 						onChange={(e) => {
 							AnimateEngine(['resetArray', parseInt(e.target.value)]);
-						}}
-					></input>
+						}}></input>
 				</div>
 
 				<p
 					title={`${text.swapsDisplay} ${swaps} \n${text.comparisonsDisplay} ${comparisons}`}
-					className='timeTaken'
-				>{`${text.runtimeDisplay} ${runTime}ms`}</p>
+					className='timeTaken'>{`${text.runtimeDisplay} ${runTime}ms`}</p>
 			</nav>
 			<InfoCard algorithmType='sorting' algorithmID={activeAlgorithm} />
 
@@ -477,6 +460,6 @@ const SortingVisualiser: React.FC = () => {
 			/>
 		</div>
 	);
-}
+};
 
 export default SortingVisualiser;

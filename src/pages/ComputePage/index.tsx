@@ -6,6 +6,7 @@ import MemoryVisualiser, {
 	dataFormats,
 } from '../../components/MemoryVisualiser/MemoryVisualiser';
 import RegisterVisualiser from '../../components/RegisterVisualiser/RegisterVisualiser';
+import { Flags } from '../../util/VM/CPU';
 import {
 	getAddressingModeFromOpcode,
 	getInstructionFromOpcode,
@@ -151,12 +152,32 @@ const ComputePage: React.FC = () => {
 		openPage();
 	}
 
+	function handleFlagUI(val: Flags) {
+		Computer.processor.flags = val;
+		setFlags(val);
+	}
+
 	function handleRegisterChangeUI(register: string, newVal: number) {
-		if (register === 'PC') return setPC(newVal);
-		if (register === 'SP') return setSP(newVal);
-		if (register === 'A') return setA(newVal);
-		if (register === 'X') return setX(newVal);
-		if (register === 'Y') return setY(newVal);
+		if (register === 'PC') {
+			Computer.processor.setPC(newVal);
+			return setPC(newVal);
+		}
+		if (register === 'SP') {
+			Computer.processor.setSP(newVal);
+			return setSP(newVal);
+		}
+		if (register === 'A') {
+			Computer.processor.setRegister('A', newVal);
+			return setA(newVal);
+		}
+		if (register === 'X') {
+			Computer.processor.setRegister('X', newVal);
+			return setX(newVal);
+		}
+		if (register === 'Y') {
+			Computer.processor.setRegister('Y', newVal);
+			return setY(newVal);
+		}
 	}
 
 	return (
@@ -269,7 +290,7 @@ const ComputePage: React.FC = () => {
 				</div>
 				<div className='compute-registerVisualiser'>
 					<RegisterVisualiser
-						setFlagsFunction={setFlags}
+						setFlagsFunction={handleFlagUI}
 						onChangeRegister={handleRegisterChangeUI}
 						PC={PC}
 						SP={SP}

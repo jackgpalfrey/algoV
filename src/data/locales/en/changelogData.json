@@ -166,7 +166,7 @@
                             ["ADDED", "setLang and setDev commands. These are console commands so cannot be used with AnimateEngine"]
                             ],
         "date": "16/03/21",
-        "isNext": true
+        "dontDisplay": true
     },
     {"version": "1.21",
         "title": "Home Update",

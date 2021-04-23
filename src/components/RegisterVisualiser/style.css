@@ -1,7 +1,7 @@
 .compute-registerVisualiser-menu {
 	padding: 0 1em;
 	display: grid;
-	grid-template-columns: 1fr 1fr;
+	grid-template-columns: 1fr 0.3fr 1fr;
 	height: 13%;
 	border-bottom: solid white 1px;
 	padding: 0 1em;
@@ -14,8 +14,9 @@
 	display: grid;
 	width: 100%;
 	height: 95%;
-	grid-template-columns: 1fr 1fr;
+	grid-template-columns: 1fr 0.3fr 1fr;
 	padding: 0 1em;
+	grid-template-areas: 'registers margin flags';
 }
 
 .compute-registerVisualiser-body-registers {
@@ -28,9 +29,33 @@
 	display: grid;
 	grid-template-columns: 80% 20%;
 	grid-template-rows: repeat(7, 1.8em);
+	grid-area: flags;
 }
 
 .compute-registerVisualiser-body-section p {
 	color: white;
 	font-size: 1.1em;
+}
+
+.compute-registerVisualiser-body-section input {
+	text-align: center;
+	color: white;
+	width: 2em;
+	padding: 0.2em;
+	background-color: transparent;
+	border: none;
+	margin: 0 0.5em;
+	color: white;
+	font-size: 1.1em;
+	margin-right: 2em;
+}
+
+input.PCReg {
+	width: 3em;
+	margin-left: -0.05em;
+}
+
+.compute-registerVisualiser-body-flags-value {
+	cursor: pointer;
+	user-select: none;
 }

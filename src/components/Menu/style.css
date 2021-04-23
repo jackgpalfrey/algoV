@@ -7,7 +7,7 @@
 }
 
 .menuCard * {
-	margin-bottom: .2em;
+	margin-bottom: 0.2em;
 }
 
 .menuCard {
@@ -33,14 +33,14 @@
 }
 
 .openMenuButton {
-	position:absolute;
+	position: absolute;
 	top: 1em;
 	color: var(--text);
 	cursor: pointer;
 	background-color: transparent;
 	border: none;
 	pointer-events: all;
-	padding-bottom: 5em;
+	/* padding-bottom: 5em; */
 }
 
 .openMenuButton:focus {
@@ -89,7 +89,6 @@
 	cursor: default;
 }
 
-
 .menuItem {
 	display: flex;
 	flex-direction: column;
@@ -103,17 +102,14 @@
 	margin: 0;
 }
 
-
 .menuText {
 	margin: 0;
 	padding: 0;
-	margin: .2em;
-	font-size: .8em;
+	margin: 0.2em;
+	font-size: 0.8em;
 }
 
-
 .menuLinkContainer {
-
 	display: flex;
 	flex-direction: column;
 	justify-content: space-around;

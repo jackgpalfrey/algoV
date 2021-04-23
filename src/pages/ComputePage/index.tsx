@@ -151,6 +151,14 @@ const ComputePage: React.FC = () => {
 		openPage();
 	}
 
+	function handleRegisterChangeUI(register: string, newVal: number) {
+		if (register === 'PC') return setPC(newVal);
+		if (register === 'SP') return setSP(newVal);
+		if (register === 'A') return setA(newVal);
+		if (register === 'X') return setX(newVal);
+		if (register === 'Y') return setY(newVal);
+	}
+
 	return (
 		<div className='compute-outerContainer'>
 			<div className='compute-innerContainer'>
@@ -234,21 +242,21 @@ const ComputePage: React.FC = () => {
 						page={memPage}
 						format={memFormat}
 						onChangePage={(newVal) => {
-							if (newVal >= 0 && newVal < 255) {
+							if (newVal >= 0 && newVal < 256) {
 								setMemPage(newVal);
 								openPage(newVal);
 							}
 						}}
 						onPageDown={() => {
 							let newVal = memPage - 1;
-							if (newVal >= 0 && newVal < 255) {
+							if (newVal >= 0 && newVal < 256) {
 								setMemPage(newVal);
 								openPage(newVal);
 							}
 						}}
 						onPageUp={() => {
 							let newVal = memPage + 1;
-							if (newVal >= 0 && newVal < 255) {
+							if (newVal >= 0 && newVal < 256) {
 								setMemPage(newVal);
 								openPage(newVal);
 							}
@@ -260,7 +268,16 @@ const ComputePage: React.FC = () => {
 					/>
 				</div>
 				<div className='compute-registerVisualiser'>
-					<RegisterVisualiser PC={PC} SP={SP} A={A} X={X} Y={Y} Flags={flags} />
+					<RegisterVisualiser
+						setFlagsFunction={setFlags}
+						onChangeRegister={handleRegisterChangeUI}
+						PC={PC}
+						SP={SP}
+						A={A}
+						X={X}
+						Y={Y}
+						Flags={flags}
+					/>
 				</div>
 				<div className='compute-editor'></div>
 			</div>

@@ -49,7 +49,7 @@ const MemoryVisualiser: React.FC<MemoryVisualiserProps> = ({
 		let idx = getAddressFromRelativeIndex(pageRelativeIndex);
 		if (newValue === '') return onChangeMemory(idx, 0);
 		let value = convertSelectedFormatToDecimal(newValue);
-		if (value < 255 && value > 0) onChangeMemory(idx, value);
+		if (value < 256 && value > 0) onChangeMemory(idx, value);
 	}
 
 	function renderMemory() {
@@ -134,7 +134,7 @@ const MemoryVisualiser: React.FC<MemoryVisualiserProps> = ({
 									onSelectFormat('DECS');
 								}}
 								className={format === 'DECS' ? 'selected' : ''}>
-								Decimal S
+								Decimal Signed
 							</button>
 							<button
 								onClick={() => {

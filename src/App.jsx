@@ -4,7 +4,7 @@ import Menu from './components/Menu';
 import BarsPage from './pages/BarsPage';
 
 import {
-	HashRouter as Router,
+	BrowserRouter as Router,
 	Redirect,
 	Route,
 	Switch,
@@ -72,7 +72,7 @@ function App() {
 	}, []);
 
 	return (
-		<Router>
+		<Router basename={process.env.PUBLIC_URL}>
 			<div className='app'>
 				<Switch>
 					<Route path='/bars'>
@@ -83,7 +83,7 @@ function App() {
 					</Route>
 
 					<Route path='/grid'>
-						{!allowInDevPages ? <UnavailablePage /> : null}
+						{/* {!allowInDevPages ? <UnavailablePage /> : null} */}
 						<GridPage />
 					</Route>
 					<Route path='/pathfind'>
@@ -98,7 +98,7 @@ function App() {
 						<ComputePage />
 					</Route>
 
-					<Route exact path='/changelog'>
+					<Route path='/changelog'>
 						<HomePage />
 					</Route>
 

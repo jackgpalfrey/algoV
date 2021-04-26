@@ -5,8 +5,13 @@ import {
 	toHex,
 	fromHex,
 	fromBin,
+	getInstructionFromOpcode,
+	getAddressingModeFromOpcode,
 } from '../../util/VM/helpers';
 import './style.css';
+import assemblyExplantions from '../../data/locales/en/assemblyExplantions.json';
+
+const assemblyDesc = assemblyExplantions as any;
 
 export type dataFormats = 'DEC' | 'DECS' | 'HEX';
 
@@ -54,6 +59,11 @@ const MemoryVisualiser: React.FC<MemoryVisualiserProps> = ({
 
 	function renderMemory() {
 		return memory.map((val, idx) => {
+			const instruction = getInstructionFromOpcode(val);
+			const assemblyRepresentation = `${instruction} - ${getAddressingModeFromOpcode(
+				val,
+				instruction
+			)}\n(${getInstructionNameFromMneumonic(instruction)})`;
 			const isCurrentPCAddress = getAddressFromRelativeIndex(idx) === PC;
 			return (
 				<input
@@ -62,7 +72,8 @@ const MemoryVisualiser: React.FC<MemoryVisualiserProps> = ({
 					}`}
 					disabled={format === 'DECS'}
 					value={convertDecimalToSelectedFormat(val)}
-					onChange={(e) => onMemoryChange(idx, e.target.value)}></input>
+					onChange={(e) => onMemoryChange(idx, e.target.value)}
+					title={assemblyRepresentation}></input>
 			);
 		});
 
@@ -78,6 +89,14 @@ const MemoryVisualiser: React.FC<MemoryVisualiserProps> = ({
 				</div>
 			);
 		});
+	}
+
+	function getInstructionNameFromMneumonic(mneumonic: any) {
+		let instruction = assemblyDesc.instructions[mneumonic];
+		let name = 'Unknown';
+		if (!!instruction) name = instruction.name;
+
+		return name;
 	}
 
 	function convertDecimalToSelectedFormat(val: number) {

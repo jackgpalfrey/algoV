@@ -46,6 +46,7 @@ const ComputePage: React.FC = () => {
 	const [writes, setWrites] = useState(0);
 
 	const [latestEvent, setLatestEvent] = useState('N/A');
+	const [isError, setIsError] = useState(false);
 
 	let readsRef = useRef(reads);
 	let writesRef = useRef(writes);
@@ -113,6 +114,11 @@ const ComputePage: React.FC = () => {
 			setLatestEvent(`${opcode}: ${mnemonic} - ${addressingMode}`);
 		});
 
+		Computer.processor.catch('', (data) => {
+			setLatestEvent(data.message);
+			setIsError(true);
+		});
+
 		Computer.processor.on('EXECUTIONEND', () => {
 			setFDECycles(Computer.processor.completedCycles);
 			setClockCycles(Computer.processor.completedTicks);
@@ -136,27 +142,22 @@ const ComputePage: React.FC = () => {
 	function stepClock() {
 		Computer.clock.step();
 	}
-
 	function setClock(val: number) {
 		Computer.clock.delay = val;
 	}
-
 	function openPage(page = memPage) {
 		let startAddress = 256 * page;
 		let endAddress = 256 * page + 256;
 		setMemArray(Computer.memoryMap.readRegion(startAddress, endAddress));
 	}
-
 	function setMemAddress(idx: number, newValue: number) {
 		Computer.memoryMap.writeByte(idx, newValue, true, true, false);
 		openPage();
 	}
-
 	function handleFlagUI(val: Flags) {
 		Computer.processor.flags = val;
 		setFlags(val);
 	}
-
 	function handleRegisterChangeUI(register: string, newVal: number) {
 		if (register === 'PC') {
 			Computer.processor.setPC(newVal);
@@ -253,6 +254,7 @@ const ComputePage: React.FC = () => {
 							name='Latest Instruction'
 							value={latestEvent.toString()}
 							margin='1em'
+							color={isError ? 'red' : ''}
 						/>
 					</div>
 				</div>
@@ -298,6 +300,7 @@ const ComputePage: React.FC = () => {
 						X={X}
 						Y={Y}
 						Flags={flags}
+						flagByte={Computer.processor.getFlagByte()}
 					/>
 				</div>
 				<div className='compute-editor'></div>

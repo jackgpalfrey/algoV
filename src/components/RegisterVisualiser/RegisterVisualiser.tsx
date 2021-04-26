@@ -1,6 +1,8 @@
 import { stringify } from 'querystring';
 import React from 'react';
 import { Flags, Registers } from '../../util/VM/CPU';
+import { toHex } from '../../util/VM/helpers';
+import { dataFormats } from '../MemoryVisualiser/MemoryVisualiser';
 import './style.css';
 
 type allRegisters = 'PC' | 'SP' | 'A' | 'X' | 'Y';
@@ -13,6 +15,7 @@ interface RegisterVisualiserProps {
 	Flags: Flags;
 	onChangeRegister: any; //(registerName: allRegisters, newVal: number) => void;
 	setFlagsFunction: Function;
+	flagByte: string;
 }
 
 const RegisterVisualiser: React.FC<RegisterVisualiserProps> = ({
@@ -24,6 +27,7 @@ const RegisterVisualiser: React.FC<RegisterVisualiserProps> = ({
 	Flags,
 	onChangeRegister,
 	setFlagsFunction,
+	flagByte,
 }) => {
 	function RegisterChangeHandler(register: allRegisters, newVal: string) {
 		let val = parseInt(newVal);
@@ -48,7 +52,7 @@ const RegisterVisualiser: React.FC<RegisterVisualiserProps> = ({
 				<div className='compute-registerVisualiser-menu'>
 					<h2>Registers: </h2>
 					<div></div>
-					<h2>Flags: </h2>
+					<h2 title={flagByte}>Flags: </h2>
 				</div>
 				<div className='compute-memoryVisualiser-body'>
 					<div className='compute-registerVisualiser-body-container'>
@@ -57,27 +61,32 @@ const RegisterVisualiser: React.FC<RegisterVisualiserProps> = ({
 							<input
 								onChange={(e) => RegisterChangeHandler('PC', e.target.value)}
 								value={PC}
-								className='PCReg'></input>
+								className='PCReg'
+								title={`$${toHex(PC, true)}`}></input>
 
 							<p>Stack Pointer</p>
 							<input
 								onChange={(e) => RegisterChangeHandler('SP', e.target.value)}
-								value={SP}></input>
+								value={SP}
+								title={`$${toHex(SP)}`}></input>
 
 							<p>Accumulator</p>
 							<input
 								onChange={(e) => RegisterChangeHandler('A', e.target.value)}
-								value={A}></input>
+								value={A}
+								title={`$${toHex(A)}`}></input>
 
 							<p>X Register</p>
 							<input
 								onChange={(e) => RegisterChangeHandler('X', e.target.value)}
-								value={X}></input>
+								value={X}
+								title={`$${toHex(X)}`}></input>
 
 							<p>Y Register</p>
 							<input
 								onChange={(e) => RegisterChangeHandler('Y', e.target.value)}
-								value={Y}></input>
+								value={Y}
+								title={`$${toHex(Y)}`}></input>
 						</div>
 						<div className='compute-registerVisualiser-body-section compute-registerVisualiser-body-flags'>
 							<p>Carry Flag</p>

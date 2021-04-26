@@ -50,6 +50,7 @@ class CPU extends EventEmitter {
 	// Used in checking for infinite Loops
 	private VM: VM;
 
+	// Used for infinite loop protection
 	private lastAddress: number;
 	private addressLoops: number;
 
@@ -59,7 +60,6 @@ class CPU extends EventEmitter {
 	public maxDataValue: number;
 
 	// Clock Controls
-	private cycleSpeed: number;
 	public completedCycles: number;
 	public completedTicks: number;
 	public cycleLimit: number;
@@ -86,7 +86,6 @@ class CPU extends EventEmitter {
 		this.bitSize = 8;
 		this.addressSize = 16;
 		this.maxDataValue = 2 ** this.bitSize;
-		this.cycleSpeed = options.cycleSpeed || 1000; //ms
 
 		this.completedCycles = 0;
 		this.completedTicks = 0;
@@ -184,6 +183,10 @@ class CPU extends EventEmitter {
 		);
 	}
 
+	/**
+	 * Pushes given value onto 255 bit stack
+	 * @param newValue Value to push onto stack
+	 */
 	public pushStack(newValue: number) {
 		let address = this.getSPFullAddress();
 		this.emitEvent('LOG', address);
@@ -191,6 +194,10 @@ class CPU extends EventEmitter {
 		this.incrementSP(-1);
 	}
 
+	/**
+	 * Pops first value off stack
+	 * @returns Value on stack
+	 */
 	public popStack() {
 		let address = this.getSPFullAddress();
 		this.completedTicks++;
@@ -252,6 +259,10 @@ class CPU extends EventEmitter {
 		return this.SP;
 	}
 
+	/**
+	 * Gets full memory address of stack pointer
+	 * @returns Address
+	 */
 	public getSPFullAddress() {
 		return this.SP + 256;
 	}
@@ -305,6 +316,10 @@ class CPU extends EventEmitter {
 		return this.flags[flag];
 	}
 
+	/**
+	 * Gets value of all flags and returns as binary representation 1 = true, 0 = flase
+	 * @returns Flag byte in binary string
+	 */
 	public getFlagByte() {
 		let values = Object.values(this.flags).reverse();
 		let stringifiedValues = values.join('');
@@ -322,6 +337,10 @@ class CPU extends EventEmitter {
 		this.emitEvent('setFlag', { flags: this.flags });
 	}
 
+	/**
+	 * Sets flags to given binary value
+	 * @param byte Decimal byte representation of binary value
+	 */
 	public setFlagByte(byte: number) {
 		let byteBin = toBin(byte);
 		let byteArray = byteBin.split('').reverse();

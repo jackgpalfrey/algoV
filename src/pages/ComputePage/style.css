@@ -1,0 +1,48 @@
+.compute-outerContainer {
+	display: flex;
+	width: 100vw;
+	height: 100vh;
+	justify-content: center;
+}
+
+.computer-header-container {
+	display: flex;
+	align-items: center;
+	width: auto;
+	margin-left: 4em;
+	height: 100%;
+}
+
+.compute-innerContainer {
+	display: grid;
+	width: 100%;
+	height: 98%;
+	grid-template-columns: 1% 40% 1% 1fr 1fr 1%;
+	grid-template-rows: 9% 56% 2% 35%;
+
+	grid-template-areas:
+		'lmargin header   header header header rmargin'
+		'lmargin memory   margin editor editor rmargin'
+		'lmargin hmargin  margin editor editor rmargin'
+		'lmargin register margin editor editor rmargin';
+}
+
+.compute-headerMenu {
+	/* background-color: red; */
+	grid-area: header;
+}
+
+.compute-memoryVisualiser {
+	background-color: blue;
+	grid-area: memory;
+}
+
+.compute-registerVisualiser {
+	background-color: green;
+	grid-area: register;
+}
+
+.compute-editor {
+	background-color: #2d2d2d;
+	grid-area: editor;
+}

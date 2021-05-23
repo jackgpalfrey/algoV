@@ -4,7 +4,7 @@ import Menu from './components/Menu';
 import BarsPage from './pages/BarsPage';
 
 import {
-	HashRouter as Router,
+	BrowserRouter as Router,
 	Redirect,
 	Route,
 	Switch,
@@ -19,6 +19,7 @@ import vars from './data/vars.json';
 import DocsPage from './pages/DocsPage';
 
 import getLocaleText from './util/getLocaleText';
+import ComputePage from './pages/ComputePage/index.tsx';
 const changelogData = getLocaleText('changeLog');
 
 let allowInDevPages = vars.devMode;
@@ -71,7 +72,7 @@ function App() {
 	}, []);
 
 	return (
-		<Router>
+		<Router basename={process.env.PUBLIC_URL}>
 			<div className='app'>
 				<Switch>
 					<Route path='/bars'>
@@ -82,7 +83,7 @@ function App() {
 					</Route>
 
 					<Route path='/grid'>
-						{!allowInDevPages ? <UnavailablePage /> : null}
+						{/* {!allowInDevPages ? <UnavailablePage /> : null} */}
 						<GridPage />
 					</Route>
 					<Route path='/pathfind'>
@@ -93,8 +94,16 @@ function App() {
 						<DocsPage />
 					</Route>
 
-					<Route exact path='/'>
+					<Route path='/compute'>
+						<ComputePage />
+					</Route>
+
+					<Route path='/changelog'>
 						<HomePage />
+					</Route>
+
+					<Route exact path='/'>
+						<Redirect to='/bars' />
 					</Route>
 
 					<Route>
@@ -110,8 +119,7 @@ function App() {
 						changes={changelogData[versionID].modifications}
 						date={changelogData[versionID].date}
 						version={changelogData[versionID].version}
-						title={changelogData[versionID].title}
-					>
+						title={changelogData[versionID].title}>
 						{' '}
 						<p>{changelogData[versionID].info}</p>{' '}
 					</LatestChangesCard>

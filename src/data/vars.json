@@ -1,7 +1,7 @@
 {
-    "devMode": true,
-    "versionNumber": "1.20",
-    "lastestChangeID": 14,
+    "devMode": false,
+    "versionNumber": "1.10",
+    "lastestChangeID": 13,
     "pages": ["home",
               "bars",
               "sort",

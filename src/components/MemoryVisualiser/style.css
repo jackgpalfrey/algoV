@@ -1,0 +1,97 @@
+.compute-memoryVisualiser-container {
+	width: 100%;
+	height: 100%;
+	background-color: #2d2d2d;
+}
+
+.compute-memoryVisualiser-innerContainer {
+	width: 100%;
+	height: 100%;
+	background-color: #2d2d2d;
+	overflow: hidden;
+}
+
+.compute-memoryVisualiser-menu {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	width: 97%;
+	height: 13%;
+	border-bottom: solid white 1px;
+	padding: 0 0.5em;
+	color: white;
+}
+
+.compute-memoryVisualiser-menu-formatSelector button {
+	color: white;
+	padding: 0.3em;
+	background-color: #5f5f5f;
+	border: none;
+	margin-right: 0.5em;
+	z-index: 10000;
+	cursor: pointer;
+	font-weight: bolder;
+}
+.compute-memoryVisualiser-menu-formatSelector button.selected {
+	background-color: #4d8cd6;
+}
+
+.compute-memoryVisualiser-menu-pageSelector {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.compute-memoryVisualiser-menu-pageSelector button {
+	color: white;
+	padding: 0.2em 0.4em;
+	background-color: #4d8cd6;
+	border: none;
+	font-weight: bold;
+	cursor: pointer;
+}
+
+.compute-memoryVisualiser-menu-pageSelector input {
+	text-align: center;
+	color: white;
+	width: 2em;
+	padding: 0.2em;
+	background-color: #5f5f5f;
+	border: none;
+	margin: 0 0.5em;
+}
+
+.compute-memoryVisualiser-body {
+	display: flex;
+	width: 100%;
+	height: 87%;
+	justify-content: center;
+	align-items: center;
+}
+
+.compute-memoryVisualiser-body-container {
+	display: grid;
+	width: 100%;
+	height: 95%;
+	grid-template-columns: repeat(16, 1fr);
+	grid-template-rows: repeat(16, 1fr);
+}
+
+.compute-memoryVisualiser-body-node {
+	color: white;
+	text-align: center;
+}
+
+.compute-memoryVisualiser-body-input {
+	background-color: transparent;
+	border: none;
+	width: 2em;
+	color: white;
+	text-align: center;
+}
+
+.currentPC {
+	color: #4d8cd6;
+	text-align: center;
+}

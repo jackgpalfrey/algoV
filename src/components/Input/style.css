@@ -1,0 +1,30 @@
+.input-container {
+	height: 100%;
+	display: flex;
+	width: fit-content;
+	flex-direction: column;
+	justify-content: center;
+	position: relative;
+	margin: 0 0.5em;
+}
+
+.input-container label {
+	position: absolute;
+	color: white;
+	font-size: 0.8em;
+	background-color: black;
+	width: fit-content;
+	padding: 0 0.4em;
+	top: 0.15em;
+	left: 1.5em;
+	font-weight: bold;
+}
+
+.input-container input {
+	height: 50%;
+	text-align: center;
+	border-radius: 1em;
+	width: 7em;
+	font-weight: bold;
+	font-size: 1.5em;
+}

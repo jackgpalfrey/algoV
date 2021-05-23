@@ -1,0 +1,174 @@
+.compute_container {
+	display: flex;
+	width: 100vw;
+	height: 100vh;
+	align-items: center;
+}
+
+.compute-inner-container {
+	width: 100%;
+	display: grid;
+	grid-template-columns: 0.5fr 0.5fr 1fr;
+	grid-template-rows: 0.5fr 0.5fr;
+	grid-template-areas:
+		'screen registry memoryBox'
+		'nul      registry    memoryBox';
+	height: fit-content;
+}
+
+.compute_container * {
+	border: none;
+}
+
+.memoryBox {
+	grid-area: memoryBox;
+	background-color: var(--higher-background);
+	align-self: center;
+	border-radius: 2em;
+	color: white;
+	margin-right: 1em;
+}
+
+.memoryContainer {
+	align-self: center;
+	padding: 0.7em 0;
+	display: grid;
+	grid-template-columns: repeat(16, 1fr);
+	grid-template-rows: repeat(16, 1fr);
+}
+
+.memoryLocation {
+	padding: 0.5em;
+	border: black 1px;
+	text-align: center;
+}
+
+input.memoryLocation {
+	width: 60%;
+	background-color: transparent;
+	color: white;
+}
+
+.memoryBoxTitle {
+	padding: 1em;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	height: 8%;
+}
+
+.memPageControls input {
+	width: 3em;
+	text-align: center;
+}
+
+button {
+	background-color: aqua;
+}
+
+button,
+input {
+	margin: 0 1em;
+	padding: 0.4em;
+}
+
+.curFormat {
+	background-color: lightblue;
+}
+
+.memFormat-DEC {
+	font-size: 1rem;
+}
+
+.memFormat-HEX {
+	font-size: 1rem;
+}
+
+.memFormat-BIN {
+	font-size: 0.7rem;
+	padding: 0.4em;
+	margin: 0;
+}
+
+.memFormatControls {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.memPageControls {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.memFormatControls h4 {
+	margin-bottom: 0.4em;
+}
+
+.memPageControls h4 {
+	margin-bottom: 0.4em;
+}
+
+h4 {
+	text-align: center;
+}
+
+.registryBox {
+	display: flex;
+	background-color: var(--higher-background);
+	grid-area: registry;
+	border-radius: 3em;
+	flex-direction: column;
+	color: white;
+	align-items: center;
+	padding: 0 1em;
+	margin-right: 1em;
+	padding-bottom: 1em;
+}
+
+.registerTitle {
+	color: white;
+	text-align: center;
+	padding-top: 1em;
+}
+
+.activePC {
+	background-color: rgb(138, 0, 0);
+}
+
+.registryBox p {
+	margin-bottom: 0.6em;
+	font-size: 0.9rem;
+}
+
+.screen {
+	background-color: var(--higher-background);
+	grid-area: screen;
+	border-radius: 1em;
+	margin-right: 1rem;
+	margin-top: 1rem;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+	align-items: center;
+	text-align: center;
+	overflow-y: hidden;
+	padding: 0.2em;
+}
+
+.screenRow {
+	display: flex;
+	align-content: space-between;
+	flex-direction: column;
+	color: red;
+}
+
+.screenNode {
+	color: white;
+	font-size: 1em;
+	/* width: 1fr;
+	height: 1fr;
+	margin: 0.2em;
+	font-size: 0.5rem; */
+}

@@ -1,0 +1,69 @@
+.makeTransactionModalContainer {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.521);
+}
+
+.makeTransactionModal {
+	display: flex;
+	flex-direction: column;
+	color: white;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 75%;
+	height: 75%;
+	background-color: var(--higher-higher-background);
+	transform: translate(-50%) translateY(-50%);
+	border-radius: 2em;
+	padding: 2em;
+	text-align: center;
+	align-items: center;
+}
+
+.makeTransactionModal * {
+	margin-bottom: 2em;
+}
+
+.makeTransactionModal label {
+	margin-bottom: 0.4em;
+}
+
+.makeTransactionModal input {
+	width: 100%;
+	text-align: center;
+	padding: 0.5em;
+	border-radius: 0.5rem;
+	border: none;
+	height: 3em;
+}
+
+.makeTransactionModal select {
+	background-color: white;
+	color: black;
+	width: 100%;
+	height: 5em;
+	border-radius: 0.5rem;
+}
+
+.makeTransactionModal option {
+	background-color: white;
+	color: black;
+	width: 100%;
+	height: 3em;
+	border-radius: 0.5rem;
+	text-align: center;
+}
+
+.makeTransactionModal button {
+	margin-top: 3em;
+	border-radius: 0.5em;
+	border: none;
+	text-align: center;
+	width: 50%;
+	background-color: white;
+	padding: 1.3em 0.5em;
+}

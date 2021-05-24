@@ -82,7 +82,7 @@ function Menu(props) {
 									</span>
 								</NavLink>,
 								<NavLink
-									className='link clickable unavailable'
+									className='link clickable'
 									activeClassName='current'
 									to='/compute'>
 									<span className='menuItem' title={text.compute}>
@@ -91,6 +91,15 @@ function Menu(props) {
 									</span>
 								</NavLink>,
 								<NavLink
+									className='link clickable'
+									activeClassName='current'
+									to='/blockchain'>
+									<span className='menuItem' title={text.blockchain}>
+										<i className='material-icons item'>link</i>
+										<span className='menuText'>{text.blockchain}</span>
+									</span>
+								</NavLink>,
+								/*<NavLink
 									className='link clickable unavailable'
 									activeClassName='current'
 									to='/learn'>
@@ -107,7 +116,8 @@ function Menu(props) {
 										<i className='material-icons item'>extension</i>
 										<span className='menuText'>{text.challenges}</span>
 									</span>
-								</NavLink>,
+								</NavLink>*/
+								,
 						  ]
 						: null}
 

@@ -87,7 +87,7 @@ class Blockchain {
 	 * @param minerAddress Address to send miners reward to
 	 * @returns True if succesful false if not
 	 */
-	public minePendingTransactions(minerAddress: string): boolean {
+	public minePendingTransactions(minerAddress: string): boolean | object {
 		let pendingTransactions = this.pendingTransactions;
 		const reward = new Transaction(
 			null,
@@ -101,10 +101,13 @@ class Blockchain {
 		const result = this.addBlock(block);
 		if (!result) return false;
 		this.pendingTransactions = [];
-		console.log(
-			`Block (${block.hash}) mined by ${minerAddress} for ${this.miningReward}`
-		);
-		return true;
+		//console.log(`Block (${block.hash}) mined by ${minerAddress} for ${this.miningReward}`);
+		return {
+			hash: block.hash,
+			nonce: block.nonce,
+			reward: this.miningReward,
+			miner: minerAddress,
+		};
 	}
 
 	/**

@@ -1,0 +1,48 @@
+.blockchainContainer nav {
+	height: 8vh;
+	display: flex;
+	flex-direction: row-reverse;
+	justify-content: end;
+}
+
+.blockchainContainer nav button {
+	padding: 0.5em 2em;
+	border: none;
+	background-color: var(--accent);
+	border-radius: 0.5em;
+}
+
+.blockchainContainer .blocks {
+	padding: 2em;
+	display: flex;
+	flex-direction: row;
+	overflow-x: scroll;
+	overflow-y: hidden;
+}
+
+.blockchainContainer table {
+	color: white;
+	width: 100%;
+	text-align: center;
+}
+
+.blockchainContainer table th {
+	color: var(--selected-menu);
+	text-align: center;
+}
+
+.blockchainContainer table tr {
+	height: 2em;
+}
+
+.blockchainContainer table tr {
+	background-color: var(--higher-background);
+}
+
+.blockchainContainer table tr:nth-child(even) {
+	background-color: var(--higher-higher-background);
+}
+
+.blockchainContainer table td.hash {
+	font-size: 0.3em;
+}

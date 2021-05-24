@@ -45,5 +45,5 @@ export function sendTransaction(
 ) {
 	const tx = new Transaction(from, to, amount);
 	tx.signTransaction(signer);
-	chain.addTransaction(tx);
+	console.log(chain.addTransaction(tx));
 }

@@ -3,6 +3,7 @@ import { Transaction } from '../../util/Blockchain';
 import './style.css';
 
 interface BlockchainBlockProps {
+	index: number;
 	hash: string;
 	nonce: number;
 	previousHash: string;
@@ -12,6 +13,7 @@ interface BlockchainBlockProps {
 }
 
 const BlockchainBlock: React.FC<BlockchainBlockProps> = ({
+	index,
 	hash,
 	nonce,
 	previousHash,
@@ -27,6 +29,7 @@ const BlockchainBlock: React.FC<BlockchainBlockProps> = ({
 			onClick={() => {
 				showTransactionsFunction(transactions);
 			}}>
+			<h1>{index === 0 ? 'Genesis Block' : `Block ${index}`}</h1>
 			<p>
 				<span>Hash:</span>
 				<br /> <span className='hash'>{hash}</span>

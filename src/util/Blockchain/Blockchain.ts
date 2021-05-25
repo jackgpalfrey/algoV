@@ -61,6 +61,7 @@ class Blockchain {
 	public addTransaction(transaction: Transaction): boolean {
 		if (!transaction.sender || !transaction.recipient) return false;
 		if (!transaction.isValid()) return false;
+		if (transaction.amount <= 0) return false;
 		this.pendingTransactions.push(transaction);
 		return true;
 	}

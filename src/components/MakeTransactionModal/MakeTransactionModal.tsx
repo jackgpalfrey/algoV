@@ -69,8 +69,10 @@ const MakeTransactionModal: React.FC<MakeTransactionModalProps> = ({
 					type='number'
 					onChange={(e) => setAmount(parseInt(e.target.value))}
 				/>
-				<button onClick={submit}>Send</button>
-				<button onClick={closeFunction}>Close</button>
+				<div className='blockchainMakeTransactionButtons'>
+					<button onClick={submit}>Send</button>
+					<button onClick={closeFunction}>Cancel</button>
+				</div>
 			</div>
 		</div>
 	);

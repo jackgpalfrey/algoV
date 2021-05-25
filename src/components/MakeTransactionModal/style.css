@@ -67,3 +67,13 @@
 	background-color: white;
 	padding: 1.3em 0.5em;
 }
+
+.blockchainMakeTransactionButtons {
+	display: flex;
+	width: 100%;
+}
+
+.blockchainMakeTransactionButtons button {
+	width: 1fr;
+	margin: 1em;
+}

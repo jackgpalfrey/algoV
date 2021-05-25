@@ -3,6 +3,12 @@
 	display: flex;
 	flex-direction: row-reverse;
 	justify-content: end;
+	align-items: center;
+}
+
+.blockchainContainer nav p {
+	transform: translateY(9%);
+	font-weight: bold;
 }
 
 .blockchainContainer nav button {
@@ -45,4 +51,10 @@
 
 .blockchainContainer table td.hash {
 	font-size: 0.3em;
+}
+
+.blockchainContainer button:hover,
+.blockchainContainer select:hover {
+	cursor: pointer;
+	filter: brightness(70%);
 }

@@ -12,6 +12,7 @@ import { Core, Wallet } from '../../util/Blockchain/API';
 import BlockchainBlock from '../../components/BlockchainBlock/BlockchainBlock';
 import { updateSourceFile, validateLocaleAndSetLanguage } from 'typescript';
 import MakeTransactioModal from '../../components/MakeTransactionModal/MakeTransactionModal';
+import BlockchainSettingsModal from '../../components/BlockchainSettingsModal/BlockchainSettingsModal';
 
 interface blockchainProps {}
 
@@ -30,6 +31,7 @@ const Blockchain: React.FC<blockchainProps> = ({}) => {
 	const [transactions, setTransactions]: [Transaction[], any] = useState([]);
 	const [balance, setBalance] = useState(0);
 	const [isTransactionModalOpen, setIsTransactionModalOpen] = useState(false);
+	const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(true);
 
 	function updateBalance() {
 		if (!wallets || !wallets[currentWalletIndex]) return;
@@ -88,10 +90,11 @@ const Blockchain: React.FC<blockchainProps> = ({}) => {
 		if (!API) return [];
 		let chainDetails = API.chain.chain;
 
-		const blocks = chainDetails.map((value) => {
+		const blocks = chainDetails.map((value, idx) => {
 			const { hash, nonce, previousHash, timestamp, transactions } = value;
 			return (
 				<BlockchainBlock
+					index={idx}
 					hash={hash}
 					nonce={nonce}
 					previousHash={previousHash}
@@ -104,7 +107,7 @@ const Blockchain: React.FC<blockchainProps> = ({}) => {
 
 		console.log(blocks);
 
-		return blocks;
+		return blocks.reverse();
 	}
 
 	function renderTransactions() {
@@ -163,6 +166,7 @@ const Blockchain: React.FC<blockchainProps> = ({}) => {
 					}}>
 					Mine Block
 				</button>
+				<button onClick={() => setIsSettingsModalOpen(true)}>Settings</button>
 				<p>Balance {balance}</p>
 			</nav>
 			<main>
@@ -193,6 +197,37 @@ const Blockchain: React.FC<blockchainProps> = ({}) => {
 						setIsTransactionModalOpen(false);
 					}}
 					possibleTargets={targetWallets}
+				/>
+			) : null}
+			{isTransactionModalOpen ? (
+				<MakeTransactioModal
+					closeFunction={() => setIsTransactionModalOpen(false)}
+					sender={wallets[currentWalletIndex]}
+					executeTransactionFunction={(
+						sender: Wallet,
+						targetAddress,
+						amount
+					) => {
+						sender.sendToAddress(targetAddress, amount);
+						console.log('Sent');
+						setIsTransactionModalOpen(false);
+					}}
+					possibleTargets={targetWallets}
+				/>
+			) : null}
+			{isSettingsModalOpen && !!API ? (
+				<BlockchainSettingsModal
+					closeFunction={() => setIsSettingsModalOpen(false)}
+					currentDifficulty={API.chain.difficulty}
+					currentMiningReward={API.chain.miningReward}
+					setDifficultyFunction={(value: number) => {
+						API.chain.difficulty = value;
+						console.log('TRIGGER');
+						console.log(API.chain.difficulty);
+					}}
+					setMiningRewardFunction={(value: number) => {
+						API.chain.miningReward = value;
+					}}
 				/>
 			) : null}
 		</div>

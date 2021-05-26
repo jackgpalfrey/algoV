@@ -45,9 +45,16 @@ const BlockchainSettingsModal: React.FC<BlockchainSettingsModalProps> = ({
 		<div className='makeTransactionModalContainer'>
 			<div className='makeTransactionModal'>
 				<h1>Blockchain Settings</h1>
-				<label htmlFor='myaddress'>Mining Reward: {'  '}</label>
+				<label htmlFor='myaddress'>
+					Mining Reward: <br />
+					<span style={{ fontSize: '.6em' }}>
+						Amount of coins given after a block is successfully mined
+					</span>
+					{'  '}
+				</label>
 				<input
 					id='myaddress'
+					placeholder='10'
 					value={miningReward}
 					type='number'
 					onChange={(e) => {
@@ -55,9 +62,17 @@ const BlockchainSettingsModal: React.FC<BlockchainSettingsModalProps> = ({
 						setMiningReward(parseInt(e.target.value));
 					}}
 				/>
-				<label htmlFor='amount'>Difficulty: {'  '}</label>
+				<label htmlFor='amount'>
+					Difficulty: <br />
+					<span style={{ fontSize: '.6em' }}>
+						Number of 0's required at start of hash to successfully mine a block
+					</span>
+					{'  '}
+				</label>
 				<input
+					style={{ marginBottom: '.5em' }}
 					value={difficulty}
+					placeholder='2'
 					id='amount'
 					type='number'
 					onChange={(e) => {
@@ -65,6 +80,10 @@ const BlockchainSettingsModal: React.FC<BlockchainSettingsModalProps> = ({
 						setDifficulty(parseInt(e.target.value));
 					}}
 				/>
+				<p style={{ color: 'red', fontSize: '.7rem' }}>
+					Warning: Going Above 4 Difficulty will likely cause extreme lag and
+					may causing crashing.
+				</p>
 				<button onClick={() => close()}>Close</button>
 			</div>
 		</div>

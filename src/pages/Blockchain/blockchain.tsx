@@ -71,10 +71,19 @@ const Blockchain: React.FC<blockchainProps> = ({}) => {
 			const row = (
 				<tr>
 					<td className={value.sender === 'SYSTEM' ? 'default' : 'hash'}>
+						{value.sender !== 'SYSTEM'
+							? `( Account ${getAccountIndex(value.sender)} )`
+							: ''}{' '}
 						{value.sender}
 					</td>
-					<td>{value.amount}</td>
-					<td className='hash'>{value.recipient}</td>
+					<td>{`${
+						value.type === 'REWARD'
+							? `Mining Reward ( ${value.amount} )`
+							: value.amount
+					}`}</td>
+					<td className='hash'>
+						( Account {getAccountIndex(value.recipient)} ) {value.recipient}
+					</td>
 					<td className={value.signature === 'UNSIGNED' ? 'default' : 'hash'}>
 						{value.signature}
 					</td>
@@ -115,13 +124,29 @@ const Blockchain: React.FC<blockchainProps> = ({}) => {
 		return transactions;
 	}
 
+	function getAccountIndex(hash: string) {
+		const addresses: string[] = wallets.map((value) => value.address);
+		const index = addresses.indexOf(hash);
+		return index;
+	}
+
+	function selectHash(hash: string | null) {
+		console.log('SELECTING');
+		if (!hash) return false;
+		const idx = getAccountIndex(hash);
+		if (idx < 0) return false;
+		setCurrentWalletIndex(idx);
+		console.log('SELECTED');
+		return true;
+	}
+
 	function renderWalletsDropdown() {
 		const walletElements = wallets.map((value, idx) => {
 			if (!value) return <option>Test</option>;
 			return (
 				<option
 					className={idx === currentWalletIndex ? 'currentWallet' : undefined}>
-					{idx === currentWalletIndex ? '> ' : ''}
+					{idx === currentWalletIndex ? '> ' : ''}(Account {idx}){' '}
 					{value.address}
 				</option>
 			);
@@ -141,11 +166,20 @@ const Blockchain: React.FC<blockchainProps> = ({}) => {
 					onChange={(e) => {
 						const value = e.target.value;
 						if (value === 'Create Wallet') {
-							addWallet();
-							e.target.value = wallets[wallets.length - 1].address;
+							if (
+								window.confirm("Are you sure you'd like to create a new Wallet")
+							) {
+								const len = wallets.length;
+								addWallet();
+								setCurrentWalletIndex(len - 1);
+							}
+
+							//e.target.value = wallets[0].address;
 						}
 						const addresses: string[] = wallets.map((value) => value.address);
-						setCurrentWalletIndex(addresses.indexOf(value));
+						const findString = value.split(') ')[1];
+						console.log(findString);
+						setCurrentWalletIndex(addresses.indexOf(findString));
 					}}>
 					{renderWalletsDropdown()}
 				</select>

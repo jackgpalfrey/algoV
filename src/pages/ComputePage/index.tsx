@@ -6,6 +6,7 @@ import MemoryVisualiser, {
 	dataFormats,
 } from '../../components/MemoryVisualiser/MemoryVisualiser';
 import RegisterVisualiser from '../../components/RegisterVisualiser/RegisterVisualiser';
+import { LMC } from '../../util/VM/Compiler';
 import { Flags } from '../../util/VM/CPU';
 import {
 	getAddressingModeFromOpcode,
@@ -15,6 +16,8 @@ import VM from '../../util/VM/VM';
 import './style.css';
 
 const ComputePage: React.FC = () => {
+	LMC('ADD 3');
+
 	const [speed, setSpeed] = useState(1000);
 	const [isClockRunning, setIsClockRunning] = useState(false);
 
@@ -57,10 +60,13 @@ const ComputePage: React.FC = () => {
 		Computer.memoryMap.writeByte(65534, 11);
 		Computer.memoryMap.writeByte(65535, 10);
 
-		Computer.processor.loadProgram(
+		/*Computer.processor.loadProgram(
 			['A9', '00', '18', '69', '08', 'C9', '18', 'D0', 'FA', 'A2', '14'],
 			'HEX'
-		);
+		);*/
+
+		const instructions = LMC('ADD 10 \n SUB 11 \n STA 20');
+		Computer.processor.loadProgram(instructions, 'DEC');
 
 		Computer.processor.on('setPC', (data) => {
 			setPC(data.PC);

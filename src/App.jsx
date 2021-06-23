@@ -20,6 +20,7 @@ import DocsPage from './pages/DocsPage';
 
 import getLocaleText from './util/getLocaleText';
 import ComputePage from './pages/ComputePage/index.tsx';
+import Blockchain from './pages/Blockchain/blockchain';
 const changelogData = getLocaleText('changeLog');
 
 let allowInDevPages = vars.devMode;
@@ -100,6 +101,10 @@ function App() {
 
 					<Route path='/changelog'>
 						<HomePage />
+					</Route>
+
+					<Route path='/blockchain'>
+						<Blockchain />
 					</Route>
 
 					<Route exact path='/'>
